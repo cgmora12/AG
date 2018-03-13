@@ -8,10 +8,11 @@ public class AG {
 
 	public static void main(String[] args) {
 		
-		String fileName = "London Underground Lifts";
+		String fileName = "Listado de centros de la UA";
 		String fileType = "csv";
 		String host = "virtserver.swaggerhub.com";
 		String basePath = "/cgmora12/lifts/1.0.0";
+		String swaggerFileName = "swaggerua.json";
 		
 		String csvFile = System.getProperty("user.dir") + "\\" + fileName + "." + fileType;
 
@@ -31,17 +32,24 @@ public class AG {
             br = new BufferedReader(new FileReader(csvFile));
             if ((line = br.readLine()) != null) {
                 // use comma as separator
-                columnsDescriptions = line.split(cvsSplitBy);
-                columns = line.replaceAll(" ", "_").toLowerCase().split(cvsSplitBy);
+            	//TODO: replace all rare characters
+                columnsDescriptions = line.replaceAll("\"", "").replaceAll("\'", "").split(cvsSplitBy);
+                columns = line.replaceAll(" ", "_").replaceAll("\"", "").replaceAll("\'", "").toLowerCase().split(cvsSplitBy);
 
             }
             if ((line = br.readLine()) != null) {
-                exampleData = line.split(cvsSplitBy);
+            	//TODO: replace all rare characters
+                exampleData = line.replaceAll("\"", "").replaceAll("\'", "").split(cvsSplitBy);
                 dataTypes = new String[exampleData.length];
                 for(int i = 0; i < exampleData.length; i++) {
                 	try {
-                		int integerValue = Integer.parseInt(exampleData[i]);
-                		dataTypes[i] = "integer";
+                		if(exampleData[i].equals("" + Integer.parseInt(exampleData[i]))) {
+                    		dataTypes[i] = "integer";
+                		} else if(exampleData[i].equals("" + Float.parseFloat(exampleData[i]))){
+                    		dataTypes[i] = "number";
+                		} else {
+                    		dataTypes[i] = "string";
+                		}
                 	} catch (NumberFormatException e) {
                 		dataTypes[i] = "string";
                 	}
@@ -78,7 +86,7 @@ public class AG {
             }
             
             System.out.println(apiDefinition);
-            PrintWriter writer = new PrintWriter("swagger.json", "UTF-8");
+            PrintWriter writer = new PrintWriter(swaggerFileName, "UTF-8");
             writer.println(apiDefinition);
             writer.close();
             
