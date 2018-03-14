@@ -13,11 +13,11 @@ import java.nio.file.StandardCopyOption;
 public class AG {
 
 	// Variables
-	public static String fileName = "Listado de centros de la UA";
+	public static String fileName = "Prueba";
 	public static String fileType = "csv";
 	public static String host = "virtserver.swaggerhub.com";
 	public static String basePath = "/cgmora12/lifts/1.0.0";
-	public static String swaggerFileName = "swaggerua.json";
+	public static String swaggerFileName = "swaggerAsignaturas.json";
 	public static String swaggerCodegeneFileName = "swagger-codegen-cli-2.2.1.jar";
 	public static String apiCodeFolderName = "apiCode";
 	public static String serverCodeFileName = "servercode.js";
@@ -39,7 +39,7 @@ public class AG {
 		String csvFile = fileName + "." + fileType;
 
 		String apiDefinition = "";
-		String fileNameNoWhiteSpaces = fileName.replaceAll(" ", "");
+		String fileNameNoWhiteSpaces = fileName.replaceAll(" ", "").replaceAll("-", "");
 		
 		BufferedReader br = null;
         String line = "";
@@ -222,9 +222,6 @@ public class AG {
 				if(line.contains("function(args, res, next) {")) {
 					lineFunctionName = line + "\n";
 				}
-				else if(line.contains("var filename =")) {
-					lineFileName = line + "\n";
-				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -250,8 +247,8 @@ public class AG {
 				if(lineServer.contains("function(args, res, next) {")) {
 					servercode += lineFunctionName + "\n";
 				}
-				else if(lineServer.contains("var filename =")) {
-					servercode += lineFileName + "\n";
+				else if(lineServer.contains("var fileName =")) {
+					servercode += lineServer.replace("./filename.csv", "./" + fileName + "." + fileType) + "\n";
 				} 
 				else {
 					servercode += lineServer + "\n";

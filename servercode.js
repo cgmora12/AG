@@ -5,7 +5,7 @@ var fs = require('fs');
 exports.getListadodecentrosdelaUA = function(args, res, next) {
 
   var examples = {};
-  var fileName = "./Listado de centros de la UA.csv";
+  var fileName = "./filename.csv";
 
   if (fs.existsSync(fileName)) {
     console.log('file exists');
@@ -17,7 +17,7 @@ exports.getListadodecentrosdelaUA = function(args, res, next) {
         var jsonObj = JSON.parse(result);
         var jsonResult = new Object();
         jsonResult.csv = [];
-        console.log(jsonObj);
+        //console.log(jsonObj);
         //console.log(JSON.stringify(args));
 
         // Filtering results
@@ -43,7 +43,7 @@ exports.getListadodecentrosdelaUA = function(args, res, next) {
               }
               filters = true;
               for(var i in jsonObj.csv){
-                if(jsonObj.csv[i][j] === args[Object.keys(args)[j]].value){
+                if(jsonObj.csv[i][j] === args[Object.keys(args)[j]].value + ""){
                   jsonResult.csv[object_number] = jsonObj.csv[i];
                   object_number++;
                 }
