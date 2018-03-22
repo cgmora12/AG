@@ -180,11 +180,15 @@ public class AG {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		}
         try {
 			br.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (NullPointerException e) {
 			e.printStackTrace();
 		}
         PrintWriter writer = null;
@@ -226,11 +230,15 @@ public class AG {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}catch (NullPointerException e) {
+			e.printStackTrace();
 		}
         try {
 			br.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (NullPointerException e) {
 			e.printStackTrace();
 		}
         
@@ -276,8 +284,12 @@ public class AG {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        writer.println(servercode);
-        writer.close();
+		try {
+			writer.println(servercode);
+			writer.close();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 		
 	}
 	

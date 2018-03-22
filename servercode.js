@@ -15,6 +15,7 @@ exports.getOperation = function(args, res, next) {
         // From csv to json
         papa.parse(data, 
           { 
+            header: true,
             complete: function ReturnJSONFile(result){
               console.log('ReturnJSONFile');
               result = result.data;
@@ -70,6 +71,10 @@ exports.getOperation = function(args, res, next) {
               else {
                 res.end();
               }
+            },
+            error: function(err){
+              console.log(err);
+              res.end();
             }       
           }
         );
