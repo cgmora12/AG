@@ -13,7 +13,7 @@ import java.nio.file.StandardCopyOption;
 public class AG {
 
 	// Variables
-	public static String fileName = "Prueba";
+	public static String fileName = "Asignaturas-Grado2015-16";
 	public static String fileType = "csv";
 	public static String host = "virtserver.swaggerhub.com";
 	public static String basePath = "/cgmora12/lifts/1.0.0";
@@ -174,7 +174,7 @@ public class AG {
 			while ((line = br.readLine()) != null) {
 				lines += line + "\n";
 				if(line.contains("\"dependencies\": {")) {
-					lines += "\t" + "\"allto-json\": \"^1.0.2\"," + "\n";
+					lines += "\t" + "\"papaparse\": \"^4.3.7\"," + "\n";
 				} 
 			}
 		} catch (IOException e) {
