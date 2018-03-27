@@ -14,11 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>London Underground</name>
-			<type>1</type>
-			<location>C:/Users/César González/eclipse-workspace/AutomaticGenerator/London Underground Lifts.csv</location>
-		</link>
-	</linkedResources>
 </projectDescription>

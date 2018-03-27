@@ -5,22 +5,29 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+
+import io.swagger.codegen.SwaggerCodegen;
+import io.swagger.codegen.languages.SwaggerGenerator;
+import io.swagger.models.Swagger;
 
 public class AG {
 
 	// Variables
-	public static String fileName = "Asignaturas-Grado2015-16";
+	public static String fileName = "data";
 	public static String fileType = "csv";
 	public static String host = "virtserver.swaggerhub.com";
 	public static String basePath = "/cgmora12/lifts/1.0.0";
-	public static String swaggerFileName = "swaggerAsignaturas.json";
+	public static String swaggerFileName = "swagger.json";
 	public static String swaggerCodegeneFileName = "swagger-codegen-cli-2.2.1.jar";
 	public static String apiCodeFolderName = "apiCode";
 	public static String serverCodeFileName = "servercode.js";
+	public static String resFolderName = "/AG/";
 	
 	public static void main(String[] args) {
 		
@@ -110,7 +117,7 @@ public class AG {
             }
             
 			// Create file
-            //new File(apiCodeFolderName).mkdirs();
+            new File(apiCodeFolderName).mkdirs();
             PrintWriter writer = new PrintWriter(apiCodeFolderName + "/" + swaggerFileName, "UTF-8");
             writer.println(apiDefinition);
             writer.close();
@@ -140,9 +147,20 @@ public class AG {
 	}
 
 	private static void generateServer() {
-		Process proc = null;
+
+		String[] args = new String [7];
+		args[0] = "generate";
+		args[1] = "--lang";
+		args[2] = "nodejs-server";
+		args[3] = "--input-spec";
+		args[4] = apiCodeFolderName + "/" + swaggerFileName;
+		args[5] = "--output";
+		args[6] = apiCodeFolderName;
+		SwaggerCodegen.main(args);
+		
+		/*Process proc = null;
 		try {
-			proc = Runtime.getRuntime().exec("java -jar " + apiCodeFolderName + "/" + swaggerCodegeneFileName 
+			proc = Runtime.getRuntime().exec("java -jar " + resFolderName + swaggerCodegeneFileName 
 					+ " generate -i " + apiCodeFolderName + "/" + swaggerFileName + " -o " + apiCodeFolderName + " -l nodejs-server");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -153,7 +171,10 @@ public class AG {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/		
 	}
 
 	private static void addServerDependencies() {
@@ -214,7 +235,6 @@ public class AG {
 		BufferedReader br = null;
 		String line = "";
         String lineFunctionName = "";
-        String lineFileName = "";
 		try {
 			br = new BufferedReader(new FileReader(apiCodeFolderName + "/controllers/DefaultService.js"));
 		} catch (FileNotFoundException e) {
@@ -245,8 +265,9 @@ public class AG {
         BufferedReader brServer = null;
         String lineServer = "";
 		try {
-			brServer = new BufferedReader(new FileReader(serverCodeFileName));
-		} catch (FileNotFoundException e) {
+			brServer = new BufferedReader(new InputStreamReader
+					(AG.class.getResourceAsStream(resFolderName + serverCodeFileName)));
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -265,10 +286,16 @@ public class AG {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
         try {
         	brServer.close();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
