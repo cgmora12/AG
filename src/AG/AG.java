@@ -11,16 +11,35 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-
 import io.swagger.codegen.SwaggerCodegen;
 import io.swagger.codegen.languages.SwaggerGenerator;
 import io.swagger.models.Swagger;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class AG {
 
 	// Variables
 	public static String fileName = "data";
 	public static String fileType = "csv";
+	public static String alternativeFileType = "xml";
 	public static String host = "virtserver.swaggerhub.com";
 	public static String basePath = "/cgmora12/lifts/1.0.0";
 	public static String swaggerFileName = "swagger.json";
@@ -31,14 +50,86 @@ public class AG {
 	
 	public static void main(String[] args) {
 		
+		if(args.length == 1) {
+			fileName = args[0];
+		}
+		else if(args.length == 3) {
+			fileName = args[0];
+			host = args[1];
+			basePath = args[2];
+		}
+		
 		//Automatic API Generation process
-		generateApiDefinition();
-        generateServer();
-        addServerDependencies();
-        generateApiCode();
-        
-        System.out.println("Automatic API Generation finished!");
-        
+
+		String csvFile = fileName + "." + fileType;
+		File f = new File(csvFile);
+		if(!(f.exists() && !f.isDirectory())) { 
+		    convertDataFileIntoCSV();
+		}
+		if(f.exists() && !f.isDirectory()) { 
+			generateApiDefinition();
+	        generateServer();
+	        addServerDependencies();
+	        generateApiCode();
+	        System.out.println("Automatic API Generation finished!");
+		}
+                
+	}
+
+	private static void convertDataFileIntoCSV() {
+		String xmlFile = fileName + "." + alternativeFileType;
+		File f = new File(xmlFile);
+		if(f.exists() && !f.isDirectory()) { 
+	        //File stylesheet = new File("style.xsl");
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		    DocumentBuilder builder = null;
+		    Document document = null;
+			try {
+				builder = factory.newDocumentBuilder();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    try {
+				document = builder.parse(xmlFile);
+			} catch (SAXException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+
+		    for(int i = 0; i < document.getElementsByTagName("rdf:Description").getLength(); i++) {
+		    	Node n = document.getElementsByTagName("rdf:Description").item(i);
+		    	System.out.println(n.getAttributes().getNamedItem("rdf:about").getNodeValue());
+		    	Element e = (Element)n;
+		    	System.out.println(e.getElementsByTagName("foaf:name").item(0).getFirstChild().getNodeValue());
+		    	System.out.println("hasLift " + (e.getElementsByTagName("mao:hasLift").item(0).hasChildNodes() ? e.getElementsByTagName("mao:hasLift").item(0).getFirstChild().getNodeValue() : "NO"));
+
+		    }
+	        /*StreamSource stylesource = new StreamSource(stylesheet);
+	        Transformer transformer = null;
+			try {
+				transformer = TransformerFactory.newInstance()
+				        .newTransformer(stylesource);
+			} catch (TransformerConfigurationException | TransformerFactoryConfigurationError e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        Source source = new DOMSource(document);
+	        Result outputTarget = new StreamResult(new File("x.csv"));
+	        try {
+				transformer.transform(source, outputTarget);
+			} catch (TransformerException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
+	        
+			System.out.println("Parsed XML into CSV!");
+		}
+		else {
+	        System.out.println("Error: data file not found or type not supported!");
+		}
+		
 	}
 
 	private static void generateApiDefinition() {
