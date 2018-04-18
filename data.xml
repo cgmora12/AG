@@ -5,23 +5,30 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 >
   <rdf:Description rdf:about="https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/estaciones/PlazaCastilla.html">
+     <mao:ofLine rdf:nodeID="Na83d1adbc95040e2bfb13954d0693890"/>
      <foaf:name>Plaza de Castilla</foaf:name>
-     <mao:hasLift>YES</mao:hasLift>
+     <mao:hasLift>TRUE</mao:hasLift>
      <rdf:type rdf:resource="mao.StopPlace" />
+     <mao:hasEscalator>TRUE</mao:hasEscalator>
   </rdf:Description>
   <rdf:Description rdf:about="https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/estaciones/HopitalMostoles.html">
      <foaf:name>Hospital de Móstoles</foaf:name>
-     <mao:hasLift></mao:hasLift>
+     <mao:ofLine rdf:resource="https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/lineas_y_horarios/linea05.html"/>
   </rdf:Description>
   <rdf:Description rdf:about="https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/estaciones/IslasFilipinas.html">
      <foaf:name>Islas Filipinas</foaf:name>
-     <mao:hasLift>YES</mao:hasLift>
+     <mao:hasLift>TRUE</mao:hasLift>
+     <mao:hasEscalator>TRUE</mao:hasEscalator>
+     <mao:hasTravelator>TRUE</mao:hasTravelator>
      <rdf:type rdf:resource="mao.StopPlace" />
+     <mao:ofLine rdf:resource="https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/lineas_y_horarios/linea06.html"/>
   </rdf:Description>
   <rdf:Description rdf:about="https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/estaciones/Abrantes.html">
      <foaf:name>Abrantes</foaf:name>
-     <mao:hasLift>YES</mao:hasLift>
+     <mao:hasLift>TRUE</mao:hasLift>
      <rdf:type rdf:resource="mao.StopPlace" />
+     <mao:Transfer> Autobuses Interurbanos</mao:Transfer>
+     <mao:ofLine rdf:resource="https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/lineas_y_horarios/linea07.html"/>
   </rdf:Description>
 
 </rdf:RDF>

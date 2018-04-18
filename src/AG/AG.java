@@ -103,7 +103,30 @@ public class AG {
 		    	System.out.println(n.getAttributes().getNamedItem("rdf:about").getNodeValue());
 		    	Element e = (Element)n;
 		    	System.out.println(e.getElementsByTagName("foaf:name").item(0).getFirstChild().getNodeValue());
-		    	System.out.println("hasLift " + (e.getElementsByTagName("mao:hasLift").item(0).hasChildNodes() ? e.getElementsByTagName("mao:hasLift").item(0).getFirstChild().getNodeValue() : "NO"));
+		    	System.out.println("hasLift " + 
+		    			(e.getElementsByTagName("mao:hasLift").getLength() > 0 
+		    				&& e.getElementsByTagName("mao:hasLift").item(0).hasChildNodes() 
+		    				? e.getElementsByTagName("mao:hasLift").item(0).getFirstChild().getNodeValue() 
+		    				: "FALSE"));
+		    	System.out.println("hasEscalator " + 
+		    			(e.getElementsByTagName("mao:hasEscalator").getLength() > 0 
+		    				&& e.getElementsByTagName("mao:hasEscalator").item(0).hasChildNodes() 
+		    				? e.getElementsByTagName("mao:hasEscalator").item(0).getFirstChild().getNodeValue() 
+		    				: "FALSE"));
+		    	System.out.println("hasTravelator " + 
+		    			(e.getElementsByTagName("mao:hasTravelator").getLength() > 0 
+		    				&& e.getElementsByTagName("mao:hasTravelator").item(0).hasChildNodes() 
+		    				? e.getElementsByTagName("mao:hasTravelator").item(0).getFirstChild().getNodeValue() 
+		    				: "FALSE"));
+		    	System.out.println("Transfer " + 
+		    			(e.getElementsByTagName("mao:Transfer").getLength() > 0 
+		    				&& e.getElementsByTagName("mao:Transfer").item(0).hasChildNodes() 
+		    				? e.getElementsByTagName("mao:Transfer").item(0).getFirstChild().getNodeValue() 
+		    				: "FALSE"));
+		    	System.out.println("Línea " + 
+		    			(e.getElementsByTagName("mao:ofLine").item(0).getAttributes().getNamedItem("rdf:resource") != null
+		    				? e.getElementsByTagName("mao:ofLine").item(0).getAttributes().getNamedItem("rdf:resource").getNodeValue()
+		    				: e.getElementsByTagName("mao:ofLine").item(0).getAttributes().getNamedItem("rdf:nodeID").getNodeValue()));
 
 		    }
 	        /*StreamSource stylesource = new StreamSource(stylesheet);
