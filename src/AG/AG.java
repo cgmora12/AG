@@ -164,7 +164,6 @@ public class AG {
 			    	}
 			    	
 		    	} else {
-		    		System.out.println("Line (list of lines or stations list)");
 		    		SetOfLines setOfLines = new SetOfLines();
 		    		setOfLines.linesID = n.getAttributes().getNamedItem("rdf:nodeID").getNodeValue();
 		    		List<String> abouts = new ArrayList<String>();
@@ -219,6 +218,8 @@ public class AG {
 		    
 		    Writer writer = null;
 		    try {
+		    	File file = new File(fileName + "." + fileType);
+		    	file.delete();
 		        writer = new BufferedWriter(new OutputStreamWriter(
 		              new FileOutputStream(fileName + "." + fileType), "utf-8"));
 		        writer.write("stationName,about,hasEscalator,hasLift,hasTravelator,transfer,"+/*type,*/"lineAbout,lineID,lineName,routeService");
