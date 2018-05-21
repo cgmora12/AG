@@ -136,7 +136,7 @@ public class AG {
 				    	xmlObject.transfer = (e.getElementsByTagName("mao:Transfer").getLength() > 0 
 			    				&& e.getElementsByTagName("mao:Transfer").item(0).hasChildNodes() 
 			    				? e.getElementsByTagName("mao:Transfer").item(0).getFirstChild().getNodeValue() 
-			    				: " ");
+			    				: "");
 				    	/*xmlObject.type = (e.getElementsByTagName("rdf:type").getLength() > 0
 				    			? e.getElementsByTagName("rdf:type").item(0).getAttributes().getNamedItem("rdf:resource").getNodeValue()
 				    			: "");*/
@@ -285,7 +285,7 @@ public class AG {
                 // use comma as separator
             	//TODO: replace all rare characters
                 columnsDescriptions = line.replaceAll("\"", "").replaceAll("\'", "").split(cvsSplitBy);
-                columns = line.replaceAll(" ", "_").replaceAll("\"", "").replaceAll("\'", "").toLowerCase().split(cvsSplitBy);
+                columns = line.replaceAll(" ", "_").replaceAll("\"", "").replaceAll("\'", "").split(cvsSplitBy);
 
             }
             if ((line = br.readLine()) != null) {
@@ -311,7 +311,7 @@ public class AG {
             
             // Generate API definition and doc
             apiDefinition += "{ \"swagger\" : \"2.0\", \"info\" : { \"version\" : \"1.0.0\", \"title\" : \"" + fileName + "\", \"description\" : \"Obtaining the " + fileNameNoWhiteSpaces  + "\" }, \"host\" : \"" + host + "\", \"basePath\" : \"" + basePath + "\",";
-            apiDefinition += "\"paths\" : { \"/\" : { \"get\" : { \"summary\" : \"GET " + fileName + "\", \"operationId\" : \"get" + fileNameNoWhiteSpaces + "\", \"produces\" : [ \"application/json\" ],";
+            apiDefinition += "\"paths\" : { \"/\" : { \"get\" : { \"summary\" : \"GET " + fileName + "\", \"operationId\" : \"get" + fileNameNoWhiteSpaces + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\", \"produces\" : [ \"application/json\" ],";
             apiDefinition += "\"parameters\" : [ ";
             		
             for(int i = 0; i < columns.length; i++) {
@@ -495,8 +495,8 @@ public class AG {
 		}
         try {
 			while ((lineServer = brServer.readLine()) != null) {
-				if(lineServer.contains("function(args, res, next) {")) {
-					servercode += lineFunctionName + "\n";
+				if(lineServer.contains("exports.getOperation = function(")) {
+					servercode += lineFunctionName.substring(0, lineFunctionName.indexOf("function")) + lineServer.substring(lineServer.indexOf("function")) + "\n";
 				}
 				else if(lineServer.contains("var fileName =")) {
 					servercode += lineServer.replace("./filename.csv", "./" + fileName + "." + fileType) + "\n";
@@ -536,6 +536,61 @@ public class AG {
 		try {
 			writer.println(servercode);
 			writer.close();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+
+		String defaultCode = "";
+		String servercodeCall = "(req.swagger.params, req.query, res, next);";
+        
+        BufferedReader brServer2 = null;
+		String lineServer2 = "";
+		try {
+			brServer2 = new BufferedReader(new FileReader
+					(apiCodeFolderName + "/controllers/Default.js"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			while ((lineServer2 = brServer2.readLine()) != null) {
+				if(lineServer2.contains("Default.getdata")) {
+					defaultCode += lineServer2.substring(0, lineServer2.indexOf('(')) + servercodeCall + "\n";
+				}
+				else {
+					defaultCode += lineServer2 + "\n";
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+        	brServer2.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        PrintWriter writer2 = null;
+		try {
+			writer2 = new PrintWriter(apiCodeFolderName + "/controllers/Default.js", "UTF-8");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			writer2.println(defaultCode);
+			writer2.close();
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
