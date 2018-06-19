@@ -314,6 +314,7 @@ public class AG {
             apiDefinition += "\"paths\" : { \"/\" : { \"get\" : { \"summary\" : \"GET " + fileName + "\", \"operationId\" : \"get" + fileNameNoWhiteSpaces + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\", \"produces\" : [ \"application/json\" ],";
             apiDefinition += "\"parameters\" : [ ";
             		
+            // Query parameters
             for(int i = 0; i < columns.length; i++) {
             	if(i > 0) {
             		apiDefinition += ",";
@@ -324,7 +325,18 @@ public class AG {
                 }
             }
             
-            apiDefinition += "\"responses\" : { \"200\" : { \"description\" : \"successful operation\", \"schema\" : { \"type\" : \"array\", \"items\" : { \"$ref\" : \"#/definitions/COLUMNS\" } } } } } } },";
+            apiDefinition += "\"responses\" : { \"200\" : { \"description\" : \"successful operation\", \"schema\" : { \"type\" : \"array\", \"items\" : { \"$ref\" : \"#/definitions/COLUMNS\" } } } } } } ,";
+        	
+            // Path parameters
+            for(int i = 0; i < columns.length; i++) {
+            	if(i > 0) {
+            		apiDefinition += ",";
+            	}
+            	apiDefinition += "\"/" + columns[i] + "/{" + columns [i] + "}\" : { \"get\" : { \"summary\" : \"" + columnsDescriptions[i] + "\", \"operationId\" : \"" + columnsDescriptions[i].replaceAll(" ", "").replaceAll("-", "") + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\", \"produces\" : [ \"application/json\" ],";
+            	apiDefinition += "\"parameters\" : [ { \"name\" : \"" + columns[i] + "\", \"in\" : \"path\", \"description\" : \"" + columnsDescriptions[i] + "\", \"required\" : true, \"type\" : \"" + dataTypes[i] + "\" } ],";
+            	apiDefinition += "\"responses\" : { \"200\" : { \"description\" : \"successful operation\", \"schema\" : { \"type\" : \"array\", \"items\" : { \"$ref\" : \"#/definitions/COLUMNS\" } } } } } }";
+            }
+            apiDefinition += "} ,";
             
             for(int i = 0; i < columns.length; i++) {
             	if(i > 0) {
@@ -452,11 +464,12 @@ public class AG {
 
 	private static void generateApiCode() {
 
+		// Edit DefaultService.js of nodejs server
 		String servercode = "";
 		
 		BufferedReader br = null;
 		String line = "";
-        String lineFunctionName = "";
+        ArrayList<String> lineFunctionNames = new ArrayList<String>();
 		try {
 			br = new BufferedReader(new FileReader(apiCodeFolderName + "/controllers/DefaultService.js"));
 		} catch (FileNotFoundException e) {
@@ -466,7 +479,7 @@ public class AG {
         try {
 			while ((line = br.readLine()) != null) {
 				if(line.contains("function(args, res, next) {")) {
-					lineFunctionName = line + "\n";
+					lineFunctionNames.add(line + "\n");
 				}
 			}
 		} catch (IOException e) {
@@ -495,15 +508,15 @@ public class AG {
 		}
         try {
 			while ((lineServer = brServer.readLine()) != null) {
-				if(lineServer.contains("exports.getOperation = function(")) {
-					servercode += lineFunctionName.substring(0, lineFunctionName.indexOf("function")) + lineServer.substring(lineServer.indexOf("function")) + "\n";
-				}
-				else if(lineServer.contains("var fileName =")) {
+				if(lineServer.contains("var fileName =")) {
 					servercode += lineServer.replace("./filename.csv", "./" + fileName + "." + fileType) + "\n";
 				} 
 				else {
 					servercode += lineServer + "\n";
 				}
+			}
+			for(String lineFunctionName: lineFunctionNames) {
+				servercode += lineFunctionName + "\t" + "exports.getOperation(args, res, next); \n}\n";
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -540,6 +553,8 @@ public class AG {
 			e.printStackTrace();
 		}
 
+		// Edit Default.js of nodejs server
+		/*
 		String defaultCode = "";
 		String servercodeCall = "(req.swagger.params, req.query, res, next);";
         
@@ -594,6 +609,7 @@ public class AG {
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
+		*/
 		
 	}
 	
