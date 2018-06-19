@@ -25,6 +25,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 public class AG {
 
 	// Variables
@@ -359,9 +364,13 @@ public class AG {
             }
             
 			// Create file
+            ObjectMapper jsonFormatter = new ObjectMapper();
+            Object json = jsonFormatter.readValue(apiDefinition, Object.class);
+            String apiDefinitionFormatted = jsonFormatter.writerWithDefaultPrettyPrinter()
+                                           .writeValueAsString(json);
             new File(apiCodeFolderName).mkdirs();
             PrintWriter writer2 = new PrintWriter(apiCodeFolderName + "/" + openAPIFileName, "UTF-8");
-            writer2.println(apiDefinition);
+            writer2.println(apiDefinitionFormatted);
             writer2.close();
             
             // Generate Swagger 2.0 API definition and doc
@@ -407,9 +416,13 @@ public class AG {
             }
             
 			// Create file
+            ObjectMapper jsonFormatter2 = new ObjectMapper();
+            Object json2 = jsonFormatter2.readValue(apiDefinition, Object.class);
+            String apiDefinitionFormatted2 = jsonFormatter2.writerWithDefaultPrettyPrinter()
+                                           .writeValueAsString(json2);
             new File(apiCodeFolderName).mkdirs();
             PrintWriter writer = new PrintWriter(apiCodeFolderName + "/" + swaggerFileName, "UTF-8");
-            writer.println(apiDefinition);
+            writer.println(apiDefinitionFormatted2);
             writer.close();
             
             File source = new File(csvFile);
