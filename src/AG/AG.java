@@ -34,12 +34,15 @@ public class AG {
 	public static String host = "virtserver.swaggerhub.com";
 	public static String basePath = "/cgmora12/lifts/1.0.0";
 	public static String swaggerFileName = "swagger.json";
+	public static String openAPIFileName = "openapi.json";
 	public static String swaggerCodegeneFileName = "swagger-codegen-cli-2.2.1.jar";
 	public static String apiCodeFolderName = "apiCode";
 	public static String serverCodeFileName = "servercode.js";
 	public static String resFolderName = "/AG/";
 	
 	public static void main(String[] args) {
+		
+		// TODO: Swagger 2.0 to OpenAPI
 		
 		//args: ficheroDatos
 		if(args.length == 1) {
@@ -83,6 +86,8 @@ public class AG {
                 
 	}
 
+	
+	// TODO: Specific RDF (XML) dataset
 	private static void convertDataFileIntoCSV() {
 		
 		String xmlFile = fileName + "." + alternativeFileType;
@@ -308,8 +313,59 @@ public class AG {
 
             }
             br.close();
+
+    		// TODO: Swagger 2.0 to OpenAPI
             
-            // Generate API definition and doc
+            // Generate OpenAPI definition and doc
+            apiDefinition = "";
+            apiDefinition += "{ \"openapi\" : \"3.0.0\", \"info\" : { \"version\" : \"1.0.0\", \"title\" : \"" + fileName + "\", \"description\" : \"Obtaining the " + fileNameNoWhiteSpaces  + "\" }, \"servers\" : [ { \"url\" : \"" + host+basePath + "\" } ] ,";
+            apiDefinition += "\"paths\" : { \"/\" : { \"get\" : { \"summary\" : \"GET " + fileName + "\", \"operationId\" : \"get" + fileNameNoWhiteSpaces + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\",";
+            apiDefinition += "\"parameters\" : [ ";
+            		
+            // Query parameters
+            for(int i = 0; i < columns.length; i++) {
+            	if(i > 0) {
+            		apiDefinition += ",";
+            	}
+            	apiDefinition += "{ \"in\" : \"query\", \"name\" : \"" + columns[i] + "\", \"schema\" : { \"type\" : \"" + dataTypes[i] + "\" }, \"description\" : \"" + columnsDescriptions[i] + "\" }";
+                if(i == columns.length-1) {
+                	apiDefinition += " ],";
+                }
+            }
+            
+            apiDefinition += "\"responses\" : { \"200\" : { \"description\" : \"successful operation\", \"content\" : { \"application/json\" : { \"schema\" : { \"type\" : \"array\", \"items\" : { \"$ref\" : \"#/components/schemas/COLUMNS\" } } } } } } } },";
+            
+            // Path parameters
+            for(int i = 0; i < columns.length; i++) {
+            	if(i > 0) {
+            		apiDefinition += ",";
+            	}
+            	apiDefinition += "\"/" + columns[i] + "/{" + columns [i] + "}\" : { \"get\" : { \"summary\" : \"" + columnsDescriptions[i] + "\", \"operationId\" : \"" + columnsDescriptions[i].replaceAll(" ", "").replaceAll("-", "") + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\",";
+            	apiDefinition += "\"parameters\" : [ { \"name\" : \"" + columns[i] + "\", \"in\" : \"path\", \"description\" : \"" + columnsDescriptions[i] + "\", \"required\" : true, \"schema\" : { \"type\" : \"" + dataTypes[i] + "\" } } ],";
+            	apiDefinition += "\"responses\" : { \"200\" : { \"description\" : \"successful operation\", \"content\" : { \"application/json\" : { \"schema\" : { \"type\" : \"array\", \"items\" : { \"$ref\" : \"#/components/schemas/COLUMNS\" } } } } } } } } ";
+            }
+            apiDefinition += "} ,";
+
+            for(int i = 0; i < columns.length; i++) {
+            	if(i > 0) {
+            		apiDefinition += ",";
+        		} else {
+        			apiDefinition += "\"components\" : { \"schemas\" : { \"COLUMNS\" : { \"type\" : \"object\", \"required\" : [ \"" + columns[i] + "\" ], \"properties\" : {";
+               	}
+            	apiDefinition += "\"" + columns[i] + "\" : { \"type\" : \"" + dataTypes[i] + "\", \"example\" : \"" + exampleData[i] + "\" }";
+                if(i == columns.length-1) {
+                	apiDefinition += "}, \"xml\" : { \"name\" : \"COLUMNS\" } } } } }";
+                }
+            }
+            
+			// Create file
+            new File(apiCodeFolderName).mkdirs();
+            PrintWriter writer2 = new PrintWriter(apiCodeFolderName + "/" + openAPIFileName, "UTF-8");
+            writer2.println(apiDefinition);
+            writer2.close();
+            
+            // Generate Swagger 2.0 API definition and doc
+            apiDefinition = "";
             apiDefinition += "{ \"swagger\" : \"2.0\", \"info\" : { \"version\" : \"1.0.0\", \"title\" : \"" + fileName + "\", \"description\" : \"Obtaining the " + fileNameNoWhiteSpaces  + "\" }, \"host\" : \"" + host + "\", \"basePath\" : \"" + basePath + "\",";
             apiDefinition += "\"paths\" : { \"/\" : { \"get\" : { \"summary\" : \"GET " + fileName + "\", \"operationId\" : \"get" + fileNameNoWhiteSpaces + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\", \"produces\" : [ \"application/json\" ],";
             apiDefinition += "\"parameters\" : [ ";
@@ -363,7 +419,7 @@ public class AG {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            
+               
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
