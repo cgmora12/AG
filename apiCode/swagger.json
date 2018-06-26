@@ -1,0 +1,394 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "1.0.0",
+    "title" : "data",
+    "description" : "Obtaining the data"
+  },
+  "host" : "metro.com",
+  "basePath" : "/madrid",
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "GET data",
+        "operationId" : "getdata",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "stationName",
+          "type" : "string",
+          "description" : "stationName"
+        }, {
+          "in" : "query",
+          "name" : "about",
+          "type" : "string",
+          "description" : "about"
+        }, {
+          "in" : "query",
+          "name" : "hasEscalator",
+          "type" : "string",
+          "description" : "hasEscalator"
+        }, {
+          "in" : "query",
+          "name" : "hasLift",
+          "type" : "string",
+          "description" : "hasLift"
+        }, {
+          "in" : "query",
+          "name" : "hasTravelator",
+          "type" : "string",
+          "description" : "hasTravelator"
+        }, {
+          "in" : "query",
+          "name" : "transfer",
+          "type" : "string",
+          "description" : "transfer"
+        }, {
+          "in" : "query",
+          "name" : "lineAbout",
+          "type" : "string",
+          "description" : "lineAbout"
+        }, {
+          "in" : "query",
+          "name" : "lineID",
+          "type" : "string",
+          "description" : "lineID"
+        }, {
+          "in" : "query",
+          "name" : "lineName",
+          "type" : "string",
+          "description" : "lineName"
+        }, {
+          "in" : "query",
+          "name" : "routeService",
+          "type" : "string",
+          "description" : "routeService"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stationName/{stationName}" : {
+      "get" : {
+        "summary" : "stationName",
+        "operationId" : "stationName",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "stationName",
+          "in" : "path",
+          "description" : "stationName",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/about/{about}" : {
+      "get" : {
+        "summary" : "about",
+        "operationId" : "about",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "about",
+          "in" : "path",
+          "description" : "about",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hasEscalator/{hasEscalator}" : {
+      "get" : {
+        "summary" : "hasEscalator",
+        "operationId" : "hasEscalator",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "hasEscalator",
+          "in" : "path",
+          "description" : "hasEscalator",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hasLift/{hasLift}" : {
+      "get" : {
+        "summary" : "hasLift",
+        "operationId" : "hasLift",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "hasLift",
+          "in" : "path",
+          "description" : "hasLift",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/hasTravelator/{hasTravelator}" : {
+      "get" : {
+        "summary" : "hasTravelator",
+        "operationId" : "hasTravelator",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "hasTravelator",
+          "in" : "path",
+          "description" : "hasTravelator",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/transfer/{transfer}" : {
+      "get" : {
+        "summary" : "transfer",
+        "operationId" : "transfer",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "transfer",
+          "in" : "path",
+          "description" : "transfer",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lineAbout/{lineAbout}" : {
+      "get" : {
+        "summary" : "lineAbout",
+        "operationId" : "lineAbout",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "lineAbout",
+          "in" : "path",
+          "description" : "lineAbout",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lineID/{lineID}" : {
+      "get" : {
+        "summary" : "lineID",
+        "operationId" : "lineID",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "lineID",
+          "in" : "path",
+          "description" : "lineID",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lineName/{lineName}" : {
+      "get" : {
+        "summary" : "lineName",
+        "operationId" : "lineName",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "lineName",
+          "in" : "path",
+          "description" : "lineName",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/routeService/{routeService}" : {
+      "get" : {
+        "summary" : "routeService",
+        "operationId" : "routeService",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "routeService",
+          "in" : "path",
+          "description" : "routeService",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/COLUMNS"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "COLUMNS" : {
+      "type" : "object",
+      "required" : [ "stationName" ],
+      "properties" : {
+        "stationName" : {
+          "type" : "string",
+          "example" : "Plaza de Castilla"
+        },
+        "about" : {
+          "type" : "string",
+          "example" : "https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/estaciones/Plaza_Castilla.html"
+        },
+        "hasEscalator" : {
+          "type" : "string",
+          "example" : "TRUE"
+        },
+        "hasLift" : {
+          "type" : "string",
+          "example" : "TRUE"
+        },
+        "hasTravelator" : {
+          "type" : "string",
+          "example" : "FALSE"
+        },
+        "transfer" : {
+          "type" : "string",
+          "example" : " Autobuses Interurbanos"
+        },
+        "lineAbout" : {
+          "type" : "string",
+          "example" : "https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/lineas_y_horarios/linea09.html"
+        },
+        "lineID" : {
+          "type" : "string",
+          "example" : "N15c3932d937e4e1b8cb30623cd1d55a9"
+        },
+        "lineName" : {
+          "type" : "string",
+          "example" : "LÃ­nea 9"
+        },
+        "routeService" : {
+          "type" : "string",
+          "example" : "https://www.metromadrid.es/es/index.html"
+        }
+      },
+      "xml" : {
+        "name" : "COLUMNS"
+      }
+    }
+  },
+  "schemes" : [ "https" ]
+}

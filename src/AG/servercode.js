@@ -21,10 +21,10 @@ exports.getOperation = function(args, res, next) {
               result = result.data;
               try{
                 // Creating json object
-                result = "{ \"csv\": " + JSON.stringify(result) + " }";
+                result = "{ \"results\": " + JSON.stringify(result) + " }";
                 var jsonObj = JSON.parse(result);
                 var jsonResult = new Object();
-                jsonResult.csv = [];
+                jsonResult.results = [];
 
                 // Filtering results
                 var argsUndefined = true;
@@ -37,25 +37,25 @@ exports.getOperation = function(args, res, next) {
                   }
                 }
                 if(argsUndefined){
-                  jsonResult.csv = jsonObj.csv;
+                  jsonResult.results = jsonObj.results;
                 }
                 else {
                   for(var j = 0; j < Object.keys(args).length; j++){
                     if(args[Object.keys(args)[j]].value != undefined){
-                      if(jsonResult.csv.length > 0 || filters){
-                        jsonObj.csv = jsonResult.csv;
-                        jsonResult.csv = [];
+                      if(jsonResult.results.length > 0 || filters){
+                        jsonObj.results = jsonResult.results;
+                        jsonResult.results = [];
                         object_number = 0;
                       }
                       filters = true;
-                      for(var i in jsonObj.csv){
-                        if(Object.keys(args)[j] === Object.keys(jsonObj.csv[i])[Object.keys(jsonObj.csv[i]).indexOf(Object.keys(args)[j])]){
-                          if(jsonObj.csv[i][Object.keys(jsonObj.csv[i])[Object.keys(jsonObj.csv[i]).indexOf(Object.keys(args)[j])]] === args[Object.keys(args)[j]].value + ""){
-                            jsonResult.csv[object_number] = jsonObj.csv[i];
+                      for(var i in jsonObj.results){
+                        if(Object.keys(args)[j] === Object.keys(jsonObj.results[i])[Object.keys(jsonObj.results[i]).indexOf(Object.keys(args)[j])]){
+                          if(jsonObj.results[i][Object.keys(jsonObj.results[i])[Object.keys(jsonObj.results[i]).indexOf(Object.keys(args)[j])]] === args[Object.keys(args)[j]].value + ""){
+                            jsonResult.results[object_number] = jsonObj.results[i];
                             object_number++;
                           }
-                          else if(args[Object.keys(args)[j]].value + "" === "all" && jsonObj.csv[i][Object.keys(jsonObj.csv[i])[Object.keys(jsonObj.csv[i]).indexOf(Object.keys(args)[j])]].replace(/\s+/g, '') != ""){
-                            jsonResult.csv[object_number] = jsonObj.csv[i];
+                          else if(args[Object.keys(args)[j]].value + "" === "all" && jsonObj.results[i][Object.keys(jsonObj.results[i])[Object.keys(jsonObj.results[i]).indexOf(Object.keys(args)[j])]].replace(/\s+/g, '') != ""){
+                            jsonResult.results[object_number] = jsonObj.results[i];
                             object_number++;
                           }
                         }

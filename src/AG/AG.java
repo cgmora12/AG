@@ -36,8 +36,8 @@ public class AG {
 	public static String fileName = "data";
 	public static String fileType = "csv";
 	public static String alternativeFileType = "";
-	public static String host = "virtserver.swaggerhub.com";
-	public static String basePath = "/cgmora12/lifts/1.0.0";
+	public static String host = "server.com";
+	public static String basePath = "/resource";
 	public static String swaggerFileName = "swagger.json";
 	public static String openAPIFileName = "openapi.json";
 	public static String swaggerCodegeneFileName = "swagger-codegen-cli-2.2.1.jar";
