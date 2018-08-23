@@ -20,6 +20,13 @@ import io.swagger.codegen.SwaggerCodegen;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,6 +43,7 @@ public class AG {
 	public static String fileName = "data";
 	public static String fileType = "csv";
 	public static String alternativeFileType = "";
+	public static String modelFileName = "";
 	public static String host = "server.com";
 	public static String basePath = "/resource";
 	public static String swaggerFileName = "swagger.json";
@@ -46,7 +54,7 @@ public class AG {
 	public static String resFolderName = "/AG/";
 	
 	public static void main(String[] args) {
-		
+		boolean m2mTransformation = false;
 		// TODO: Swagger 2.0 to OpenAPI
 		
 		//args: ficheroDatos
@@ -71,26 +79,160 @@ public class AG {
 			host = args[2];
 			basePath = args[3];
 		}
+		//args: ficheroDatos table.xmi metro.com /madrid m2m
+		else if(args.length == 5) {
+			fileName = args[0];
+			modelFileName = args[1];
+			host = args[2];
+			basePath = args[3];
+			if(args[4].contentEquals("m2m")) {
+				m2mTransformation = true;
+			}
+		}
 		
 		//Automatic API Generation process
-
-		if(!alternativeFileType.isEmpty() && alternativeFileType != fileType) { 
-		    convertDataFileIntoCSV();
-		}
-		String file = fileName + "." + fileType;
-		File f = new File(file);
-		if(f.exists() && !f.isDirectory()) { 
-			generateApiDefinition();
-	        generateServer();
-	        addServerDependencies();
-	        generateApiCode();
-	        System.out.println("Automatic API Generation finished!");
+		if(m2mTransformation) {
+	        System.out.println("convertCSVIntoXMI");
+			convertCSVIntoXMI();
 		} else {
-			System.out.println("The file " + fileName + "." + fileType + " does NOT exist...");
+			if(!alternativeFileType.isEmpty() && alternativeFileType != fileType) { 
+			    convertDataFileIntoCSV();
+			}
+			String file = fileName + "." + fileType;
+			File f = new File(file);
+			if(f.exists() && !f.isDirectory()) { 
+				generateApiDefinition();
+		        generateServer();
+		        addServerDependencies();
+		        generateApiCode();
+		        System.out.println("Automatic API Generation finished!");
+			} else {
+				System.out.println("The file " + fileName + "." + fileType + " does NOT exist...");
+			}
 		}
                 
 	}
 
+	// TODO: Specific RDF (XML) dataset
+	private static void convertCSVIntoXMI() {
+	
+		String csvFile = fileName + "." + fileType;
+		
+		BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ",";
+        ArrayList<String[]> rows = new ArrayList<String[]>();
+
+        try {
+        	// Read first rows of data file
+            br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                // use comma as separator
+            	//TODO: replace all rare characters
+                rows.add(line.replaceAll(" ", "_").replaceAll("\"", "").replaceAll("\'", "").split(cvsSplitBy));
+
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        try {
+	        System.out.println("create xmi");
+
+        	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+    		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+    		// root elements
+    		Document doc = docBuilder.newDocument();
+
+			Element rootElement = doc.createElement("table:Table");
+
+    		// set attributes to root element
+    		Attr attrsXmi = doc.createAttribute("xmi:version");
+    		attrsXmi.setValue("2.0");
+    		rootElement.setAttributeNode(attrsXmi);
+    		Attr attrsXmi2 = doc.createAttribute("xmlns:xmi");
+    		attrsXmi2.setValue("http://www.omg.org/XMI");
+    		rootElement.setAttributeNode(attrsXmi2);
+    		Attr attrsXmi3 = doc.createAttribute("xmlns:xsi");
+    		attrsXmi3.setValue("http://www.w3.org/2001/XMLSchema-instance");
+    		rootElement.setAttributeNode(attrsXmi3);
+    		Attr attrsXmi4 = doc.createAttribute("xmlns:table");
+    		attrsXmi4.setValue("platform:/resource/TransformationRules/Table.ecore");
+    		rootElement.setAttributeNode(attrsXmi4);
+
+    		Attr attr = doc.createAttribute("filename");
+    		attr.setValue(csvFile);
+    		rootElement.setAttributeNode(attr);
+    		
+    		doc.appendChild(rootElement);
+
+    		for(int i = 0; i < rows.size(); i++) {
+        		// rows elements
+        		Element rowsElement = doc.createElement("rows");
+        		Attr attrRow = doc.createAttribute("position");
+        		attrRow.setValue(i + "");
+        		rowsElement.setAttributeNode(attrRow);
+        		rootElement.appendChild(rowsElement);
+    			for (int j = 0; j < rows.get(i).length; j++) {
+    	    		// cells elements
+            		Element cellsElement = doc.createElement("cells");
+            		Attr attrCells = doc.createAttribute("value");
+            		attrCells.setValue(rows.get(i)[j]);
+            		cellsElement.setAttributeNode(attrCells);
+            		String cellType = "";
+            		try {
+                		if(rows.get(i)[j].equals("" + Integer.parseInt(rows.get(i)[j]))) {
+                			cellType = "integer";
+                		} else if(rows.get(i)[j].equals("" + Float.parseFloat(rows.get(i)[j]))){
+                			cellType = "number";
+                		} else {
+                			cellType = "string";
+                		}
+                	} catch (NumberFormatException e) {
+                		cellType = "string";
+                	}
+
+            		Attr attrCells2 = doc.createAttribute("type");
+            		attrCells2.setValue(cellType);
+            		cellsElement.setAttributeNode(attrCells2);
+            		rowsElement.appendChild(cellsElement);
+    				
+    			}
+    		}
+
+    		// write the content into xml file
+    		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    		Transformer transformer = transformerFactory.newTransformer();
+    		DOMSource source = new DOMSource(doc);
+    		StreamResult result = new StreamResult(new File("." + File.separator + modelFileName));
+
+    		// Output to console for testing
+    		// StreamResult result = new StreamResult(System.out);
+
+    		transformer.transform(source, result);
+
+    		System.out.println("File saved!");
+
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        } catch (TransformerException tfe) {
+    		tfe.printStackTrace();
+    	}
+    	
+		
+	}
 	
 	// TODO: Specific RDF (XML) dataset
 	private static void convertDataFileIntoCSV() {
