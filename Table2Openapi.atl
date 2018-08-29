@@ -1,0 +1,149 @@
+-- @path Table=/TransformationRules/Table.ecore
+-- @path Openapi=/TransformationRules/Openapi.ecore
+
+module Table2Openapi;
+
+create OUT: Openapi from IN: Table;
+
+rule Main {
+	from
+		s: Table!Table
+	using {
+			firstTableRow : Sequence(Table!Cell) = s.rows->first().cells;
+			lastTableRow : Sequence(Table!Cell) = s.rows->last().cells;
+	}
+	to
+		t: Openapi!API (
+			openapi <- '3.0.0',
+			info <- openapi_info,--thisModule.resolveTemp(table.info, 'openapi_info'),
+			servers <- Sequence{openapi_servers},
+			paths <- Sequence{openapi_basic_path, openapi_paths},
+			components <- openapi_components
+		),
+		openapi_info: Openapi!Info (
+			title <- s.filename,
+			version <- '1.0.0',
+			description <- 'Obtaining the ' + s.filename
+		),
+		openapi_servers: Openapi!Server (
+			url <- 'http://www.urlprueba.com/v1'
+		),
+		openapi_basic_path: Openapi!Path (
+			pattern <- '/' ,
+			get <- path_operation_basic_get
+		),
+		openapi_paths: distinct Openapi!Path foreach (cell in firstTableRow)(
+			pattern <- '/' + cell.value + '/{' + cell.value + '}',
+			get <- path_operation->at(firstTableRow->indexOf(cell))
+		),
+		openapi_components: Openapi!Component (
+			schemas <- component_schema
+		),
+		component_schema: Openapi!Schemas (
+			mainComponent <- main_component
+		),
+		main_component: Openapi!MainComponent (
+			type <- 'object',
+			xml <- xml_component,
+			properties <- schema_properties
+		),
+		xml_component: Openapi!Xml(
+			name <- 'mainComponent'	
+		),
+		schema_properties: distinct Openapi!Property foreach (cell in firstTableRow) (
+			name <- cell.value,
+			content <- property_content->at(firstTableRow->indexOf(cell))
+		),
+		property_content: distinct Openapi!PropertyContent foreach (cell in firstTableRow)(
+			type <- lastTableRow->at(firstTableRow->indexOf(cell)).type,
+			example <- lastTableRow->at(firstTableRow->indexOf(cell)).value
+		),
+		path_operation_basic_get: Openapi!Operation (
+			summary <- 'GET ' + s.filename,
+			operationId <- 'get' + s.filename,
+			description <- 'Use value \'all\' in a parameter for non-empty values',
+			responses <- operation_responses_basic,
+			parameters <- operation_parameters_basic_get
+		),
+		path_operation: distinct Openapi!Operation foreach (cell in firstTableRow) (
+			summary <- 'GET ' + cell.value,
+			operationId <- 'get' + cell.value,
+			description <- 'Use value \'all\' in a parameter for non-empty values',
+			responses <- operation_responses->at(firstTableRow->indexOf(cell)),
+			parameters <- operation_parameters
+		),
+		operation_responses_basic: Openapi!Response (
+			code <- '200',
+			responseCode <- response_code_basic
+		),
+		operation_responses: distinct Openapi!Response foreach (cell in firstTableRow) (
+			code <- '200',
+			responseCode <- response_code->at(firstTableRow->indexOf(cell))
+		),
+		response_code_basic: Openapi!ResponseCode (
+			description <- 'successful operation',
+			content <- response_content_basic
+		),
+		response_code: distinct Openapi!ResponseCode foreach (cell in firstTableRow) (
+			description <- 'successful operation',
+			content <- response_content->at(firstTableRow->indexOf(cell))
+		),
+		response_content_basic: Openapi!ResponseContent (
+			contentTypeName <- 'application/json',
+			contentType <- response_content_type_basic
+		),
+		response_content: distinct Openapi!ResponseContent foreach (cell in firstTableRow) (
+			contentTypeName <- 'application/json',
+			contentType <- response_content_type->at(firstTableRow->indexOf(cell))
+		),
+		response_content_type_basic: Openapi!ResponseContentType (
+			schema <- response_schema_basic	
+		),
+		response_content_type: distinct Openapi!ResponseContentType foreach (cell in firstTableRow) (
+			schema <- response_schema->at(firstTableRow->indexOf(cell))
+		),
+		response_schema_basic: Openapi!Schema (
+			type <- 'array',
+			items <- schema_items_basic
+		),
+		response_schema: distinct Openapi!Schema foreach (cell in firstTableRow) (
+			type <- 'array',
+			items <- schema_items->at(firstTableRow->indexOf(cell))
+		),
+		schema_items_basic: Openapi!Item (
+			ref <- '#/components/schemas/mainComponent'
+		),
+		schema_items: distinct Openapi!Item foreach (cell in firstTableRow) (
+			ref <- '#/components/schemas/mainComponent'	
+		),
+		operation_parameters_basic_get: distinct Openapi!Parameter foreach (cell in firstTableRow)(
+				in <- 'query',
+				name <- cell.value,
+				description <- cell.value,
+				schema <- parameter_schema_basic->at(firstTableRow->indexOf(cell))
+		),
+		operation_parameters: distinct Openapi!Parameter foreach (cell in firstTableRow)(
+				in <- 'path',
+				name <- cell.value,
+				description <- cell.value,
+				schema <- parameter_schema->at(firstTableRow->indexOf(cell)),
+				required <- true
+		),
+		parameter_schema_basic: distinct Openapi!Schema foreach (cell in firstTableRow)(
+				type <- cell.type
+		),
+		parameter_schema: distinct Openapi!Schema foreach (cell in firstTableRow)(
+				type <- cell.type
+		)
+}
+
+--rule TableInfo2OpenapiInfo {
+--	from
+--		info: Table!Info
+--	to
+--		openapi_info: Openapi!Info (
+--			title <- info.filename,
+--			version <- '1',
+--			description <- 'Obtaining the ' + info.filename
+--		)
+--}

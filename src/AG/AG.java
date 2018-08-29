@@ -26,7 +26,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.m2m.atl.emftvm.standalone.ATLRunner;
+import cs.ualberta.launcher.*;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +55,7 @@ public class AG {
 	public static String fileName = "data";
 	public static String fileType = "csv";
 	public static String alternativeFileType = "";
-	public static String modelFileName = "";
+	public static String modelFileName = "table.xmi";
 	public static String host = "server.com";
 	public static String basePath = "/resource";
 	public static String swaggerFileName = "swagger.json";
@@ -65,6 +69,8 @@ public class AG {
 	public static boolean m2mTransformation = false;
 	public static boolean openapi2api = false;
 	public static boolean xmi2json = false;
+	public static boolean xmi2api = false;
+	public static boolean csv2api = false;
 	
 	public static void main(String[] args) {
 		// TODO: Swagger 2.0 to OpenAPI
@@ -83,6 +89,12 @@ public class AG {
 			fileName = args[0];
 			alternativeFileType = args[1];
 		}
+		//args: openapi.xmi openapi.json xmi2api
+		else if(args.length == 3 && args[2].contentEquals("xmi2api")) {
+			xmi2api = true;
+			openAPIXMIFileName = args[0];
+			openAPIFileName = args[1];
+		}
 		//args: openapi.xmi openapi.json xmi2json
 		else if(args.length == 3 && args[2].contentEquals("xmi2json")) {
 			xmi2json = true;
@@ -94,6 +106,13 @@ public class AG {
 			fileName = args[0];
 			host = args[1];
 			basePath = args[2];
+		}
+		//args: data table.xmi openapi.xmi csv2api
+		else if(args.length == 4 && args[3].contentEquals("csv2api")) {
+			csv2api = true;
+			fileName = args[0];
+			modelFileName = args[1];
+			openAPIXMIFileName = args[2];
 		}
 		//args: ficheroDatos xml metro.com /madrid
 		else if(args.length == 4) {
@@ -125,6 +144,24 @@ public class AG {
 		else if(xmi2json) {
 		    System.out.println("convertXMIintoJSON");
 		    convertXMIintoJSON();
+		}  
+		else if(xmi2api) {
+		    System.out.println("convertXMIintoAPI");
+		    convertXMIintoJSON();
+		    generateServer();
+	        addServerDependencies();
+	        generateApiCode();
+	        System.out.println("Automatic API Generation finished!");
+		}   
+		else if(csv2api) {
+		    System.out.println("convertCSVintoAPI");
+			convertCSVIntoXMI();
+			model2modelTransformation();
+		    convertXMIintoJSON();
+		    generateServer();
+	        addServerDependencies();
+	        generateApiCode();
+	        System.out.println("Automatic API Generation finished!");
 		} 
 		else {
 			if(!alternativeFileType.isEmpty() && alternativeFileType != fileType) { 
@@ -146,126 +183,11 @@ public class AG {
                 
 	}
 
-	private static void convertCSVIntoXMI() {
-	
-		String csvFile = fileName + "." + fileType;
-		
-		BufferedReader br = null;
-        String line = "";
-        String cvsSplitBy = ",";
-        ArrayList<String[]> rows = new ArrayList<String[]>();
-
-        try {
-        	// Read first rows of data file
-            br = new BufferedReader(new FileReader(csvFile));
-            while ((line = br.readLine()) != null) {
-                // use comma as separator
-            	//TODO: replace all rare characters
-                rows.add(line.replaceAll(" ", "_").replaceAll("\"", "").replaceAll("\'", "").split(cvsSplitBy));
-
-            }
-            br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        try {
-	        System.out.println("create xmi");
-
-        	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-    		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-    		// root elements
-    		Document doc = docBuilder.newDocument();
-
-			Element rootElement = doc.createElement("table:Table");
-
-    		// set attributes to root element
-    		Attr attrsXmi = doc.createAttribute("xmi:version");
-    		attrsXmi.setValue("2.0");
-    		rootElement.setAttributeNode(attrsXmi);
-    		Attr attrsXmi2 = doc.createAttribute("xmlns:xmi");
-    		attrsXmi2.setValue("http://www.omg.org/XMI");
-    		rootElement.setAttributeNode(attrsXmi2);
-    		Attr attrsXmi3 = doc.createAttribute("xmlns:xsi");
-    		attrsXmi3.setValue("http://www.w3.org/2001/XMLSchema-instance");
-    		rootElement.setAttributeNode(attrsXmi3);
-    		Attr attrsXmi4 = doc.createAttribute("xmlns:table");
-    		attrsXmi4.setValue("platform:/resource/TransformationRules/Table.ecore");
-    		rootElement.setAttributeNode(attrsXmi4);
-
-    		Attr attr = doc.createAttribute("filename");
-    		attr.setValue(csvFile);
-    		rootElement.setAttributeNode(attr);
-    		
-    		doc.appendChild(rootElement);
-
-    		for(int i = 0; i < rows.size(); i++) {
-        		// rows elements
-        		Element rowsElement = doc.createElement("rows");
-        		Attr attrRow = doc.createAttribute("position");
-        		attrRow.setValue(i + "");
-        		rowsElement.setAttributeNode(attrRow);
-        		rootElement.appendChild(rowsElement);
-    			for (int j = 0; j < rows.get(i).length; j++) {
-    	    		// cells elements
-            		Element cellsElement = doc.createElement("cells");
-            		Attr attrCells = doc.createAttribute("value");
-            		attrCells.setValue(rows.get(i)[j]);
-            		cellsElement.setAttributeNode(attrCells);
-            		String cellType = "";
-            		try {
-                		if(rows.get(i)[j].equals("" + Integer.parseInt(rows.get(i)[j]))) {
-                			cellType = "integer";
-                		} else if(rows.get(i)[j].equals("" + Float.parseFloat(rows.get(i)[j]))){
-                			cellType = "number";
-                		} else {
-                			cellType = "string";
-                		}
-                	} catch (NumberFormatException e) {
-                		cellType = "string";
-                	}
-
-            		Attr attrCells2 = doc.createAttribute("type");
-            		attrCells2.setValue(cellType);
-            		cellsElement.setAttributeNode(attrCells2);
-            		rowsElement.appendChild(cellsElement);
-    				
-    			}
-    		}
-
-    		// write the content into xml file
-    		TransformerFactory transformerFactory = TransformerFactory.newInstance();
-    		Transformer transformer = transformerFactory.newTransformer();
-    		DOMSource source = new DOMSource(doc);
-    		StreamResult result = new StreamResult(new File("." + File.separator + modelFileName));
-
-    		// Output to console for testing
-    		// StreamResult result = new StreamResult(System.out);
-
-    		transformer.transform(source, result);
-
-    		System.out.println("File saved!");
-
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (TransformerException tfe) {
-    		tfe.printStackTrace();
-    	}
-    	
-		
+	@Override
+	public String toString() {
+		return "AG [getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
-	
+
 	private static void convertDataFileIntoCSV() {
 		
 		String xmlFile = fileName + "." + alternativeFileType;
@@ -290,11 +212,11 @@ public class AG {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
+	
 			List<XmlObject> xmlObjectList = new ArrayList<XmlObject>();
 			List<Line> lineList = new ArrayList<Line>();
 			List<SetOfLines> setOfLinesList = new ArrayList<SetOfLines>();
-
+	
 		    for(int i = 0; i < document.getElementsByTagName("rdf:Description").getLength(); i++) {
 		    	Node n = document.getElementsByTagName("rdf:Description").item(i);
 		    	Element e = (Element)n;
@@ -323,7 +245,7 @@ public class AG {
 				    	/*xmlObject.type = (e.getElementsByTagName("rdf:type").getLength() > 0
 				    			? e.getElementsByTagName("rdf:type").item(0).getAttributes().getNamedItem("rdf:resource").getNodeValue()
 				    			: "");*/
-
+	
 				    	if(e.getElementsByTagName("mao:ofLine").item(0).getAttributes().getNamedItem("rdf:resource") != null) {
 				    		xmlObject.lineAbout = e.getElementsByTagName("mao:ofLine").item(0).getAttributes().getNamedItem("rdf:resource").getNodeValue();
 				    	} else if(e.getElementsByTagName("mao:ofLine").item(0).getAttributes().getNamedItem("rdf:nodeID") != null) {
@@ -440,9 +362,154 @@ public class AG {
 		}
 		
 	}
+
+	private static void convertCSVIntoXMI() {
 	
+		String csvFile = fileName + "." + fileType;
+		
+		BufferedReader br = null;
+        String line = "";
+        String cvsSplitBy = ",";
+        ArrayList<String[]> rows = new ArrayList<String[]>();
+
+        try {
+        	// Read first rows of data file
+            br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                // use comma as separator
+            	//TODO: replace all rare characters
+                rows.add(line.replaceAll(" ", "_").replaceAll("\"", "").replaceAll("\'", "").split(cvsSplitBy));
+
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
+        try {
+	        System.out.println("create xmi");
+
+        	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+    		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+    		// root elements
+    		Document doc = docBuilder.newDocument();
+
+			Element rootElement = doc.createElement("table:Table");
+
+    		// set attributes to root element
+    		Attr attrsXmi = doc.createAttribute("xmi:version");
+    		attrsXmi.setValue("2.0");
+    		rootElement.setAttributeNode(attrsXmi);
+    		Attr attrsXmi2 = doc.createAttribute("xmlns:xmi");
+    		attrsXmi2.setValue("http://www.omg.org/XMI");
+    		rootElement.setAttributeNode(attrsXmi2);
+    		Attr attrsXmi3 = doc.createAttribute("xmlns:xsi");
+    		attrsXmi3.setValue("http://www.w3.org/2001/XMLSchema-instance");
+    		rootElement.setAttributeNode(attrsXmi3);
+    		Attr attrsXmi4 = doc.createAttribute("xmlns:table");
+    		attrsXmi4.setValue("platform:/resource/TransformationRules/Table.ecore");
+    		rootElement.setAttributeNode(attrsXmi4);
+
+    		Attr attr = doc.createAttribute("filename");
+    		attr.setValue(fileName);
+    		rootElement.setAttributeNode(attr);
+    		
+    		doc.appendChild(rootElement);
+
+    		for(int i = 0; i < rows.size(); i++) {
+        		// rows elements
+        		Element rowsElement = doc.createElement("rows");
+        		Attr attrRow = doc.createAttribute("position");
+        		attrRow.setValue(i + "");
+        		rowsElement.setAttributeNode(attrRow);
+        		rootElement.appendChild(rowsElement);
+    			for (int j = 0; j < rows.get(i).length; j++) {
+    	    		// cells elements
+            		Element cellsElement = doc.createElement("cells");
+            		Attr attrCells = doc.createAttribute("value");
+            		attrCells.setValue(rows.get(i)[j]);
+            		cellsElement.setAttributeNode(attrCells);
+            		String cellType = "";
+            		try {
+                		if(rows.get(i)[j].equals("" + Integer.parseInt(rows.get(i)[j]))) {
+                			cellType = "integer";
+                		} else if(rows.get(i)[j].equals("" + Float.parseFloat(rows.get(i)[j]))){
+                			cellType = "number";
+                		} else {
+                			cellType = "string";
+                		}
+                	} catch (NumberFormatException e) {
+                		cellType = "string";
+                	}
+
+            		Attr attrCells2 = doc.createAttribute("type");
+            		attrCells2.setValue(cellType);
+            		cellsElement.setAttributeNode(attrCells2);
+            		rowsElement.appendChild(cellsElement);
+    				
+    			}
+    		}
+
+    		// write the content into xml file
+    		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+    		Transformer transformer = transformerFactory.newTransformer();
+    		DOMSource source = new DOMSource(doc);
+    		StreamResult result = new StreamResult(new File("." + File.separator + modelFileName));
+
+    		// Output to console for testing
+    		// StreamResult result = new StreamResult(System.out);
+
+    		transformer.transform(source, result);
+
+    		System.out.println("File saved!");
+
+        } catch (ParserConfigurationException pce) {
+            pce.printStackTrace();
+        } catch (TransformerException tfe) {
+    		tfe.printStackTrace();
+    	}
+    	
+		
+	}
+	
+	private static void model2modelTransformation() {
+		
+		/*String[] args = new String [10];
+		args[0] = "-f";
+		args[1] = "Table2Openapi.atl";
+		args[2] = "-s";
+		args[3] = "Table.ecore";
+		args[4] = "-t";
+		args[5] = "Openapi.ecore";
+		args[6] = "-i";
+		args[7] = modelFileName;
+		args[8] = "-o";
+		args[9] = openAPIXMIFileName;
+		try {
+			ATLRunner.main(args);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+		Launcher launcher = new Launcher();
+		launcher.runATL("Table.ecore", "Table", modelFileName, "Openapi.ecore", "Openapi", openAPIXMIFileName, "Table2Openapi", "");
+		
+	}
+
 	private static void convertXMIintoJSON() {
-		String jsonString = "", jsonStringFormatted = "";
+		String jsonString = "", jsonStringFormatted = "", swaggerString = "", swaggerStringFormatted = "";
 		
 		try {
             JSONObject xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(openAPIXMIFileName)));
@@ -452,9 +519,19 @@ public class AG {
             xmlJSONObj.remove("xmi:version");
             xmlJSONObj.remove("xmlns:xmi");
             xmlJSONObj.remove("xmlns:openapi");
-
+            
             JSONArray pathsArray = xmlJSONObj.getJSONArray("paths");
             xmlJSONObj.remove("paths");
+            
+            try {
+            	JSONArray servers = xmlJSONObj.getJSONArray("servers");
+            } catch (JSONException e) {
+            	JSONObject servers = xmlJSONObj.getJSONObject("servers");
+                xmlJSONObj.remove("servers");
+                JSONArray serversArray = new JSONArray();
+                serversArray.put(servers);
+                xmlJSONObj.put("servers", serversArray);
+            }
             
             for(int i = 0; i < pathsArray.length(); i++) {
             	JSONObject jsonobj = pathsArray.getJSONObject(i);
@@ -510,10 +587,69 @@ public class AG {
             jsonString = xmlJSONObj.toString();
             ObjectMapper jsonFormatter = new ObjectMapper();
             Object json = jsonFormatter.readValue(jsonString, Object.class);
-            jsonStringFormatted = jsonFormatter.writerWithDefaultPrettyPrinter()
-                                           .writeValueAsString(json);
+            jsonStringFormatted = jsonFormatter.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+            
+
+            JSONObject xmlSwaggerObj = xmlJSONObj;
+            xmlSwaggerObj.remove("openapi");
+            xmlSwaggerObj.put("swagger", "2.0");
+            String urlServer = xmlSwaggerObj.getJSONArray("servers").getJSONObject(0).getString("url");
+            urlServer = urlServer.replaceAll("http://", "");
+            urlServer = urlServer.replaceAll("https://", "");
+            if(StringUtils.countMatches(urlServer,"/") > 0) {
+                xmlSwaggerObj.put("host", urlServer.substring(0, urlServer.indexOf("/")));
+                xmlSwaggerObj.put("basePath", urlServer.substring(urlServer.indexOf("/")));
+            } else {
+                xmlSwaggerObj.put("host", urlServer);
+                xmlSwaggerObj.put("basePath", "/");
+            }
+            xmlSwaggerObj.remove("servers");
+
+            
+            for(int i = 0; i < xmlSwaggerObj.getJSONObject("paths").length(); i++) {
+            	String pathSwagger = xmlSwaggerObj.getJSONObject("paths").names().getString(i);
+            	JSONObject jsonobj = xmlSwaggerObj.getJSONObject("paths").getJSONObject(pathSwagger);
+            	JSONArray produces = new JSONArray();
+            	produces.put("application/json");
+            	jsonobj.getJSONObject("get").put("produces", produces);
+            	
+            	
+            	try {
+            		JSONArray parameters = jsonobj.getJSONObject("get").getJSONArray("parameters");
+            		for(int j = 0; j < parameters.length(); j++) {
+            			parameters.getJSONObject(j).put("type", parameters.getJSONObject(j).getJSONObject("schema").getString("type"));
+    	            	parameters.getJSONObject(j).remove("schema");
+            		}
+	            	
+            	} catch (JSONException e) {
+        			System.out.println(e.getMessage());
+            	}
+            	
+            	JSONObject jsonobjAuxSwagger = jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").getJSONObject("application/json").getJSONObject("schema");
+            	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").remove("content");
+            	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").put("schema", jsonobjAuxSwagger);
+            	
+            	String ref = jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("schema").getJSONObject("items").getString("$ref");
+            	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("schema").getJSONObject("items").remove("$ref");
+            	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("schema").getJSONObject("items").put("$ref", "#/definitions" + ref.substring(ref.lastIndexOf("/")));
+            	
+            }
+            
+            JSONObject componentsSchemas = xmlSwaggerObj.getJSONObject("components").getJSONObject("schemas");
+            xmlSwaggerObj.remove("components");
+            xmlSwaggerObj.put("definitions", componentsSchemas);
+            JSONArray definitionsSchemes = new JSONArray();
+            definitionsSchemes.put("https");
+            xmlSwaggerObj.put("schemes", definitionsSchemes);
+            
+            swaggerString = xmlSwaggerObj.toString();
+            ObjectMapper swaggerFormatter = new ObjectMapper();
+            Object jsonSwagger = swaggerFormatter.readValue(swaggerString, Object.class);
+            swaggerStringFormatted = swaggerFormatter.writerWithDefaultPrettyPrinter().writeValueAsString(jsonSwagger);
+            
         } catch (JSONException e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
         } catch (JsonParseException e) {
 			System.out.println(e.getMessage());
 		} catch (JsonMappingException e) {
@@ -521,20 +657,20 @@ public class AG {
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
-		 try (PrintWriter out = new PrintWriter(openAPIFileName)) {
+		
+		try (PrintWriter out = new PrintWriter(openAPIFileName)) {
 		    out.println(jsonStringFormatted);
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
+		
+		try (PrintWriter out = new PrintWriter(swaggerFileName)) {
+		    out.println(swaggerStringFormatted);
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
 	}
-
-	//TODO: Openapi.json to Swagger.json
 	
-	@Override
-	public String toString() {
-		return "AG [getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
-	}
-
 	private static void generateApiDefinition() {
 		
 		String csvFile = fileName + "." + fileType;
@@ -713,12 +849,19 @@ public class AG {
 
 	private static void generateServer() {
 
-		if(openapi2api) {
+		if(openapi2api || xmi2api || csv2api) {
 			new File(apiCodeFolderName).mkdirs();
 			File source = new File(swaggerFileName);
 			File dest = new File(apiCodeFolderName + File.separator + swaggerFileName);
 			try {
 			    FileUtils.copyFile(source, dest);
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+			File sourceData = new File(fileName + "." + fileType);
+			File destData = new File(apiCodeFolderName + File.separator + fileName + "." + fileType);
+			try {
+			    FileUtils.copyFile(sourceData, destData);
 			} catch (IOException e) {
 			    e.printStackTrace();
 			}

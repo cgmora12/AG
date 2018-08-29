@@ -8,5 +8,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="res/swagger-codegen-cli-2.2.1.jar"/>
 	<classpathentry kind="lib" path="/Users/cesargonzalezmora/eclipse-workspace/AG/res/java-json.jar"/>
+	<classpathentry kind="lib" path="res/atl-emftvm-fatjar.jar"/>
+	<classpathentry kind="lib" path="res/MTCLauncherJava.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
