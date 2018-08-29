@@ -26,13 +26,21 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.XML;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -48,23 +56,38 @@ public class AG {
 	public static String basePath = "/resource";
 	public static String swaggerFileName = "swagger.json";
 	public static String openAPIFileName = "openapi.json";
+	public static String openAPIXMIFileName = "openapi.xmi";
 	public static String swaggerCodegeneFileName = "swagger-codegen-cli-2.2.1.jar";
 	public static String apiCodeFolderName = "apiCode";
 	public static String serverCodeFileName = "servercode.js";
 	public static String resFolderName = "/AG/";
+
+	public static boolean m2mTransformation = false;
+	public static boolean openapi2api = false;
+	public static boolean xmi2json = false;
 	
 	public static void main(String[] args) {
-		boolean m2mTransformation = false;
 		// TODO: Swagger 2.0 to OpenAPI
 		
 		//args: ficheroDatos
 		if(args.length == 1) {
 			fileName = args[0];
 		}
+		//args: openapi.json openapi2api
+		else if(args.length == 2 && args[1].contentEquals("openapi2api")) {
+			openapi2api = true;
+			swaggerFileName = args[0];
+		}
 		//args: ficheroDatos xml
 		else if(args.length == 2) {
 			fileName = args[0];
 			alternativeFileType = args[1];
+		}
+		//args: openapi.xmi openapi.json xmi2json
+		else if(args.length == 3 && args[2].contentEquals("xmi2json")) {
+			xmi2json = true;
+			openAPIXMIFileName = args[0];
+			openAPIFileName = args[1];
 		}
 		//args: ficheroDatos metro.com /madrid
 		else if(args.length == 3) {
@@ -94,7 +117,16 @@ public class AG {
 		if(m2mTransformation) {
 	        System.out.println("convertCSVIntoXMI");
 			convertCSVIntoXMI();
-		} else {
+		} 
+		else if(openapi2api) {
+		    System.out.println("convertOpenapiToAPI");
+		    generateServer();
+		} 
+		else if(xmi2json) {
+		    System.out.println("convertXMIintoJSON");
+		    convertXMIintoJSON();
+		} 
+		else {
 			if(!alternativeFileType.isEmpty() && alternativeFileType != fileType) { 
 			    convertDataFileIntoCSV();
 			}
@@ -109,11 +141,11 @@ public class AG {
 			} else {
 				System.out.println("The file " + fileName + "." + fileType + " does NOT exist...");
 			}
+			
 		}
                 
 	}
 
-	// TODO: Specific RDF (XML) dataset
 	private static void convertCSVIntoXMI() {
 	
 		String csvFile = fileName + "." + fileType;
@@ -234,7 +266,6 @@ public class AG {
 		
 	}
 	
-	// TODO: Specific RDF (XML) dataset
 	private static void convertDataFileIntoCSV() {
 		
 		String xmlFile = fileName + "." + alternativeFileType;
@@ -409,7 +440,96 @@ public class AG {
 		}
 		
 	}
+	
+	private static void convertXMIintoJSON() {
+		String jsonString = "", jsonStringFormatted = "";
+		
+		try {
+            JSONObject xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(openAPIXMIFileName)));
+            
+            xmlJSONObj = xmlJSONObj.getJSONObject("openapi:API");
+            xmlJSONObj.remove("openapi:API");
+            xmlJSONObj.remove("xmi:version");
+            xmlJSONObj.remove("xmlns:xmi");
+            xmlJSONObj.remove("xmlns:openapi");
 
+            JSONArray pathsArray = xmlJSONObj.getJSONArray("paths");
+            xmlJSONObj.remove("paths");
+            
+            for(int i = 0; i < pathsArray.length(); i++) {
+            	JSONObject jsonobj = pathsArray.getJSONObject(i);
+            	String path = jsonobj.getString("pattern");
+            	jsonobj.remove("pattern");
+            	if(i == 0) {
+                	xmlJSONObj.put("paths", new JSONObject());
+            	}
+            	JSONObject jsonobj2 = pathsArray.getJSONObject(i).getJSONObject("get");
+            	xmlJSONObj.getJSONObject("paths").put(path, new JSONObject());
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).put("get", jsonobj2);
+            	
+            	try {
+	            	JSONObject parameters = xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("parameters");
+	            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").put("parameters", new JSONArray());
+	            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONArray("parameters").put(parameters);
+            	} catch (JSONException e) {
+        			System.out.println(e.getMessage());
+            	}
+            	
+            	JSONObject jsonobjAux = pathsArray.getJSONObject(i).getJSONObject("get").getJSONObject("responses").getJSONObject("responseCode");
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").remove("responses");
+                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").put("responses", new JSONObject());
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").put("200", jsonobjAux);
+            	
+            	JSONObject jsonobjAuxContent = jsonobjAux.getJSONObject("content").getJSONObject("contentType");
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").remove("content");
+                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").put("content", new JSONObject());
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").put("application/json", jsonobjAuxContent);
+            	
+            	String ref = jsonobjAuxContent.getJSONObject("schema").getJSONObject("items").getString("ref");
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").getJSONObject("application/json").getJSONObject("schema").remove("items");
+                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").getJSONObject("application/json").getJSONObject("schema").put("items", new JSONObject());
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").getJSONObject("application/json").getJSONObject("schema").getJSONObject("items").put("$ref", ref);
+            	
+            }
+            
+            JSONArray propertiesArray = xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").getJSONArray("properties");
+            xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").remove("properties");
+            
+            for(int i = 0; i < propertiesArray.length(); i++) {
+            	JSONObject jsonobj = propertiesArray.getJSONObject(i);
+            	String path = jsonobj.getString("name");
+            	jsonobj.remove("name");
+            	if(i == 0) {
+                	xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").put("properties", new JSONObject());
+            	} 
+            	JSONObject jsonobj2 = propertiesArray.getJSONObject(i).getJSONObject("content");
+            	xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").getJSONObject("properties").put(path, jsonobj2);
+            	
+            }
+            
+            jsonString = xmlJSONObj.toString();
+            ObjectMapper jsonFormatter = new ObjectMapper();
+            Object json = jsonFormatter.readValue(jsonString, Object.class);
+            jsonStringFormatted = jsonFormatter.writerWithDefaultPrettyPrinter()
+                                           .writeValueAsString(json);
+        } catch (JSONException e) {
+			System.out.println(e.getMessage());
+        } catch (JsonParseException e) {
+			System.out.println(e.getMessage());
+		} catch (JsonMappingException e) {
+			System.out.println(e.getMessage());
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		 try (PrintWriter out = new PrintWriter(openAPIFileName)) {
+		    out.println(jsonStringFormatted);
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	//TODO: Openapi.json to Swagger.json
+	
 	@Override
 	public String toString() {
 		return "AG [getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
@@ -593,12 +713,23 @@ public class AG {
 
 	private static void generateServer() {
 
+		if(openapi2api) {
+			new File(apiCodeFolderName).mkdirs();
+			File source = new File(swaggerFileName);
+			File dest = new File(apiCodeFolderName + File.separator + swaggerFileName);
+			try {
+			    FileUtils.copyFile(source, dest);
+			} catch (IOException e) {
+			    e.printStackTrace();
+			}
+		}
+		
 		String[] args = new String [7];
 		args[0] = "generate";
 		args[1] = "--lang";
 		args[2] = "nodejs-server";
 		args[3] = "--input-spec";
-		args[4] = apiCodeFolderName + "/" + swaggerFileName;
+		args[4] = apiCodeFolderName + File.separator + swaggerFileName;
 		args[5] = "--output";
 		args[6] = apiCodeFolderName;
 		SwaggerCodegen.main(args);

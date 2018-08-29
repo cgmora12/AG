@@ -1,0 +1,470 @@
+{
+  "components" : {
+    "schemas" : {
+      "mainComponent" : {
+        "xml" : {
+          "name" : "mainComponent"
+        },
+        "type" : "object",
+        "properties" : {
+          "hasLift" : {
+            "type" : "string",
+            "example" : false
+          },
+          "transfer" : {
+            "type" : "string",
+            "example" : ""
+          },
+          "hasEscalator" : {
+            "type" : "string",
+            "example" : true
+          },
+          "routeService" : {
+            "type" : "string",
+            "example" : "https://www.metromadrid.es/es/index.html"
+          },
+          "about" : {
+            "type" : "string",
+            "example" : "https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/estaciones/PuertaAngel.html"
+          },
+          "hasTravelator" : {
+            "type" : "string",
+            "example" : false
+          },
+          "lineID" : {
+            "type" : "string",
+            "example" : "N0b3660760b3d410b8de821cb0085b8c9"
+          },
+          "lineName" : {
+            "type" : "string",
+            "example" : "L�nea_6_Circular"
+          },
+          "stationName" : {
+            "type" : "string",
+            "example" : "Puerta_del_�ngel"
+          },
+          "lineAbout" : {
+            "type" : "string",
+            "example" : "https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/lineas_y_horarios/linea06.html"
+          }
+        }
+      }
+    }
+  },
+  "servers" : [ {
+    "url" : "www.urlprueba.com"
+  }, {
+    "url" : "www.urlprueba2.com"
+  } ],
+  "openapi" : "3.0.0",
+  "paths" : {
+    "/transfer/{transfer}" : {
+      "get" : {
+        "summary" : "GET transfer",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "gettransfer",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "transfer",
+          "description" : "transfer",
+          "required" : true
+        } ]
+      }
+    },
+    "/hasTravelator/{hasTravelator}" : {
+      "get" : {
+        "summary" : "GET hasTravelator",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "gethasTravelator",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "hasTravelator",
+          "description" : "hasTravelator",
+          "required" : true
+        } ]
+      }
+    },
+    "/lineAbout/{lineAbout}" : {
+      "get" : {
+        "summary" : "GET lineAbout",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "getlineAbout",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "lineAbout",
+          "description" : "lineAbout",
+          "required" : true
+        } ]
+      }
+    },
+    "/stationName/{stationName}" : {
+      "get" : {
+        "summary" : "GET stationName",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "getstationName",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "stationName",
+          "description" : "stationName",
+          "required" : true
+        } ]
+      }
+    },
+    "/about/{about}" : {
+      "get" : {
+        "summary" : "GET about",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "getabout",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "about",
+          "description" : "about",
+          "required" : true
+        } ]
+      }
+    },
+    "/hasLift/{hasLift}" : {
+      "get" : {
+        "summary" : "GET hasLift",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "gethasLift",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "hasLift",
+          "description" : "hasLift",
+          "required" : true
+        } ]
+      }
+    },
+    "/lineID/{lineID}" : {
+      "get" : {
+        "summary" : "GET lineID",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "getlineID",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "lineID",
+          "description" : "lineID",
+          "required" : true
+        } ]
+      }
+    },
+    "/hasEscalator/{hasEscalator}" : {
+      "get" : {
+        "summary" : "GET hasEscalator",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "gethasEscalator",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "hasEscalator",
+          "description" : "hasEscalator",
+          "required" : true
+        } ]
+      }
+    },
+    "/routeService/{routeService}" : {
+      "get" : {
+        "summary" : "GET routeService",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "getrouteService",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "routeService",
+          "description" : "routeService",
+          "required" : true
+        } ]
+      }
+    },
+    "/" : {
+      "get" : {
+        "summary" : "GET data.csv",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "getdata.csv",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "stationName",
+          "description" : "stationName"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "about",
+          "description" : "about"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "hasEscalator",
+          "description" : "hasEscalator"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "hasLift",
+          "description" : "hasLift"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "hasTravelator",
+          "description" : "hasTravelator"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "transfer",
+          "description" : "transfer"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "lineAbout",
+          "description" : "lineAbout"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "lineID",
+          "description" : "lineID"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "lineName",
+          "description" : "lineName"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "routeService",
+          "description" : "routeService"
+        } ]
+      }
+    },
+    "/lineName/{lineName}" : {
+      "get" : {
+        "summary" : "GET lineName",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "operationId" : "getlineName",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "lineName",
+          "description" : "lineName",
+          "required" : true
+        } ]
+      }
+    }
+  },
+  "info" : {
+    "description" : "Obtaining the data.csv",
+    "title" : "data.csv",
+    "version" : "1.0.0"
+  }
+}
