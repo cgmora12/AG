@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="ASCII"?>
+<openapi:API xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:openapi="platform:/resource/TransformationRules/Openapi.ecore" openapi="3.0.0">
+  <info version="1.0.0" title="data" description="Obtaining the data"/>
+  <servers url="http://www.urlprueba.com/v1"/>
+  <paths pattern="/">
+    <get summary="GET data" operationId="getdata" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="stationName" in="query" description="stationName">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="about" in="query" description="about">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="hasEscalator" in="query" description="hasEscalator">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="hasLift" in="query" description="hasLift">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="hasTravelator" in="query" description="hasTravelator">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="transfer" in="query" description="transfer">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="lineAbout" in="query" description="lineAbout">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="lineID" in="query" description="lineID">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="lineName" in="query" description="lineName">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="routeService" in="query" description="routeService">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/stationName/{stationName}">
+    <get summary="GET stationName" operationId="getstationName" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="stationName" in="path" description="stationName" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/about/{about}">
+    <get summary="GET about" operationId="getabout" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="about" in="path" description="about" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/hasEscalator/{hasEscalator}">
+    <get summary="GET hasEscalator" operationId="gethasEscalator" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="hasEscalator" in="path" description="hasEscalator" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/hasLift/{hasLift}">
+    <get summary="GET hasLift" operationId="gethasLift" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="hasLift" in="path" description="hasLift" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/hasTravelator/{hasTravelator}">
+    <get summary="GET hasTravelator" operationId="gethasTravelator" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="hasTravelator" in="path" description="hasTravelator" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/transfer/{transfer}">
+    <get summary="GET transfer" operationId="gettransfer" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="transfer" in="path" description="transfer" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/lineAbout/{lineAbout}">
+    <get summary="GET lineAbout" operationId="getlineAbout" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="lineAbout" in="path" description="lineAbout" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/lineID/{lineID}">
+    <get summary="GET lineID" operationId="getlineID" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="lineID" in="path" description="lineID" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/lineName/{lineName}">
+    <get summary="GET lineName" operationId="getlineName" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="lineName" in="path" description="lineName" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/routeService/{routeService}">
+    <get summary="GET routeService" operationId="getrouteService" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="routeService" in="path" description="routeService" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <components>
+    <schemas>
+      <mainComponent type="object">
+        <properties name="stationName">
+          <content type="string" example="Puerta_del_&#xc3;&#xfffd;ngel"/>
+        </properties>
+        <properties name="about">
+          <content type="string" example="https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/estaciones/PuertaAngel.html"/>
+        </properties>
+        <properties name="hasEscalator">
+          <content type="string" example="TRUE"/>
+        </properties>
+        <properties name="hasLift">
+          <content type="string" example="FALSE"/>
+        </properties>
+        <properties name="hasTravelator">
+          <content type="string" example="FALSE"/>
+        </properties>
+        <properties name="transfer">
+          <content type="string" example=""/>
+        </properties>
+        <properties name="lineAbout">
+          <content type="string" example="https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/lineas_y_horarios/linea06.html"/>
+        </properties>
+        <properties name="lineID">
+          <content type="string" example="N0b3660760b3d410b8de821cb0085b8c9"/>
+        </properties>
+        <properties name="lineName">
+          <content type="string" example="L&#xc3;&#xad;nea_6_Circular"/>
+        </properties>
+        <properties name="routeService">
+          <content type="string" example="https://www.metromadrid.es/es/index.html"/>
+        </properties>
+        <xml name="mainComponent"/>
+      </mainComponent>
+    </schemas>
+  </components>
+</openapi:API>

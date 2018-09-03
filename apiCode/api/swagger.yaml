@@ -1,0 +1,323 @@
+---
+swagger: "2.0"
+info:
+  description: "Obtaining the data"
+  version: "1.0.0"
+  title: "data"
+host: "www.urlprueba.com"
+basePath: "/v1"
+schemes:
+- "https"
+paths:
+  /:
+    get:
+      summary: "GET data"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getdata"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "stationName"
+        in: "query"
+        description: "stationName"
+        required: false
+        type: "string"
+      - name: "about"
+        in: "query"
+        description: "about"
+        required: false
+        type: "string"
+      - name: "hasEscalator"
+        in: "query"
+        description: "hasEscalator"
+        required: false
+        type: "string"
+      - name: "hasLift"
+        in: "query"
+        description: "hasLift"
+        required: false
+        type: "string"
+      - name: "hasTravelator"
+        in: "query"
+        description: "hasTravelator"
+        required: false
+        type: "string"
+      - name: "transfer"
+        in: "query"
+        description: "transfer"
+        required: false
+        type: "string"
+      - name: "lineAbout"
+        in: "query"
+        description: "lineAbout"
+        required: false
+        type: "string"
+      - name: "lineID"
+        in: "query"
+        description: "lineID"
+        required: false
+        type: "string"
+      - name: "lineName"
+        in: "query"
+        description: "lineName"
+        required: false
+        type: "string"
+      - name: "routeService"
+        in: "query"
+        description: "routeService"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /about/{about}:
+    get:
+      summary: "GET about"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getabout"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "about"
+        in: "path"
+        description: "about"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /hasEscalator/{hasEscalator}:
+    get:
+      summary: "GET hasEscalator"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "gethasEscalator"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hasEscalator"
+        in: "path"
+        description: "hasEscalator"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /hasLift/{hasLift}:
+    get:
+      summary: "GET hasLift"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "gethasLift"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hasLift"
+        in: "path"
+        description: "hasLift"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /hasTravelator/{hasTravelator}:
+    get:
+      summary: "GET hasTravelator"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "gethasTravelator"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hasTravelator"
+        in: "path"
+        description: "hasTravelator"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /lineAbout/{lineAbout}:
+    get:
+      summary: "GET lineAbout"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getlineAbout"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "lineAbout"
+        in: "path"
+        description: "lineAbout"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /lineID/{lineID}:
+    get:
+      summary: "GET lineID"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getlineID"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "lineID"
+        in: "path"
+        description: "lineID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /lineName/{lineName}:
+    get:
+      summary: "GET lineName"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getlineName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "lineName"
+        in: "path"
+        description: "lineName"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /routeService/{routeService}:
+    get:
+      summary: "GET routeService"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getrouteService"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "routeService"
+        in: "path"
+        description: "routeService"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /stationName/{stationName}:
+    get:
+      summary: "GET stationName"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getstationName"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "stationName"
+        in: "path"
+        description: "stationName"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+  /transfer/{transfer}:
+    get:
+      summary: "GET transfer"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "gettransfer"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "transfer"
+        in: "path"
+        description: "transfer"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/mainComponent"
+      x-swagger-router-controller: "Default"
+definitions:
+  mainComponent:
+    type: "object"
+    properties:
+      hasLift:
+        type: "string"
+        example: "false"
+      transfer:
+        type: "string"
+        example: ""
+      hasEscalator:
+        type: "string"
+        example: "true"
+      routeService:
+        type: "string"
+        example: "https://www.metromadrid.es/es/index.html"
+      about:
+        type: "string"
+        example: "https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/estaciones/PuertaAngel.html"
+      hasTravelator:
+        type: "string"
+        example: "false"
+      lineID:
+        type: "string"
+        example: "N0b3660760b3d410b8de821cb0085b8c9"
+      lineName:
+        type: "string"
+        example: "L&#xc3;&#xad;nea_6_Circular"
+      stationName:
+        type: "string"
+        example: "Puerta_del_&#xc3;&#xfffd;ngel"
+      lineAbout:
+        type: "string"
+        example: "https://www.metromadrid.es//es/viaja_en_metro/red_de_metro/lineas_y_horarios/linea06.html"
+    xml:
+      name: "mainComponent"
