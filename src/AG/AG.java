@@ -12,6 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -53,6 +54,7 @@ public class AG {
 
 	// Variables
 	public static String fileName = "data";
+	public static String newfileName = "data";
 	public static String fileType = "csv";
 	public static String alternativeFileType = "";
 	public static String modelFileName = "table.xmi";
@@ -369,7 +371,7 @@ public class AG {
 		
 		BufferedReader br = null;
         String line = "";
-        String cvsSplitBy = ",";
+        String csvSplitBy = ",";
         ArrayList<String[]> rows = new ArrayList<String[]>();
 
         try {
@@ -378,7 +380,7 @@ public class AG {
             while ((line = br.readLine()) != null) {
                 // use comma as separator
             	//TODO: replace all rare characters
-                rows.add(line.replaceAll(" ", "_").replaceAll("\"", "").replaceAll("\'", "").split(cvsSplitBy));
+                rows.add(line.replaceAll(" ", "").replaceAll("\"", "").replaceAll("\'", "").split(csvSplitBy));
 
             }
             br.close();
@@ -395,6 +397,32 @@ public class AG {
                 }
             }
         }
+        
+        // Rewrite CSV without rare characters
+	    Writer writer = null;
+	    try {
+			new File(apiCodeFolderName).mkdirs();
+	    	File file = new File(apiCodeFolderName + File.separator + newfileName + "." + fileType);
+	    	file.delete();
+	        writer = new BufferedWriter(new OutputStreamWriter(
+	              new FileOutputStream(apiCodeFolderName + File.separator + newfileName + "." + fileType), "utf-8"));
+	        for(int i = 0; i < rows.size(); i++) {
+	        	if(i > 0) {
+		        	writer.write("\n");
+	        	}
+	        	for (int j = 0; j < rows.get(i).length; j++) {
+	        		if(j == 0) {
+			        	writer.write(rows.get(i)[j]);
+	        		} else {
+			        	writer.write(csvSplitBy + rows.get(i)[j]);
+	        		}
+	        	}
+	        }
+	    } catch (IOException ex) {
+	        // Report
+	    } finally {
+	       try {writer.close();} catch (Exception ex) {/*ignore*/}
+	    }
         
         try {
 	        System.out.println("create xmi");
@@ -502,6 +530,19 @@ public class AG {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+
+		try {
+            Files.copy(AG.class.getResourceAsStream(resFolderName + "metamodels" + File.separator + "Table.ecore"), 
+            		new File("Table.ecore").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(resFolderName + "metamodels" + File.separator + "Openapi.ecore"), 
+            		new File("Openapi.ecore").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(resFolderName + "transformator" + File.separator + "Table2Openapi.atl"), 
+            		new File("Table2Openapi.atl").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(resFolderName + "transformator" + File.separator + "Table2Openapi.emftvm"), 
+            		new File("Table2Openapi.emftvm").toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+			System.out.println(e.getMessage());
+        }
 		
 		Launcher launcher = new Launcher();
 		launcher.runATL("Table.ecore", "Table", modelFileName, "Openapi.ecore", "Openapi", openAPIXMIFileName, "Table2Openapi", "");
@@ -822,14 +863,6 @@ public class AG {
             PrintWriter writer = new PrintWriter(apiCodeFolderName + "/" + swaggerFileName, "UTF-8");
             writer.println(apiDefinitionFormatted2);
             writer.close();
-            
-            File source = new File(csvFile);
-            File dest = new File(apiCodeFolderName + "/" + csvFile);
-            try {
-                Files.copy(source.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
                
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -858,13 +891,13 @@ public class AG {
 			} catch (IOException e) {
 			    e.printStackTrace();
 			}
-			File sourceData = new File(fileName + "." + fileType);
+			/*File sourceData = new File(fileName + "." + fileType);
 			File destData = new File(apiCodeFolderName + File.separator + fileName + "." + fileType);
 			try {
 			    FileUtils.copyFile(sourceData, destData);
 			} catch (IOException e) {
 			    e.printStackTrace();
-			}
+			}*/
 		}
 		
 		String[] args = new String [7];
@@ -949,6 +982,16 @@ public class AG {
 
 	private static void generateApiCode() {
 
+		/*String csvFile = fileName + "." + fileType;
+		
+        File source = new File(csvFile);
+        File dest = new File(apiCodeFolderName + "/" + csvFile);
+        try {
+            Files.copy(source.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
 		// Edit DefaultService.js of nodejs server
 		String servercode = "";
 		
@@ -994,7 +1037,8 @@ public class AG {
         try {
 			while ((lineServer = brServer.readLine()) != null) {
 				if(lineServer.contains("var fileName =")) {
-					servercode += lineServer.replace("./filename.csv", "./" + fileName + "." + fileType) + "\n";
+					//servercode += "\tvar fileName =\"./" + fileName + "." + fileType + "\";" + "\n";
+					servercode += lineServer + "\n";
 				} 
 				else {
 					servercode += lineServer + "\n";
