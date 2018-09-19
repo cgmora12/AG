@@ -7,16 +7,23 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
 import io.swagger.codegen.SwaggerCodegen;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -66,7 +73,13 @@ public class AG {
 	public static String swaggerCodegeneFileName = "swagger-codegen-cli-2.2.1.jar";
 	public static String apiCodeFolderName = "apiCode";
 	public static String serverCodeFileName = "servercode.js";
-	public static String resFolderName = "/AG/";
+	public static String resFolderName = "AG";
+	public static String tempFolderName = "temp";
+	public static String visualizationMainFolderName = "PruebaVisualizacion";
+	public static String visualizationZipFileName = visualizationMainFolderName + ".zip";
+	public static String visualizationProjectName = "ChartsDemo-macOS";
+	public static String visualizationFolderName = "Demos";
+	public static String visualizationSwiftFileName = "PruebaBarDemoViewController.swift";
 
 	public static boolean m2mTransformation = false;
 	public static boolean openapi2api = false;
@@ -163,6 +176,7 @@ public class AG {
 		    generateServer();
 	        addServerDependencies();
 	        generateApiCode();
+	        generateVisualization();
 	        System.out.println("Automatic API Generation finished!");
 		} 
 		else {
@@ -493,7 +507,8 @@ public class AG {
     		TransformerFactory transformerFactory = TransformerFactory.newInstance();
     		Transformer transformer = transformerFactory.newTransformer();
     		DOMSource source = new DOMSource(doc);
-    		StreamResult result = new StreamResult(new File("." + File.separator + modelFileName));
+    		new File(tempFolderName).mkdirs();
+    		StreamResult result = new StreamResult(new File(tempFolderName + File.separator + modelFileName));
 
     		// Output to console for testing
     		// StreamResult result = new StreamResult(System.out);
@@ -532,20 +547,22 @@ public class AG {
 		}*/
 
 		try {
-            Files.copy(AG.class.getResourceAsStream(resFolderName + "metamodels" + File.separator + "Table.ecore"), 
-            		new File("Table.ecore").toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(AG.class.getResourceAsStream(resFolderName + "metamodels" + File.separator + "Openapi.ecore"), 
-            		new File("Openapi.ecore").toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(AG.class.getResourceAsStream(resFolderName + "transformator" + File.separator + "Table2Openapi.atl"), 
-            		new File("Table2Openapi.atl").toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(AG.class.getResourceAsStream(resFolderName + "transformator" + File.separator + "Table2Openapi.emftvm"), 
-            		new File("Table2Openapi.emftvm").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "metamodels" + File.separator + "Table.ecore"), 
+            		new File(tempFolderName + File.separator + "Table.ecore").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "metamodels" + File.separator + "Openapi.ecore"), 
+            		new File(tempFolderName + File.separator + "Openapi.ecore").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "transformator" + File.separator + "Table2Openapi.atl"), 
+            		new File(tempFolderName + File.separator + "Table2Openapi.atl").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "transformator" + File.separator + "Table2Openapi.emftvm"), 
+            		new File(tempFolderName + File.separator + "Table2Openapi.emftvm").toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
 		
 		Launcher launcher = new Launcher();
-		launcher.runATL("Table.ecore", "Table", modelFileName, "Openapi.ecore", "Openapi", openAPIXMIFileName, "Table2Openapi", "");
+		launcher.runATL(tempFolderName + File.separator + "Table.ecore", "Table", 
+				tempFolderName + File.separator + modelFileName, tempFolderName + File.separator + "Openapi.ecore", "Openapi", 
+				tempFolderName + File.separator + openAPIXMIFileName, "Table2Openapi", tempFolderName + File.separator);
 		
 	}
 
@@ -553,7 +570,7 @@ public class AG {
 		String jsonString = "", jsonStringFormatted = "", swaggerString = "", swaggerStringFormatted = "";
 		
 		try {
-            JSONObject xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(openAPIXMIFileName)));
+            JSONObject xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(tempFolderName + File.separator + openAPIXMIFileName)));
             
             xmlJSONObj = xmlJSONObj.getJSONObject("openapi:API");
             xmlJSONObj.remove("openapi:API");
@@ -699,13 +716,13 @@ public class AG {
 			System.out.println(e.getMessage());
 		}
 		
-		try (PrintWriter out = new PrintWriter(openAPIFileName)) {
+		try (PrintWriter out = new PrintWriter(tempFolderName + File.separator + openAPIFileName)) {
 		    out.println(jsonStringFormatted);
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
 		
-		try (PrintWriter out = new PrintWriter(swaggerFileName)) {
+		try (PrintWriter out = new PrintWriter(tempFolderName + File.separator + swaggerFileName)) {
 		    out.println(swaggerStringFormatted);
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
@@ -884,20 +901,20 @@ public class AG {
 
 		if(openapi2api || xmi2api || csv2api) {
 			new File(apiCodeFolderName).mkdirs();
-			File source = new File(swaggerFileName);
+			File source = new File(tempFolderName + File.separator + swaggerFileName);
 			File dest = new File(apiCodeFolderName + File.separator + swaggerFileName);
 			try {
 			    FileUtils.copyFile(source, dest);
 			} catch (IOException e) {
 			    e.printStackTrace();
 			}
-			/*File sourceData = new File(fileName + "." + fileType);
-			File destData = new File(apiCodeFolderName + File.separator + fileName + "." + fileType);
+			File source2 = new File(tempFolderName + File.separator + openAPIFileName);
+			File dest2 = new File(apiCodeFolderName + File.separator + openAPIFileName);
 			try {
-			    FileUtils.copyFile(sourceData, destData);
+			    FileUtils.copyFile(source2, dest2);
 			} catch (IOException e) {
 			    e.printStackTrace();
-			}*/
+			}
 		}
 		
 		String[] args = new String [7];
@@ -912,7 +929,7 @@ public class AG {
 		
 		/*Process proc = null;
 		try {
-			proc = Runtime.getRuntime().exec("java -jar " + resFolderName + swaggerCodegeneFileName 
+			proc = Runtime.getRuntime().exec("java -jar " + File.separator + resFolderName + File.separator + swaggerCodegeneFileName 
 					+ " generate -i " + apiCodeFolderName + "/" + swaggerFileName + " -o " + apiCodeFolderName + " -l nodejs-server");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -1029,7 +1046,7 @@ public class AG {
         String lineServer = "";
 		try {
 			brServer = new BufferedReader(new InputStreamReader
-					(AG.class.getResourceAsStream(resFolderName + serverCodeFileName)));
+					(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + serverCodeFileName)));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1140,6 +1157,120 @@ public class AG {
 		}
 		*/
 		
+	}
+
+	private static void generateVisualization() {
+		try {
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "visualization" + File.separator + "PruebaVisualizacion.zip"), 
+            		new File(visualizationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+			System.out.println(e.getMessage());
+        }
+		
+		try {
+			ZipFile zipFile = new ZipFile(visualizationZipFileName);
+			Enumeration<?> enu = zipFile.entries();
+			while (enu.hasMoreElements()) {
+				ZipEntry zipEntry = (ZipEntry) enu.nextElement();
+
+				String name = zipEntry.getName();
+				/*long size = zipEntry.getSize();
+				long compressedSize = zipEntry.getCompressedSize();
+				System.out.printf("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize);*/
+
+				File file = new File(name);
+				if (name.endsWith("/")) {
+					file.mkdirs();
+					continue;
+				}
+
+				File parent = file.getParentFile();
+				if (parent != null) {
+					parent.mkdirs();
+				}
+
+				InputStream is = zipFile.getInputStream(zipEntry);
+				FileOutputStream fos = new FileOutputStream(file);
+				byte[] bytes = new byte[1024];
+				int length;
+				while ((length = is.read(bytes)) >= 0) {
+					fos.write(bytes, 0, length);
+				}
+				is.close();
+				fos.close();
+
+			}
+			zipFile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		File file = new File(visualizationZipFileName);
+		if (file.exists()) {
+		    file.delete();
+		} else {
+		    System.err.println("Error deleting zip file");
+		}
+		
+		//Determine the columns to generate the graph
+		JSONObject xmlJSONObj;
+		ArrayList<String> columnNames = new ArrayList<String>();
+		String columnNameId = "";
+		try {
+			xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(tempFolderName + File.separator + openAPIXMIFileName)));
+			JSONArray xmlJSONObjAux = xmlJSONObj.getJSONObject("openapi:API").getJSONObject("components")
+					.getJSONObject("schemas").getJSONObject("mainComponent").getJSONArray("properties");
+			
+			for(int i = 0; i < xmlJSONObjAux.length(); i++) {
+				if(i == 0) {
+					columnNameId = xmlJSONObjAux.getJSONObject(i).get("name").toString();
+				}
+				else if(xmlJSONObjAux.getJSONObject(i).getJSONObject("content").get("type").equals("integer")) {
+					columnNames.add(xmlJSONObjAux.getJSONObject(i).get("name").toString());
+				}
+			}
+		} catch (JSONException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		//Create graphs in swift
+		String swiftFilePath = visualizationMainFolderName + File.separator + visualizationProjectName 
+				+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
+				+ File.separator + visualizationSwiftFileName;
+		try(BufferedReader br = new BufferedReader(new FileReader(swiftFilePath))) {
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    String content = sb.toString();
+		    content = content.replaceFirst("columnNameId", columnNameId);
+		    if(!columnNames.isEmpty()) {
+		    	for(int i = 0; i < columnNames.size(); i++) {
+		    		if(i == 0) {
+				    	content = content.replaceFirst("\"columnNames\"", "\"" + columnNames.get(i)) +  "\"";
+		    		} else {
+				    	content = content.replaceFirst("\"" + columnNames.get(i-1) + "\"", 
+				    			"\"" + columnNames.get(i-1) + "\"" + ", " + "\"" + columnNames.get(i) + "\"");
+		    		}
+		    	}
+		    }
+		    
+		    File swiftFile = new File(swiftFilePath);
+		    FileUtils.writeStringToFile(swiftFile, content);
+		    System.err.println("Visualization created");
+		    //System.out.println(content);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
