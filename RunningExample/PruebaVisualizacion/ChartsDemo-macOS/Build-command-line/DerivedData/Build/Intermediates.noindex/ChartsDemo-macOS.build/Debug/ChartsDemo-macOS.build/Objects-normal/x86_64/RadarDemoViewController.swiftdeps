@@ -1,0 +1,712 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "RadarDemoViewController"
+provides-nominal:
+- "16ChartsDemo_macOS05RadarB14ViewControllerC"
+provides-member:
+- ["16ChartsDemo_macOS05RadarB14ViewControllerC", ""]
+provides-dynamic-lookup:
+- "radarChartView"
+- "viewDidLoad"
+- "viewWillAppear"
+depends-top-level:
+- !private "*"
+- !private "..<"
+- !private "/"
+- !private "Array"
+- "AssignmentPrecedence"
+- !private "Double"
+- !private "FloatLiteralType"
+- !private "IntegerLiteralType"
+- !private "NSUIColor"
+- "NSViewController"
+- !private "RadarChartData"
+- !private "RadarChartDataEntry"
+- !private "RadarChartDataSet"
+- "RadarChartView"
+- "RadarDemoViewController"
+- !private "StringLiteralType"
+- !private "cos"
+- !private "sin"
+depends-member:
+- !private ["6Charts16AnimatorDelegateP", "animate"]
+- !private ["6Charts16AnimatorDelegateP", "chartDescription"]
+- !private ["6Charts16AnimatorDelegateP", "data"]
+- !private ["Sa", "enumerated"]
+- !private ["Sa", "init"]
+- !private ["Sa", "map"]
+- !private ["s13ArrayProtocolP", "enumerated"]
+- !private ["s13ArrayProtocolP", "init"]
+- !private ["s13ArrayProtocolP", "map"]
+- !private ["6Charts38BarLineScatterCandleBubbleChartDataSetC", "colors"]
+- !private ["SK", "enumerated"]
+- !private ["SK", "init"]
+- !private ["SK", "init"]
+- !private ["SK", "map"]
+- !private ["SB", "init"]
+- !private ["s7CVarArgP", "Array"]
+- !private ["s7CVarArgP", "Double"]
+- !private ["s7CVarArgP", "NSUIColor"]
+- !private ["s7CVarArgP", "RadarChartData"]
+- !private ["s7CVarArgP", "RadarChartDataEntry"]
+- !private ["s7CVarArgP", "RadarChartDataSet"]
+- ["s7CVarArgP", ""]
+- !private ["s7CVarArgP", "addDataSet"]
+- !private ["s7CVarArgP", "animate"]
+- !private ["s7CVarArgP", "blue"]
+- !private ["s7CVarArgP", "chartDescription"]
+- !private ["s7CVarArgP", "colors"]
+- !private ["s7CVarArgP", "cos"]
+- !private ["s7CVarArgP", "data"]
+- !private ["s7CVarArgP", "enumerated"]
+- !private ["s7CVarArgP", "init"]
+- !private ["s7CVarArgP", "init"]
+- !private ["s7CVarArgP", "map"]
+- !private ["s7CVarArgP", "radarChartView"]
+- !private ["s7CVarArgP", "red"]
+- !private ["s7CVarArgP", "sin"]
+- !private ["s7CVarArgP", "text"]
+- !private ["s7CVarArgP", "viewDidLoad"]
+- !private ["6Charts16ChartBaseDataSetC", "colors"]
+- !private ["6Charts9ChartDataC", "addDataSet"]
+- !private ["6Charts9ChartDataC", "init"]
+- !private ["6Charts17ChartDataProviderP", "animate"]
+- !private ["6Charts17ChartDataProviderP", "chartDescription"]
+- !private ["6Charts17ChartDataProviderP", "data"]
+- !private ["6Charts12ChartDataSetC", "colors"]
+- !private ["6Charts13ChartViewBaseC", "animate"]
+- !private ["6Charts13ChartViewBaseC", "chartDescription"]
+- !private ["6Charts13ChartViewBaseC", "data"]
+- !private ["Sl", "enumerated"]
+- !private ["Sl", "init"]
+- !private ["Sl", "init"]
+- !private ["Sl", "map"]
+- !private ["SL", "init"]
+- !private ["SL", "init"]
+- !private ["6Charts13ComponentBaseC", "text"]
+- !private ["s28CustomDebugStringConvertibleP", "Array"]
+- !private ["s28CustomDebugStringConvertibleP", "Double"]
+- !private ["s28CustomDebugStringConvertibleP", "NSUIColor"]
+- !private ["s28CustomDebugStringConvertibleP", "RadarChartData"]
+- !private ["s28CustomDebugStringConvertibleP", "RadarChartDataEntry"]
+- !private ["s28CustomDebugStringConvertibleP", "RadarChartDataSet"]
+- ["s28CustomDebugStringConvertibleP", ""]
+- !private ["s28CustomDebugStringConvertibleP", "addDataSet"]
+- !private ["s28CustomDebugStringConvertibleP", "animate"]
+- !private ["s28CustomDebugStringConvertibleP", "blue"]
+- !private ["s28CustomDebugStringConvertibleP", "chartDescription"]
+- !private ["s28CustomDebugStringConvertibleP", "colors"]
+- !private ["s28CustomDebugStringConvertibleP", "cos"]
+- !private ["s28CustomDebugStringConvertibleP", "data"]
+- !private ["s28CustomDebugStringConvertibleP", "enumerated"]
+- !private ["s28CustomDebugStringConvertibleP", "init"]
+- !private ["s28CustomDebugStringConvertibleP", "init"]
+- !private ["s28CustomDebugStringConvertibleP", "map"]
+- !private ["s28CustomDebugStringConvertibleP", "radarChartView"]
+- !private ["s28CustomDebugStringConvertibleP", "red"]
+- !private ["s28CustomDebugStringConvertibleP", "sin"]
+- !private ["s28CustomDebugStringConvertibleP", "text"]
+- !private ["s28CustomDebugStringConvertibleP", "viewDidLoad"]
+- !private ["s29CustomPlaygroundQuickLookableP", "init"]
+- !private ["s29CustomPlaygroundQuickLookableP", "init"]
+- !private ["s17CustomReflectableP", "animate"]
+- !private ["s17CustomReflectableP", "chartDescription"]
+- !private ["s17CustomReflectableP", "data"]
+- !private ["s17CustomReflectableP", "enumerated"]
+- !private ["s17CustomReflectableP", "init"]
+- !private ["s17CustomReflectableP", "init"]
+- !private ["s17CustomReflectableP", "map"]
+- !private ["s23CustomStringConvertibleP", "Array"]
+- !private ["s23CustomStringConvertibleP", "Double"]
+- !private ["s23CustomStringConvertibleP", "NSUIColor"]
+- !private ["s23CustomStringConvertibleP", "RadarChartData"]
+- !private ["s23CustomStringConvertibleP", "RadarChartDataEntry"]
+- !private ["s23CustomStringConvertibleP", "RadarChartDataSet"]
+- ["s23CustomStringConvertibleP", ""]
+- !private ["s23CustomStringConvertibleP", "addDataSet"]
+- !private ["s23CustomStringConvertibleP", "animate"]
+- !private ["s23CustomStringConvertibleP", "blue"]
+- !private ["s23CustomStringConvertibleP", "chartDescription"]
+- !private ["s23CustomStringConvertibleP", "colors"]
+- !private ["s23CustomStringConvertibleP", "cos"]
+- !private ["s23CustomStringConvertibleP", "data"]
+- !private ["s23CustomStringConvertibleP", "enumerated"]
+- !private ["s23CustomStringConvertibleP", "init"]
+- !private ["s23CustomStringConvertibleP", "init"]
+- !private ["s23CustomStringConvertibleP", "map"]
+- !private ["s23CustomStringConvertibleP", "radarChartView"]
+- !private ["s23CustomStringConvertibleP", "red"]
+- !private ["s23CustomStringConvertibleP", "sin"]
+- !private ["s23CustomStringConvertibleP", "text"]
+- !private ["s23CustomStringConvertibleP", "viewDidLoad"]
+- !private ["Se", "animate"]
+- !private ["Se", "chartDescription"]
+- !private ["Se", "data"]
+- !private ["Se", "enumerated"]
+- !private ["Se", "init"]
+- !private ["Se", "init"]
+- !private ["Se", "map"]
+- !private ["6Charts11DescriptionC", "text"]
+- !private ["Sd", "init"]
+- !private ["SE", "animate"]
+- !private ["SE", "chartDescription"]
+- !private ["SE", "data"]
+- !private ["SE", "enumerated"]
+- !private ["SE", "init"]
+- !private ["SE", "init"]
+- !private ["SE", "map"]
+- !private ["s18EnumeratedSequenceV", "map"]
+- !private ["SQ", "Array"]
+- !private ["SQ", "Double"]
+- !private ["SQ", "NSUIColor"]
+- !private ["SQ", "RadarChartData"]
+- !private ["SQ", "RadarChartDataEntry"]
+- !private ["SQ", "RadarChartDataSet"]
+- ["SQ", ""]
+- !private ["SQ", "addDataSet"]
+- !private ["SQ", "animate"]
+- !private ["SQ", "blue"]
+- !private ["SQ", "chartDescription"]
+- !private ["SQ", "colors"]
+- !private ["SQ", "cos"]
+- !private ["SQ", "data"]
+- !private ["SQ", "enumerated"]
+- !private ["SQ", "init"]
+- !private ["SQ", "init"]
+- !private ["SQ", "map"]
+- !private ["SQ", "radarChartView"]
+- !private ["SQ", "red"]
+- !private ["SQ", "sin"]
+- !private ["SQ", "text"]
+- !private ["SQ", "viewDidLoad"]
+- !private ["s25ExpressibleByArrayLiteralP", "enumerated"]
+- !private ["s25ExpressibleByArrayLiteralP", "init"]
+- !private ["s25ExpressibleByArrayLiteralP", "map"]
+- !private ["s43ExpressibleByExtendedGraphemeClusterLiteralP", "init"]
+- !private ["s43ExpressibleByExtendedGraphemeClusterLiteralP", "init"]
+- !private ["s25ExpressibleByFloatLiteralP", "init"]
+- !private ["s27ExpressibleByIntegerLiteralP", "init"]
+- !private ["s23ExpressibleByNilLiteralP", "animate"]
+- !private ["s23ExpressibleByNilLiteralP", "chartDescription"]
+- !private ["s23ExpressibleByNilLiteralP", "data"]
+- !private ["s26ExpressibleByStringLiteralP", "init"]
+- !private ["s26ExpressibleByStringLiteralP", "init"]
+- !private ["s33ExpressibleByUnicodeScalarLiteralP", "init"]
+- !private ["s33ExpressibleByUnicodeScalarLiteralP", "init"]
+- !private ["SF", "init"]
+- !private ["SH", "Array"]
+- !private ["SH", "Double"]
+- !private ["SH", "NSUIColor"]
+- !private ["SH", "RadarChartData"]
+- !private ["SH", "RadarChartDataEntry"]
+- !private ["SH", "RadarChartDataSet"]
+- ["SH", ""]
+- !private ["SH", "addDataSet"]
+- !private ["SH", "animate"]
+- !private ["SH", "blue"]
+- !private ["SH", "chartDescription"]
+- !private ["SH", "colors"]
+- !private ["SH", "cos"]
+- !private ["SH", "data"]
+- !private ["SH", "enumerated"]
+- !private ["SH", "init"]
+- !private ["SH", "init"]
+- !private ["SH", "map"]
+- !private ["SH", "radarChartView"]
+- !private ["SH", "red"]
+- !private ["SH", "sin"]
+- !private ["SH", "text"]
+- !private ["SH", "viewDidLoad"]
+- !private ["6Charts39IBarLineScatterCandleBubbleChartDataSetP", "colors"]
+- !private ["6Charts39IBarLineScatterCandleBubbleChartDataSetP", "init"]
+- !private ["6Charts13IChartDataSetP", "colors"]
+- !private ["6Charts13IChartDataSetP", "init"]
+- !private ["6Charts22ILineRadarChartDataSetP", "colors"]
+- !private ["6Charts22ILineRadarChartDataSetP", "init"]
+- !private ["6Charts35ILineScatterCandleRadarChartDataSetP", "colors"]
+- !private ["6Charts35ILineScatterCandleRadarChartDataSetP", "init"]
+- !private ["6Charts18IRadarChartDataSetP", "colors"]
+- !private ["6Charts18IRadarChartDataSetP", "init"]
+- !private ["6Charts21LineRadarChartDataSetC", "colors"]
+- !private ["6Charts34LineScatterCandleRadarChartDataSetC", "colors"]
+- !private ["s25LosslessStringConvertibleP", "init"]
+- !private ["s25LosslessStringConvertibleP", "init"]
+- !private ["s10MirrorPathP", "init"]
+- !private ["s10MirrorPathP", "init"]
+- !private ["SM", "enumerated"]
+- !private ["SM", "init"]
+- !private ["SM", "map"]
+- !private ["So22NSAccessibilityElementP", "animate"]
+- !private ["So22NSAccessibilityElementP", "chartDescription"]
+- !private ["So22NSAccessibilityElementP", "data"]
+- !private ["So20NSAccessibilityGroupP", "animate"]
+- !private ["So20NSAccessibilityGroupP", "chartDescription"]
+- !private ["So20NSAccessibilityGroupP", "data"]
+- !private ["So15NSAccessibilityP", "animate"]
+- !private ["So15NSAccessibilityP", "chartDescription"]
+- !private ["So15NSAccessibilityP", "data"]
+- !private ["So29NSAnimatablePropertyContainerP", "animate"]
+- !private ["So29NSAnimatablePropertyContainerP", "chartDescription"]
+- !private ["So29NSAnimatablePropertyContainerP", "data"]
+- !private ["So25NSAppearanceCustomizationP", "animate"]
+- !private ["So25NSAppearanceCustomizationP", "chartDescription"]
+- !private ["So25NSAppearanceCustomizationP", "data"]
+- !private ["So8NSCodingP", "Array"]
+- !private ["So8NSCodingP", "Double"]
+- !private ["So8NSCodingP", "NSUIColor"]
+- !private ["So8NSCodingP", "RadarChartData"]
+- !private ["So8NSCodingP", "RadarChartDataEntry"]
+- !private ["So8NSCodingP", "RadarChartDataSet"]
+- ["So8NSCodingP", ""]
+- !private ["So8NSCodingP", "animate"]
+- !private ["So8NSCodingP", "blue"]
+- !private ["So8NSCodingP", "chartDescription"]
+- !private ["So8NSCodingP", "cos"]
+- !private ["So8NSCodingP", "data"]
+- !private ["So8NSCodingP", "init"]
+- !private ["So8NSCodingP", "init"]
+- !private ["So8NSCodingP", "radarChartView"]
+- !private ["So8NSCodingP", "red"]
+- !private ["So8NSCodingP", "sin"]
+- !private ["So8NSCodingP", "viewDidLoad"]
+- !private ["So7NSColorC", "blue"]
+- !private ["So7NSColorC", "red"]
+- !private ["So9NSCopyingP", "blue"]
+- !private ["So9NSCopyingP", "red"]
+- !private ["So21NSDraggingDestinationP", "animate"]
+- !private ["So21NSDraggingDestinationP", "chartDescription"]
+- !private ["So21NSDraggingDestinationP", "data"]
+- !private ["So8NSEditorP", "Array"]
+- !private ["So8NSEditorP", "Double"]
+- !private ["So8NSEditorP", "NSUIColor"]
+- !private ["So8NSEditorP", "RadarChartData"]
+- !private ["So8NSEditorP", "RadarChartDataEntry"]
+- !private ["So8NSEditorP", "RadarChartDataSet"]
+- ["So8NSEditorP", ""]
+- !private ["So8NSEditorP", "cos"]
+- !private ["So8NSEditorP", "init"]
+- !private ["So8NSEditorP", "init"]
+- !private ["So8NSEditorP", "radarChartView"]
+- !private ["So8NSEditorP", "sin"]
+- !private ["So8NSEditorP", "viewDidLoad"]
+- !private ["So26NSExtensionRequestHandlingP", "Array"]
+- !private ["So26NSExtensionRequestHandlingP", "Double"]
+- !private ["So26NSExtensionRequestHandlingP", "NSUIColor"]
+- !private ["So26NSExtensionRequestHandlingP", "RadarChartData"]
+- !private ["So26NSExtensionRequestHandlingP", "RadarChartDataEntry"]
+- !private ["So26NSExtensionRequestHandlingP", "RadarChartDataSet"]
+- ["So26NSExtensionRequestHandlingP", ""]
+- !private ["So26NSExtensionRequestHandlingP", "cos"]
+- !private ["So26NSExtensionRequestHandlingP", "init"]
+- !private ["So26NSExtensionRequestHandlingP", "init"]
+- !private ["So26NSExtensionRequestHandlingP", "radarChartView"]
+- !private ["So26NSExtensionRequestHandlingP", "sin"]
+- !private ["So26NSExtensionRequestHandlingP", "viewDidLoad"]
+- !private ["So8NSObjectC", "Array"]
+- !private ["So8NSObjectC", "Double"]
+- !private ["So8NSObjectC", "NSUIColor"]
+- !private ["So8NSObjectC", "RadarChartData"]
+- !private ["So8NSObjectC", "RadarChartDataEntry"]
+- !private ["So8NSObjectC", "RadarChartDataSet"]
+- ["So8NSObjectC", "RadarChartView"]
+- !private ["So8NSObjectC", "addDataSet"]
+- !private ["So8NSObjectC", "animate"]
+- !private ["So8NSObjectC", "blue"]
+- !private ["So8NSObjectC", "chartDescription"]
+- !private ["So8NSObjectC", "colors"]
+- !private ["So8NSObjectC", "cos"]
+- !private ["So8NSObjectC", "data"]
+- ["So8NSObjectC", "init"]
+- !private ["So8NSObjectC", "init"]
+- ["So8NSObjectC", "radarChartView"]
+- !private ["So8NSObjectC", "red"]
+- !private ["So8NSObjectC", "sin"]
+- !private ["So8NSObjectC", "text"]
+- ["So8NSObjectC", "viewDidLoad"]
+- ["So8NSObjectC", "viewWillAppear"]
+- !private ["So8NSObjectP", "Array"]
+- !private ["So8NSObjectP", "Double"]
+- !private ["So8NSObjectP", "NSUIColor"]
+- !private ["So8NSObjectP", "RadarChartData"]
+- !private ["So8NSObjectP", "RadarChartDataEntry"]
+- !private ["So8NSObjectP", "RadarChartDataSet"]
+- ["So8NSObjectP", ""]
+- !private ["So8NSObjectP", "addDataSet"]
+- !private ["So8NSObjectP", "animate"]
+- !private ["So8NSObjectP", "blue"]
+- !private ["So8NSObjectP", "chartDescription"]
+- !private ["So8NSObjectP", "colors"]
+- !private ["So8NSObjectP", "cos"]
+- !private ["So8NSObjectP", "data"]
+- !private ["So8NSObjectP", "init"]
+- !private ["So8NSObjectP", "init"]
+- !private ["So8NSObjectP", "radarChartView"]
+- !private ["So8NSObjectP", "red"]
+- !private ["So8NSObjectP", "sin"]
+- !private ["So8NSObjectP", "text"]
+- !private ["So8NSObjectP", "viewDidLoad"]
+- !private ["So19NSPasteboardReadingP", "blue"]
+- !private ["So19NSPasteboardReadingP", "red"]
+- !private ["So19NSPasteboardWritingP", "blue"]
+- !private ["So19NSPasteboardWritingP", "red"]
+- !private ["So11NSResponderC", "Array"]
+- !private ["So11NSResponderC", "Double"]
+- !private ["So11NSResponderC", "NSUIColor"]
+- !private ["So11NSResponderC", "RadarChartData"]
+- !private ["So11NSResponderC", "RadarChartDataEntry"]
+- !private ["So11NSResponderC", "RadarChartDataSet"]
+- ["So11NSResponderC", "RadarChartView"]
+- !private ["So11NSResponderC", "animate"]
+- !private ["So11NSResponderC", "chartDescription"]
+- !private ["So11NSResponderC", "cos"]
+- !private ["So11NSResponderC", "data"]
+- ["So11NSResponderC", "init"]
+- !private ["So11NSResponderC", "init"]
+- ["So11NSResponderC", "radarChartView"]
+- !private ["So11NSResponderC", "sin"]
+- ["So11NSResponderC", "viewDidLoad"]
+- ["So11NSResponderC", "viewWillAppear"]
+- !private ["So14NSSecureCodingP", "blue"]
+- !private ["So14NSSecureCodingP", "red"]
+- !private ["So17NSSeguePerformingP", "Array"]
+- !private ["So17NSSeguePerformingP", "Double"]
+- !private ["So17NSSeguePerformingP", "NSUIColor"]
+- !private ["So17NSSeguePerformingP", "RadarChartData"]
+- !private ["So17NSSeguePerformingP", "RadarChartDataEntry"]
+- !private ["So17NSSeguePerformingP", "RadarChartDataSet"]
+- ["So17NSSeguePerformingP", ""]
+- !private ["So17NSSeguePerformingP", "cos"]
+- !private ["So17NSSeguePerformingP", "init"]
+- !private ["So17NSSeguePerformingP", "init"]
+- !private ["So17NSSeguePerformingP", "radarChartView"]
+- !private ["So17NSSeguePerformingP", "sin"]
+- !private ["So17NSSeguePerformingP", "viewDidLoad"]
+- !private ["So30NSStandardKeyBindingRespondingP", "Array"]
+- !private ["So30NSStandardKeyBindingRespondingP", "Double"]
+- !private ["So30NSStandardKeyBindingRespondingP", "NSUIColor"]
+- !private ["So30NSStandardKeyBindingRespondingP", "RadarChartData"]
+- !private ["So30NSStandardKeyBindingRespondingP", "RadarChartDataEntry"]
+- !private ["So30NSStandardKeyBindingRespondingP", "RadarChartDataSet"]
+- ["So30NSStandardKeyBindingRespondingP", ""]
+- !private ["So30NSStandardKeyBindingRespondingP", "animate"]
+- !private ["So30NSStandardKeyBindingRespondingP", "chartDescription"]
+- !private ["So30NSStandardKeyBindingRespondingP", "cos"]
+- !private ["So30NSStandardKeyBindingRespondingP", "data"]
+- !private ["So30NSStandardKeyBindingRespondingP", "init"]
+- !private ["So30NSStandardKeyBindingRespondingP", "init"]
+- !private ["So30NSStandardKeyBindingRespondingP", "radarChartView"]
+- !private ["So30NSStandardKeyBindingRespondingP", "sin"]
+- !private ["So30NSStandardKeyBindingRespondingP", "viewDidLoad"]
+- !private ["So18NSTouchBarProviderP", "Array"]
+- !private ["So18NSTouchBarProviderP", "Double"]
+- !private ["So18NSTouchBarProviderP", "NSUIColor"]
+- !private ["So18NSTouchBarProviderP", "RadarChartData"]
+- !private ["So18NSTouchBarProviderP", "RadarChartDataEntry"]
+- !private ["So18NSTouchBarProviderP", "RadarChartDataSet"]
+- ["So18NSTouchBarProviderP", ""]
+- !private ["So18NSTouchBarProviderP", "animate"]
+- !private ["So18NSTouchBarProviderP", "chartDescription"]
+- !private ["So18NSTouchBarProviderP", "cos"]
+- !private ["So18NSTouchBarProviderP", "data"]
+- !private ["So18NSTouchBarProviderP", "init"]
+- !private ["So18NSTouchBarProviderP", "init"]
+- !private ["So18NSTouchBarProviderP", "radarChartView"]
+- !private ["So18NSTouchBarProviderP", "sin"]
+- !private ["So18NSTouchBarProviderP", "viewDidLoad"]
+- !private ["6Charts8NSUIViewC", "animate"]
+- !private ["6Charts8NSUIViewC", "chartDescription"]
+- !private ["6Charts8NSUIViewC", "data"]
+- !private ["So23NSUserActivityRestoringP", "Array"]
+- !private ["So23NSUserActivityRestoringP", "Double"]
+- !private ["So23NSUserActivityRestoringP", "NSUIColor"]
+- !private ["So23NSUserActivityRestoringP", "RadarChartData"]
+- !private ["So23NSUserActivityRestoringP", "RadarChartDataEntry"]
+- !private ["So23NSUserActivityRestoringP", "RadarChartDataSet"]
+- ["So23NSUserActivityRestoringP", ""]
+- !private ["So23NSUserActivityRestoringP", "animate"]
+- !private ["So23NSUserActivityRestoringP", "chartDescription"]
+- !private ["So23NSUserActivityRestoringP", "cos"]
+- !private ["So23NSUserActivityRestoringP", "data"]
+- !private ["So23NSUserActivityRestoringP", "init"]
+- !private ["So23NSUserActivityRestoringP", "init"]
+- !private ["So23NSUserActivityRestoringP", "radarChartView"]
+- !private ["So23NSUserActivityRestoringP", "sin"]
+- !private ["So23NSUserActivityRestoringP", "viewDidLoad"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "Array"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "Double"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "NSUIColor"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "RadarChartData"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "RadarChartDataEntry"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "RadarChartDataSet"]
+- ["So33NSUserInterfaceItemIdentificationP", ""]
+- !private ["So33NSUserInterfaceItemIdentificationP", "animate"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "chartDescription"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "cos"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "data"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "init"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "init"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "radarChartView"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "sin"]
+- !private ["So33NSUserInterfaceItemIdentificationP", "viewDidLoad"]
+- !private ["So6NSViewC", "animate"]
+- !private ["So6NSViewC", "chartDescription"]
+- !private ["So6NSViewC", "data"]
+- !private ["So16NSViewControllerC", "Array"]
+- !private ["So16NSViewControllerC", "Double"]
+- !private ["So16NSViewControllerC", "NSUIColor"]
+- !private ["So16NSViewControllerC", "RadarChartData"]
+- !private ["So16NSViewControllerC", "RadarChartDataEntry"]
+- !private ["So16NSViewControllerC", "RadarChartDataSet"]
+- ["So16NSViewControllerC", "RadarChartView"]
+- ["So16NSViewControllerC", ""]
+- !private ["So16NSViewControllerC", "cos"]
+- ["So16NSViewControllerC", "init"]
+- !private ["So16NSViewControllerC", "init"]
+- ["So16NSViewControllerC", "radarChartView"]
+- !private ["So16NSViewControllerC", "sin"]
+- ["So16NSViewControllerC", "viewDidLoad"]
+- ["So16NSViewControllerC", "viewWillAppear"]
+- !private ["Sj", "init"]
+- !private ["Sq", "animate"]
+- !private ["Sq", "chartDescription"]
+- !private ["Sq", "data"]
+- !private ["6Charts21PieRadarChartViewBaseC", "animate"]
+- !private ["6Charts21PieRadarChartViewBaseC", "chartDescription"]
+- !private ["6Charts21PieRadarChartViewBaseC", "data"]
+- !private ["6Charts14RadarChartDataC", "addDataSet"]
+- !private ["6Charts14RadarChartDataC", "init"]
+- !private ["6Charts19RadarChartDataEntryC", "init"]
+- !private ["6Charts17RadarChartDataSetC", "colors"]
+- !private ["6Charts17RadarChartDataSetC", "init"]
+- !private ["6Charts14RadarChartViewC", "animate"]
+- !private ["6Charts14RadarChartViewC", "chartDescription"]
+- !private ["6Charts14RadarChartViewC", "data"]
+- !private ["16ChartsDemo_macOS05RadarB14ViewControllerC", "Array"]
+- !private ["16ChartsDemo_macOS05RadarB14ViewControllerC", "Double"]
+- !private ["16ChartsDemo_macOS05RadarB14ViewControllerC", "NSUIColor"]
+- !private ["16ChartsDemo_macOS05RadarB14ViewControllerC", "RadarChartData"]
+- !private ["16ChartsDemo_macOS05RadarB14ViewControllerC", "RadarChartDataEntry"]
+- !private ["16ChartsDemo_macOS05RadarB14ViewControllerC", "RadarChartDataSet"]
+- ["16ChartsDemo_macOS05RadarB14ViewControllerC", "RadarChartView"]
+- !private ["16ChartsDemo_macOS05RadarB14ViewControllerC", "cos"]
+- ["16ChartsDemo_macOS05RadarB14ViewControllerC", "init"]
+- ["16ChartsDemo_macOS05RadarB14ViewControllerC", "radarChartView"]
+- !private ["16ChartsDemo_macOS05RadarB14ViewControllerC", "sin"]
+- ["16ChartsDemo_macOS05RadarB14ViewControllerC", "viewDidLoad"]
+- ["16ChartsDemo_macOS05RadarB14ViewControllerC", "viewWillAppear"]
+- !private ["Sk", "enumerated"]
+- !private ["Sk", "init"]
+- !private ["Sk", "map"]
+- !private ["Sm", "enumerated"]
+- !private ["Sm", "init"]
+- !private ["Sm", "init"]
+- !private ["Sm", "map"]
+- !private ["ST", "enumerated"]
+- !private ["ST", "init"]
+- !private ["ST", "init"]
+- !private ["ST", "map"]
+- !private ["s13SignedNumericP", "init"]
+- !private ["Sx", "init"]
+- !private ["SS", "init"]
+- !private ["SS", "init"]
+- !private ["Sy", "init"]
+- !private ["Sy", "init"]
+- !private ["s16TextOutputStreamP", "init"]
+- !private ["s16TextOutputStreamP", "init"]
+- !private ["s20TextOutputStreamableP", "init"]
+- !private ["s20TextOutputStreamableP", "init"]
+- !private ["s15_CVarArgAlignedP", "init"]
+- !private ["s22_CVarArgPassedAsDoubleP", "init"]
+- !private ["s37_DefaultCustomPlaygroundQuickLookableP", "animate"]
+- !private ["s37_DefaultCustomPlaygroundQuickLookableP", "chartDescription"]
+- !private ["s37_DefaultCustomPlaygroundQuickLookableP", "data"]
+- !private ["s24_DestructorSafeContainerP", "enumerated"]
+- !private ["s24_DestructorSafeContainerP", "init"]
+- !private ["s24_DestructorSafeContainerP", "map"]
+- !private ["s51_ExpressibleByBuiltinExtendedGraphemeClusterLiteralP", "init"]
+- !private ["s51_ExpressibleByBuiltinExtendedGraphemeClusterLiteralP", "init"]
+- !private ["s33_ExpressibleByBuiltinFloatLiteralP", "init"]
+- !private ["s35_ExpressibleByBuiltinIntegerLiteralP", "init"]
+- !private ["s34_ExpressibleByBuiltinStringLiteralP", "init"]
+- !private ["s34_ExpressibleByBuiltinStringLiteralP", "init"]
+- !private ["s39_ExpressibleByBuiltinUTF16StringLiteralP", "init"]
+- !private ["s39_ExpressibleByBuiltinUTF16StringLiteralP", "init"]
+- !private ["s41_ExpressibleByBuiltinUnicodeScalarLiteralP", "init"]
+- !private ["s41_ExpressibleByBuiltinUnicodeScalarLiteralP", "init"]
+- !private ["s26_ExpressibleByColorLiteralP", "blue"]
+- !private ["s26_ExpressibleByColorLiteralP", "red"]
+- !private ["s33_ExpressibleByStringInterpolationP", "init"]
+- !private ["s33_ExpressibleByStringInterpolationP", "init"]
+- !private ["s35_HasCustomAnyHashableRepresentationP", "enumerated"]
+- !private ["s35_HasCustomAnyHashableRepresentationP", "init"]
+- !private ["s35_HasCustomAnyHashableRepresentationP", "map"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "Array"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "Double"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "NSUIColor"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "RadarChartData"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "RadarChartDataEntry"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "RadarChartDataSet"]
+- ["10Foundation27_KeyValueCodingAndObservingP", ""]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "addDataSet"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "animate"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "blue"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "chartDescription"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "colors"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "cos"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "data"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "init"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "init"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "radarChartView"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "red"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "sin"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "text"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "viewDidLoad"]
+- !private ["s21_ObjectiveCBridgeableP", "animate"]
+- !private ["s21_ObjectiveCBridgeableP", "chartDescription"]
+- !private ["s21_ObjectiveCBridgeableP", "data"]
+- !private ["s21_ObjectiveCBridgeableP", "enumerated"]
+- !private ["s21_ObjectiveCBridgeableP", "init"]
+- !private ["s21_ObjectiveCBridgeableP", "init"]
+- !private ["s21_ObjectiveCBridgeableP", "map"]
+- !private ["s16_SwiftStringViewP", "init"]
+- !private ["s16_SwiftStringViewP", "init"]
+depends-nominal:
+- !private "6Charts16AnimatorDelegateP"
+- !private "Sa"
+- !private "s13ArrayProtocolP"
+- !private "6Charts38BarLineScatterCandleBubbleChartDataSetC"
+- !private "SK"
+- !private "SB"
+- "s7CVarArgP"
+- !private "6Charts16ChartBaseDataSetC"
+- !private "6Charts9ChartDataC"
+- !private "6Charts17ChartDataProviderP"
+- !private "6Charts12ChartDataSetC"
+- !private "6Charts13ChartViewBaseC"
+- !private "Sl"
+- !private "SL"
+- !private "6Charts13ComponentBaseC"
+- "s28CustomDebugStringConvertibleP"
+- !private "s29CustomPlaygroundQuickLookableP"
+- !private "s17CustomReflectableP"
+- "s23CustomStringConvertibleP"
+- !private "Se"
+- !private "6Charts11DescriptionC"
+- !private "Sd"
+- !private "SE"
+- !private "s18EnumeratedSequenceV"
+- "SQ"
+- !private "s25ExpressibleByArrayLiteralP"
+- !private "s43ExpressibleByExtendedGraphemeClusterLiteralP"
+- !private "s25ExpressibleByFloatLiteralP"
+- !private "s27ExpressibleByIntegerLiteralP"
+- !private "s23ExpressibleByNilLiteralP"
+- !private "s26ExpressibleByStringLiteralP"
+- !private "s33ExpressibleByUnicodeScalarLiteralP"
+- !private "SF"
+- "SH"
+- !private "6Charts39IBarLineScatterCandleBubbleChartDataSetP"
+- !private "6Charts13IChartDataSetP"
+- !private "6Charts22ILineRadarChartDataSetP"
+- !private "6Charts35ILineScatterCandleRadarChartDataSetP"
+- !private "6Charts18IRadarChartDataSetP"
+- !private "6Charts21LineRadarChartDataSetC"
+- !private "6Charts34LineScatterCandleRadarChartDataSetC"
+- !private "s25LosslessStringConvertibleP"
+- !private "s10MirrorPathP"
+- !private "SM"
+- !private "So22NSAccessibilityElementP"
+- !private "So20NSAccessibilityGroupP"
+- !private "So15NSAccessibilityP"
+- !private "So29NSAnimatablePropertyContainerP"
+- !private "So25NSAppearanceCustomizationP"
+- "So8NSCodingP"
+- !private "So7NSColorC"
+- !private "So9NSCopyingP"
+- !private "So21NSDraggingDestinationP"
+- "So8NSEditorP"
+- "So26NSExtensionRequestHandlingP"
+- "So8NSObjectC"
+- "So8NSObjectP"
+- !private "So19NSPasteboardReadingP"
+- !private "So19NSPasteboardWritingP"
+- "So11NSResponderC"
+- !private "So14NSSecureCodingP"
+- "So17NSSeguePerformingP"
+- "So30NSStandardKeyBindingRespondingP"
+- "So18NSTouchBarProviderP"
+- !private "6Charts8NSUIViewC"
+- "So23NSUserActivityRestoringP"
+- "So33NSUserInterfaceItemIdentificationP"
+- !private "So6NSViewC"
+- "So16NSViewControllerC"
+- !private "Sj"
+- !private "Sq"
+- !private "6Charts21PieRadarChartViewBaseC"
+- !private "6Charts14RadarChartDataC"
+- !private "6Charts19RadarChartDataEntryC"
+- !private "6Charts17RadarChartDataSetC"
+- !private "6Charts14RadarChartViewC"
+- "16ChartsDemo_macOS05RadarB14ViewControllerC"
+- !private "Sk"
+- !private "Sm"
+- !private "ST"
+- !private "s13SignedNumericP"
+- !private "Sx"
+- !private "SS"
+- !private "Sy"
+- !private "s16TextOutputStreamP"
+- !private "s20TextOutputStreamableP"
+- !private "s15_CVarArgAlignedP"
+- !private "s22_CVarArgPassedAsDoubleP"
+- !private "s37_DefaultCustomPlaygroundQuickLookableP"
+- !private "s24_DestructorSafeContainerP"
+- !private "s51_ExpressibleByBuiltinExtendedGraphemeClusterLiteralP"
+- !private "s33_ExpressibleByBuiltinFloatLiteralP"
+- !private "s35_ExpressibleByBuiltinIntegerLiteralP"
+- !private "s34_ExpressibleByBuiltinStringLiteralP"
+- !private "s39_ExpressibleByBuiltinUTF16StringLiteralP"
+- !private "s41_ExpressibleByBuiltinUnicodeScalarLiteralP"
+- !private "s26_ExpressibleByColorLiteralP"
+- !private "s33_ExpressibleByStringInterpolationP"
+- !private "s35_HasCustomAnyHashableRepresentationP"
+- "10Foundation27_KeyValueCodingAndObservingP"
+- !private "s21_ObjectiveCBridgeableP"
+- !private "s16_SwiftStringViewP"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Dispatch.apinotesc"
+- "/Users/cesargonzalezmora/eclipse-workspace/AG/PruebaVisualizacion/ChartsDemo-macOS/Build-command-line/Products/Debug/Charts.framework/Modules/Charts.swiftmodule/x86_64.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/XPC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/CoreData.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Metal.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/CoreFoundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/IOKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/AppKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/macosx/x86_64/SwiftOnoneSupport.swiftmodule"
+- "/Users/cesargonzalezmora/eclipse-workspace/AG/PruebaVisualizacion/ChartsDemo-macOS/Build-command-line/Products/Debug/Charts.framework/Headers/Charts.h"
+- "/Users/cesargonzalezmora/eclipse-workspace/AG/PruebaVisualizacion/ChartsDemo-macOS/Build-command-line/Products/Debug/Charts.framework/Headers/Charts-Swift.h"
+- "/Users/cesargonzalezmora/eclipse-workspace/AG/PruebaVisualizacion/ChartsDemo-macOS/Build-command-line/Products/Debug/Charts.framework/Modules/module.modulemap"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/xpc/XPC.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/objc/ObjectiveC.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/CoreData.framework/Headers/CoreData.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CoreImage.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/QuartzCore.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/Metal.framework/Headers/Metal.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/Darwin.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CoreGraphics.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/ApplicationServices.framework/Headers/ApplicationServices.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/AppKit.framework/Headers/AppKit.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/CoreText.framework/Headers/CoreText.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/Security.framework/Headers/Security.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/Quartz.framework/Headers/Quartz.apinotes"
+interface-hash: "a0721f8504e82e007f78b557179c0b40"

@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "opening visualization"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+echo $DIR
+cd $DIR/PruebaVisualizacion/ChartsDemo-macOS/Build-command-line/Products/Debug
+open ChartsDemo-macOS.app

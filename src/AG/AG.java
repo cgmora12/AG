@@ -74,6 +74,7 @@ public class AG {
 	public static String apiCodeFolderName = "apiCode";
 	public static String serverCodeFileName = "servercode.js";
 	public static String resFolderName = "AG";
+	public static String apiFolderName = "api";
 	public static String tempFolderName = "temp";
 	public static String visualizationMainFolderName = "PruebaVisualizacion";
 	public static String visualizationZipFileName = visualizationMainFolderName + ".zip";
@@ -176,6 +177,7 @@ public class AG {
 		    generateServer();
 	        addServerDependencies();
 	        generateApiCode();
+	        runApi();
 	        generateVisualization();
 	        System.out.println("Automatic API Generation finished!");
 		} 
@@ -1046,7 +1048,8 @@ public class AG {
         String lineServer = "";
 		try {
 			brServer = new BufferedReader(new InputStreamReader
-					(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + serverCodeFileName)));
+					(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator 
+							+ apiFolderName + File.separator + serverCodeFileName)));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1159,9 +1162,44 @@ public class AG {
 		
 	}
 
+	private static void runApi() {
+
+		System.out.println("Launching API to localhost...");
+		try {
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "api" 
+            		+ File.separator + "runApi"), 
+            		new File("runApi").toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+			System.out.println(e.getMessage());
+        }
+		File execFile = new File("runApi");
+		execFile.setExecutable(true);
+	    try {
+	        Process p = new ProcessBuilder("./runApi", "").start();
+	        /*BufferedReader reader = 
+	                new BufferedReader(new InputStreamReader(p.getInputStream()));
+			StringBuilder builder = new StringBuilder();
+			String line = null;
+			while ( (line = reader.readLine()) != null) {
+			   builder.append(line);
+			   builder.append(System.getProperty("line.separator"));
+			}
+			String result = builder.toString();
+			System.out.println(result);*/
+	        //p.waitFor();
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }
+
+		System.out.println("Server listening in http://localhost:8080/v1/");
+		
+	}
+
 	private static void generateVisualization() {
 		try {
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "visualization" + File.separator + "PruebaVisualizacion.zip"), 
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "visualization" 
+            		+ File.separator + "PruebaVisualizacion.zip"), 
             		new File(visualizationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -1252,7 +1290,7 @@ public class AG {
 		    if(!columnNames.isEmpty()) {
 		    	for(int i = 0; i < columnNames.size(); i++) {
 		    		if(i == 0) {
-				    	content = content.replaceFirst("\"columnNames\"", "\"" + columnNames.get(i)) +  "\"";
+				    	content = content.replaceFirst("\"columnNames\"", "\"" + columnNames.get(i) +  "\"");
 		    		} else {
 				    	content = content.replaceFirst("\"" + columnNames.get(i-1) + "\"", 
 				    			"\"" + columnNames.get(i-1) + "\"" + ", " + "\"" + columnNames.get(i) + "\"");
@@ -1271,6 +1309,67 @@ public class AG {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// Build and open visualization generated
+		System.out.println("Waiting for building and opening visualization...");
+		try {
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "visualization" 
+            		+ File.separator + "buildVisualization"), 
+            		new File("buildVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+			System.out.println(e.getMessage());
+        }
+
+		try {
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "visualization" 
+            		+ File.separator + "openVisualization"), 
+            		new File("openVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+			System.out.println(e.getMessage());
+        }
+		
+		File execFile1 = new File("buildVisualization");
+		execFile1.setExecutable(true);
+		File execFile2 = new File("openVisualization");
+		execFile2.setExecutable(true);
+        
+	    try {
+	        Process p = new ProcessBuilder("./buildVisualization", "").start();
+	        BufferedReader reader = 
+	                new BufferedReader(new InputStreamReader(p.getInputStream()));
+			StringBuilder builder = new StringBuilder();
+			String line = null;
+			while ( (line = reader.readLine()) != null) {
+			   builder.append(line);
+			   builder.append(System.getProperty("line.separator"));
+			}
+			String result = builder.toString();
+			System.out.println(result);
+	        p.waitFor();
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	    try {
+	        Process p = new ProcessBuilder("./openVisualization", "").start();
+	        /*BufferedReader reader = 
+	                new BufferedReader(new InputStreamReader(p.getInputStream()));
+			StringBuilder builder = new StringBuilder();
+			String line = null;
+			while ( (line = reader.readLine()) != null) {
+			   builder.append(line);
+			   builder.append(System.getProperty("line.separator"));
+			}
+			String result = builder.toString();
+			System.out.println(result);*/
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }
 	}
 	
 }

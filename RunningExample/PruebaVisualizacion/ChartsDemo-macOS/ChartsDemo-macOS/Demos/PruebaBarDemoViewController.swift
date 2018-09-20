@@ -97,7 +97,7 @@ open class PruebaBarDemoViewController: NSViewController
                                 /*self.barChartView.xAxis.axisMinimum = Double(Int(stops_ids.min() ?? "0") ?? 0)
                                 self.barChartView.xAxis.axisMaximum = Double(Int(stops_ids.min() ?? "0") ?? 0) + data.groupWidth(groupSpace: groupSpace, barSpace: barSpace) * Double(stops_ids.count)
                                  // (0.4 + 0.05) * 2 (data set count) + 0.1 = 1
-                                data.groupBars(fromX: Double(Int(ids.min() ?? "0") ?? 0), groupSpace: groupSpace, barSpace: barSpace)*/
+                                data.groupBars(fromX: Double(Int(stops_ids.min() ?? "0") ?? 0), groupSpace: groupSpace, barSpace: barSpace)*/
                                 self.barChartView.xAxis.valueFormatter = DefaultAxisValueFormatter { (value, axis) -> String in return ids[Int(value)] }
                             }
                             self.barChartView.data = data
