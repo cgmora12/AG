@@ -81,6 +81,7 @@ public class AG {
 	public static String visualizationProjectName = "ChartsDemo-macOS";
 	public static String visualizationFolderName = "Demos";
 	public static String visualizationSwiftFileName = "PruebaBarDemoViewController.swift";
+	public static String visualizationSwiftFileName2 = "LineDemoViewController.swift";
 
 	public static boolean m2mTransformation = false;
 	public static boolean openapi2api = false;
@@ -1299,6 +1300,42 @@ public class AG {
 		    }
 		    
 		    File swiftFile = new File(swiftFilePath);
+		    FileUtils.writeStringToFile(swiftFile, content);
+		    System.err.println("Visualization created");
+		    //System.out.println(content);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String swiftFilePath2 = visualizationMainFolderName + File.separator + visualizationProjectName 
+				+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
+				+ File.separator + visualizationSwiftFileName2;
+		try(BufferedReader br = new BufferedReader(new FileReader(swiftFilePath2))) {
+		    StringBuilder sb = new StringBuilder();
+		    String line = br.readLine();
+
+		    while (line != null) {
+		        sb.append(line);
+		        sb.append(System.lineSeparator());
+		        line = br.readLine();
+		    }
+		    String content = sb.toString();
+		    content = content.replaceFirst("columnNameId", columnNameId);
+		    if(!columnNames.isEmpty()) {
+		    	for(int i = 0; i < columnNames.size(); i++) {
+		    		if(i == 0) {
+				    	content = content.replaceFirst("\"columnNames\"", "\"" + columnNames.get(i) +  "\"");
+		    		} else {
+				    	content = content.replaceFirst("\"" + columnNames.get(i-1) + "\"", 
+				    			"\"" + columnNames.get(i-1) + "\"" + ", " + "\"" + columnNames.get(i) + "\"");
+		    		}
+		    	}
+		    }
+		    
+		    File swiftFile = new File(swiftFilePath2);
 		    FileUtils.writeStringToFile(swiftFile, content);
 		    System.err.println("Visualization created");
 		    //System.out.println(content);
