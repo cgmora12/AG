@@ -80,7 +80,7 @@ public class AG {
 	public static String visualizationZipFileName = visualizationMainFolderName + ".zip";
 	public static String visualizationProjectName = "ChartsDemo-macOS";
 	public static String visualizationFolderName = "Demos";
-	public static String visualizationSwiftFileName = "PruebaBarDemoViewController.swift";
+	public static String visualizationSwiftFileName = "BarDemoViewController.swift";
 	public static String visualizationSwiftFileName2 = "LineDemoViewController.swift";
 	public static String visualizationSwiftFileName3 = "PieDemoViewController.swift";
 	public static String visualizationSwiftFileName3Tab = "CustomPieTab.swift";

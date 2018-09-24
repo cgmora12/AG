@@ -221,17 +221,6 @@ SWIFT_CLASS("_TtC16ChartsDemo_macOS22LineDemoViewController")
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
 
-
-SWIFT_CLASS("_TtC16ChartsDemo_macOS27PruebaBarDemoViewController")
-@interface PruebaBarDemoViewController : NSViewController
-@property (nonatomic, strong) IBOutlet BarChartView * _Null_unspecified barChartView;
-- (void)viewDidLoad;
-- (IBAction)save:(id _Nonnull)sender;
-- (void)viewWillAppear;
-- (nonnull instancetype)initWithNibName:(NSNibName _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
-- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
-@end
-
 #if __has_attribute(external_source_symbol)
 # pragma clang attribute pop
 #endif

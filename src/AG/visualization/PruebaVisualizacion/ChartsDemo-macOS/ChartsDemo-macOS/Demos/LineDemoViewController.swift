@@ -56,17 +56,21 @@ open class LineDemoViewController: NSViewController
                             for column in column_names {
                                 column_values.removeAll()
                                 for result in jsonResults  as! [[String : Any]] {
-                                    column_values.append(Int((result[column] as! NSString).intValue))
+                                    if result[column] != nil {
+                                        column_values.append(Int((result[column] as! NSString).intValue))
+                                    }
                                 }
-                                column_values_min_aux = column_values.min()!
-                                column_values_max_aux = column_values.max()!
-                                if(column_values_min_aux < column_values_min) {
-                                    column_values_min = column_values_min_aux
+                                if(column_values.count > 0){
+                                    column_values_min_aux = column_values.min()!
+                                    column_values_max_aux = column_values.max()!
+                                    if(column_values_min_aux < column_values_min) {
+                                        column_values_min = column_values_min_aux
+                                    }
+                                    if(column_values_max_aux > column_values_max) {
+                                        column_values_max = column_values_max_aux
+                                    }
+                                    column_array.append(column_values)
                                 }
-                                if(column_values_max_aux > column_values_max) {
-                                    column_values_max = column_values_max_aux
-                                }
-                                column_array.append(column_values)
                             }
                             
                             var i = 0

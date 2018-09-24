@@ -674,9 +674,9 @@
             <objects>
                 <tabViewController selectedTabViewItemIndex="0" id="MdU-M1-yR2" sceneMemberID="viewController">
                     <tabViewItems>
-                        <tabViewItem identifier="" id="Yby-Hr-Gbs"/>
-                        <tabViewItem label="Bar" identifier="" id="75m-u6-Lg4"/>
                         <tabViewItem label="Pie" id="i5Z-1U-tMT"/>
+                        <tabViewItem label="Bar" identifier="" id="75m-u6-Lg4"/>
+                        <tabViewItem label="Line" identifier="" id="Yby-Hr-Gbs"/>
                     </tabViewItems>
                     <tabView key="tabView" type="noTabsNoBorder" id="4aI-t7-jgI">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
@@ -688,9 +688,9 @@
                     </tabView>
                     <connections>
                         <outlet property="tabView" destination="4aI-t7-jgI" id="H36-1r-bl2"/>
-                        <segue destination="vkP-1b-D8k" kind="relationship" relationship="tabItems" id="gGD-RY-5OB"/>
-                        <segue destination="4fu-uG-om0" kind="relationship" relationship="tabItems" id="LFV-tq-WGj"/>
                         <segue destination="mJ3-Pk-ynl" kind="relationship" relationship="tabItems" id="ceJ-Av-z0H"/>
+                        <segue destination="4fu-uG-om0" kind="relationship" relationship="tabItems" id="LFV-tq-WGj"/>
+                        <segue destination="vkP-1b-D8k" kind="relationship" relationship="tabItems" id="gGD-RY-5OB"/>
                     </connections>
                 </tabViewController>
                 <customObject id="VRA-wT-PQh" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -700,7 +700,7 @@
         <!--Bar Demo View Controller-->
         <scene sceneID="A6I-3s-knM">
             <objects>
-                <viewController title="Bar Demo View Controller" id="4fu-uG-om0" customClass="PruebaBarDemoViewController" customModule="ChartsDemo_macOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Bar Demo View Controller" id="4fu-uG-om0" customClass="BarDemoViewController" customModule="ChartsDemo_macOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="U2J-4p-9ti">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
