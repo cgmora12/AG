@@ -14,13 +14,18 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -61,6 +66,7 @@ public class AG {
 
 	// Variables
 	public static String fileName = "data";
+	public static String defaultFileName = "data";
 	public static String newfileName = "data";
 	public static String fileType = "csv";
 	public static String alternativeFileType = "";
@@ -75,7 +81,7 @@ public class AG {
 	public static String serverCodeFileName = "servercode.js";
 	public static String resFolderName = "AG";
 	public static String apiFolderName = "api";
-	public static String tempFolderName = "temp";
+	public static String tempFolderName = "generated";
 	public static String visualizationMainFolderName = "PruebaVisualizacion";
 	public static String visualizationZipFileName = visualizationMainFolderName + ".zip";
 	public static String visualizationProjectName = "ChartsDemo-macOS";
@@ -90,124 +96,257 @@ public class AG {
 	public static boolean xmi2json = false;
 	public static boolean xmi2api = false;
 	public static boolean csv2api = false;
+	public static boolean csv2openapi = false;
 	
 	public static void main(String[] args) {
-		// TODO: Swagger 2.0 to OpenAPI
 		
-		//args: ficheroDatos
-		if(args.length == 1) {
-			fileName = args[0];
+		if(args.length > 0) {
+			switch (args[0]) {
+				case "csv2api" : csv2api(args);
+					break;
+				/*case "openapi2api" : openapi2api(args);
+					break;*/
+				case "xmi2api" : xmi2api(args);
+					break;
+				case "xmi2json" : xmi2json(args);
+					break;
+				case "xml2api" : xml2api(args);
+					break;
+				case "m2m" : m2m(args);
+					break;
+				case "csv2openapi" : csv2openapi(args);
+					break;
+				default : System.out.println("No operation called");
+					break;
+			}
+		} else {
+			//Default operation without parameters
+			csv2api(args);
 		}
-		//args: openapi.json openapi2api
-		else if(args.length == 2 && args[1].contentEquals("openapi2api")) {
-			openapi2api = true;
-			swaggerFileName = args[0];
+                
+	}
+	
+	private static void csv2api(String[] args) {
+		System.out.println("csv2api");
+
+		//args: csv2api
+		csv2api = true;
+		
+		//args: csv2api data
+		if(args.length == 2) {
+			fileName = args[1];
+		} 
+		//args: csv2api data table.xmi openapi.xmi 
+		else if(args.length == 4) {
+			fileName = args[1];
+			modelFileName = args[2];
+			openAPIXMIFileName = args[3];
 		}
-		//args: ficheroDatos xml
-		else if(args.length == 2) {
-			fileName = args[0];
-			alternativeFileType = args[1];
+
+		convertCSVIntoXMI();
+		model2modelTransformation();
+	    convertXMIintoJSON();
+	    generateServer();
+        addServerDependencies();
+        generateApiCode();
+        runApi();
+        generateVisualization();
+        System.out.println("Automatic API Generation finished!");
+		
+	}
+	
+	/*private static void openapi2api(String[] args) {
+		System.out.println("openapi2api");
+
+		//args: openapi2api
+		openapi2api = true;
+		
+		//args: openapi2api data openapi.json 
+		if(args.length == 3) {
+			fileName = args[1];
+			swaggerFileName = args[2];
 		}
-		//args: openapi.xmi openapi.json xmi2api
-		else if(args.length == 3 && args[2].contentEquals("xmi2api")) {
-			xmi2api = true;
-			openAPIXMIFileName = args[0];
-			openAPIFileName = args[1];
+		
+		File source = new File(swaggerFileName);
+		File dest = new File(tempFolderName + File.separator + swaggerFileName);
+		try {
+		    FileUtils.copyFile(source, dest);
+		} catch (IOException e) {
+		    e.printStackTrace();
 		}
-		//args: openapi.xmi openapi.json xmi2json
-		else if(args.length == 3 && args[2].contentEquals("xmi2json")) {
-			xmi2json = true;
-			openAPIXMIFileName = args[0];
-			openAPIFileName = args[1];
+	
+	    generateServer();
+        addServerDependencies();
+        generateApiCode();
+        runApi();
+        generateVisualization();
+        System.out.println("Automatic API Generation finished!");
+	}*/
+	
+	private static void xmi2api(String[] args) {
+		System.out.println("xmi2api");
+
+		//args: xmi2api
+		xmi2api = true;
+		
+		//args: xmi2api data
+		if(args.length == 2) {
+			fileName = args[1];
 		}
-		//args: ficheroDatos metro.com /madrid
+		//args: xmi2api data openapi.xmi
 		else if(args.length == 3) {
-			fileName = args[0];
-			host = args[1];
-			basePath = args[2];
+			fileName = args[1];
+			openAPIXMIFileName = args[2];
 		}
-		//args: data table.xmi openapi.xmi csv2api
-		else if(args.length == 4 && args[3].contentEquals("csv2api")) {
-			csv2api = true;
-			fileName = args[0];
+		//args: xmi2api data openapi.xmi openapi.json 
+		else if(args.length == 4) {
+			fileName = args[1];
+			openAPIXMIFileName = args[2];
+			openAPIFileName = args[3];
+		}
+
+		File source = new File(openAPIXMIFileName);
+		File dest = new File(tempFolderName + File.separator + openAPIXMIFileName);
+		try {
+		    FileUtils.copyFile(source, dest);
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+		
+		cleanCSV();
+
+		// Move source files to temp folder
+	    convertXMIintoJSON();
+	    generateServer();
+        addServerDependencies();
+        generateApiCode();
+        runApi();
+        generateVisualization();
+        System.out.println("Automatic API Generation finished!");
+	}
+	
+	private static void xmi2json(String[] args) {
+		System.out.println("xmi2json");
+
+		//args: xmi2json
+		xmi2json = true;
+		
+		//args: xmi2json openapi.xmi
+		if(args.length == 2) {
+			openAPIXMIFileName = args[1];
+		}
+		//args: xmi2json openapi.xmi openapi.json 
+		if(args.length == 3) {
+			openAPIXMIFileName = args[1];
+			openAPIFileName = args[2];
+		}
+
+		// Move source files to temp folder
+		File source = new File(openAPIXMIFileName);
+		File dest = new File(tempFolderName + File.separator + openAPIXMIFileName);
+		try {
+		    FileUtils.copyFile(source, dest);
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+				
+		convertXMIintoJSON();
+        System.out.println("JSON API definition generated!");
+	}
+	
+	private static void xml2api(String[] args) {
+		System.out.println("xml2api");
+		
+		//args: xml2api ficheroDatos xml
+		if(args.length == 5) {
+			fileName = args[1];
+			alternativeFileType = args[2];
+		}
+		
+	    convertDataFileIntoCSV();
+		convertCSVIntoXMI();
+		model2modelTransformation();
+	    convertXMIintoJSON();
+	    generateServer();
+        addServerDependencies();
+        generateApiCode();
+        runApi();
+        generateVisualization();
+        System.out.println("Automatic API Generation finished!");
+	}
+	
+	private static void m2m(String[] args) {
+		System.out.println("m2m");
+		
+		//args: m2m 
+		m2mTransformation = true;
+		
+		//args: m2m table.xmi
+		if(args.length == 2) {
+			modelFileName = args[1];
+		}
+		//args: m2m table.xmi openapi.xmi
+		if(args.length == 3) {
 			modelFileName = args[1];
 			openAPIXMIFileName = args[2];
 		}
-		//args: ficheroDatos xml metro.com /madrid
-		else if(args.length == 4) {
-			fileName = args[0];
-			alternativeFileType = args[1];
-			host = args[2];
-			basePath = args[3];
-		}
-		//args: ficheroDatos table.xmi metro.com /madrid m2m
-		else if(args.length == 5) {
-			fileName = args[0];
-			modelFileName = args[1];
-			host = args[2];
-			basePath = args[3];
-			if(args[4].contentEquals("m2m")) {
-				m2mTransformation = true;
-			}
+
+		// Move source files to temp folder
+		File source = new File(modelFileName);
+		File dest = new File(tempFolderName + File.separator + modelFileName);
+		try {
+		    FileUtils.copyFile(source, dest);
+		} catch (IOException e) {
+		    e.printStackTrace();
 		}
 		
-		//Automatic API Generation process
-		if(m2mTransformation) {
-	        System.out.println("convertCSVIntoXMI");
-			convertCSVIntoXMI();
+		model2modelTransformation();
+        System.out.println("Converted datafile model into OpenAPI model!");
+	}
+	
+	private static void csv2openapi(String[] args) {
+		System.out.println("csv2openapi");
+
+		//args: csv2openapi
+		csv2openapi = true;
+		
+		//args: csv2openapi data
+		if(args.length == 2) {
+			fileName = args[1];
 		} 
-		else if(openapi2api) {
-		    System.out.println("convertOpenapiToAPI");
-		    generateServer();
-		} 
-		else if(xmi2json) {
-		    System.out.println("convertXMIintoJSON");
-		    convertXMIintoJSON();
-		}  
-		else if(xmi2api) {
-		    System.out.println("convertXMIintoAPI");
-		    convertXMIintoJSON();
-		    generateServer();
-	        addServerDependencies();
-	        generateApiCode();
-	        System.out.println("Automatic API Generation finished!");
-		}   
-		else if(csv2api) {
-		    System.out.println("convertCSVintoAPI");
-			convertCSVIntoXMI();
-			model2modelTransformation();
-		    convertXMIintoJSON();
-		    generateServer();
-	        addServerDependencies();
-	        generateApiCode();
-	        runApi();
-	        generateVisualization();
-	        System.out.println("Automatic API Generation finished!");
-		} 
-		else {
-			if(!alternativeFileType.isEmpty() && alternativeFileType != fileType) { 
-			    convertDataFileIntoCSV();
-			}
-			String file = fileName + "." + fileType;
-			File f = new File(file);
-			if(f.exists() && !f.isDirectory()) { 
-				generateApiDefinition();
-		        generateServer();
-		        addServerDependencies();
-		        generateApiCode();
-		        System.out.println("Automatic API Generation finished!");
-			} else {
-				System.out.println("The file " + fileName + "." + fileType + " does NOT exist...");
-			}
-			
+		//args: csv2openapi data openapi.json
+		else if(args.length == 3) {
+			fileName = args[1];
+			openAPIFileName = args[2];
 		}
-                
+
+		convertCSVIntoXMI();
+		model2modelTransformation();
+	    convertXMIintoJSON();
+        System.out.println("OpenAPI Generation finished!");
+		
 	}
 
 	@Override
 	public String toString() {
 		return "AG [getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
+	
+	/* Returns true if url is valid */
+    public static boolean URLisValid(String url) 
+    { 
+        /* Try creating a valid URL */
+        try { 
+            new URL(url).toURI(); 
+            return true; 
+        } 
+          
+        // If there was an Exception 
+        // while creating URL object 
+        catch (Exception e) { 
+            return false; 
+        } 
+    }
 
 	private static void convertDataFileIntoCSV() {
 		
@@ -383,9 +522,28 @@ public class AG {
 		}
 		
 	}
-
-	private static void convertCSVIntoXMI() {
 	
+	private static ArrayList<String[]> cleanCSV() {
+		
+		/*if(URLisValid(fileName)) {
+			URL url = null;
+			try {
+				url = new URL(fileName);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				FileUtils.copyURLToFile(url, new File(defaultFileName + "." + fileType));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			fileName = defaultFileName;
+		}*/
+		
 		String csvFile = fileName + "." + fileType;
 		
 		BufferedReader br = null;
@@ -442,6 +600,13 @@ public class AG {
 	    } finally {
 	       try {writer.close();} catch (Exception ex) {/*ignore*/}
 	    }
+	    
+	    return rows;
+	}
+
+	private static void convertCSVIntoXMI() {
+	
+		ArrayList<String[]> rows = cleanCSV();
         
         try {
 	        System.out.println("create xmi");
@@ -621,14 +786,23 @@ public class AG {
             	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").put("200", jsonobjAux);
             	
             	JSONObject jsonobjAuxContent = jsonobjAux.getJSONObject("content").getJSONObject("contentType");
-            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").remove("content");
-                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").put("content", new JSONObject());
-            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").put("application/json", jsonobjAuxContent);
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+            		.getJSONObject("responses").getJSONObject("200").remove("content");
+                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+                	.getJSONObject("responses").getJSONObject("200").put("content", new JSONObject());
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+            		.getJSONObject("responses").getJSONObject("200").getJSONObject("content").put("application/json", jsonobjAuxContent);
             	
             	String ref = jsonobjAuxContent.getJSONObject("schema").getJSONObject("items").getString("ref");
-            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").getJSONObject("application/json").getJSONObject("schema").remove("items");
-                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").getJSONObject("application/json").getJSONObject("schema").put("items", new JSONObject());
-            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").getJSONObject("application/json").getJSONObject("schema").getJSONObject("items").put("$ref", ref);
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+            		.getJSONObject("responses").getJSONObject("200").getJSONObject("content")
+            		.getJSONObject("application/json").getJSONObject("schema").remove("items");
+                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+                	.getJSONObject("responses").getJSONObject("200").getJSONObject("content")
+                	.getJSONObject("application/json").getJSONObject("schema").put("items", new JSONObject());
+            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+            		.getJSONObject("responses").getJSONObject("200").getJSONObject("content")
+            		.getJSONObject("application/json").getJSONObject("schema").getJSONObject("items").put("$ref", ref);
             	
             }
             
@@ -734,7 +908,7 @@ public class AG {
 		}
 	}
 	
-	private static void generateApiDefinition() {
+	/*private static void generateApiDefinition() {
 		
 		String csvFile = fileName + "." + fileType;
 
@@ -836,8 +1010,10 @@ public class AG {
             
             // Generate Swagger 2.0 API definition and doc
             apiDefinition = "";
-            apiDefinition += "{ \"swagger\" : \"2.0\", \"info\" : { \"version\" : \"1.0.0\", \"title\" : \"" + fileName + "\", \"description\" : \"Obtaining the " + fileNameNoWhiteSpaces  + "\" }, \"host\" : \"" + host + "\", \"basePath\" : \"" + basePath + "\",";
-            apiDefinition += "\"paths\" : { \"/\" : { \"get\" : { \"summary\" : \"GET " + fileName + "\", \"operationId\" : \"get" + fileNameNoWhiteSpaces + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\", \"produces\" : [ \"application/json\" ],";
+            apiDefinition += "{ \"swagger\" : \"2.0\", \"info\" : { \"version\" : \"1.0.0\", \"title\" : \"" + fileName + "\", \"description\" : \"Obtaining the " + fileNameNoWhiteSpaces  
+            			+ "\" }, \"host\" : \"" + host + "\", \"basePath\" : \"" + basePath + "\",";
+            apiDefinition += "\"paths\" : { \"/\" : { \"get\" : { \"summary\" : \"GET " + fileName + "\", \"operationId\" : \"get" 
+            			+ fileNameNoWhiteSpaces + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\", \"produces\" : [ \"application/json\" ],";
             apiDefinition += "\"parameters\" : [ ";
             		
             // Query parameters
@@ -858,7 +1034,8 @@ public class AG {
             	if(i > 0) {
             		apiDefinition += ",";
             	}
-            	apiDefinition += "\"/" + columns[i] + "/{" + columns [i] + "}\" : { \"get\" : { \"summary\" : \"" + columnsDescriptions[i] + "\", \"operationId\" : \"" + columnsDescriptions[i].replaceAll(" ", "").replaceAll("-", "") + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\", \"produces\" : [ \"application/json\" ],";
+            	apiDefinition += "\"/" + columns[i] + "/{" + columns [i] + "}\" : { \"get\" : { \"summary\" : \"" + columnsDescriptions[i] + "\", \"operationId\" : \"" 
+            			+ columnsDescriptions[i].replaceAll(" ", "").replaceAll("-", "") + "\", \"description\": \"Use value 'all' in a parameter for non-empty values\", \"produces\" : [ \"application/json\" ],";
             	apiDefinition += "\"parameters\" : [ { \"name\" : \"" + columns[i] + "\", \"in\" : \"path\", \"description\" : \"" + columnsDescriptions[i] + "\", \"required\" : true, \"type\" : \"" + dataTypes[i] + "\" } ],";
             	apiDefinition += "\"responses\" : { \"200\" : { \"description\" : \"successful operation\", \"schema\" : { \"type\" : \"array\", \"items\" : { \"$ref\" : \"#/definitions/COLUMNS\" } } } } } }";
             }
@@ -900,20 +1077,24 @@ public class AG {
             }
         }
 		
-	}
+	}*/
 
 	private static void generateServer() {
 
+		// TODO: Swagger 2.0 to OpenAPI
 		if(openapi2api || xmi2api || csv2api) {
+			String sourcePath = tempFolderName + File.separator + swaggerFileName;
 			new File(apiCodeFolderName).mkdirs();
-			File source = new File(tempFolderName + File.separator + swaggerFileName);
+			File source = new File(sourcePath);
 			File dest = new File(apiCodeFolderName + File.separator + swaggerFileName);
 			try {
 			    FileUtils.copyFile(source, dest);
 			} catch (IOException e) {
 			    e.printStackTrace();
 			}
-			File source2 = new File(tempFolderName + File.separator + openAPIFileName);
+
+			String sourcePath2 = tempFolderName + File.separator + openAPIFileName;
+			File source2 = new File(sourcePath2);
 			File dest2 = new File(apiCodeFolderName + File.separator + openAPIFileName);
 			try {
 			    FileUtils.copyFile(source2, dest2);
@@ -1189,11 +1370,14 @@ public class AG {
 			}
 			String result = builder.toString();
 			System.out.println(result);*/
-	        //p.waitFor();
+			p.waitFor(5000, TimeUnit.MILLISECONDS);
 	    } catch (IOException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
-	    }
+	    } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		System.out.println("Server listening in http://localhost:8080/v1/");
 		

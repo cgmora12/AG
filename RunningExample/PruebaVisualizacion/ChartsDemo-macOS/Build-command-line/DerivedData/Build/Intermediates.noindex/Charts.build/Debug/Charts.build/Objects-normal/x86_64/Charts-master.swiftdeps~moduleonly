@@ -1,6 +1,6 @@
 version: "Apple Swift version 4.2 (swiftlang-1000.11.37.1 clang-1000.11.45.1)"
 options: "4963770d32ed4224ba97549f8f5d2b78"
-build_time: [1537793110, 199532000]
+build_time: [1537878607, 960003000]
 inputs:
   "/Users/cesargonzalezmora/eclipse-workspace/AG/RunningExample/PruebaVisualizacion/Source/Charts/Animation/Animator.swift": [9223372036, 854775807]
   "/Users/cesargonzalezmora/eclipse-workspace/AG/RunningExample/PruebaVisualizacion/Source/Charts/Animation/ChartAnimationEasing.swift": [9223372036, 854775807]
