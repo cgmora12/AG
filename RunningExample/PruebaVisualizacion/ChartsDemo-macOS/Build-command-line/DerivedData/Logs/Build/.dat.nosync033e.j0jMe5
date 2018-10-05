@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>9</integer>
+	<key>logs</key>
+	<dict>
+		<key>FEDA8F3D-FAA3-4745-B5D0-24D67CDA220E</key>
+		<dict>
+			<key>className</key>
+			<string>IDECommandLineBuildLog</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
+			<key>fileName</key>
+			<string>FEDA8F3D-FAA3-4745-B5D0-24D67CDA220E.xcactivitylog</string>
+			<key>highLevelStatus</key>
+			<string>W</string>
+			<key>schemeIdentifier-containerName</key>
+			<string>ChartsDemo-macOS project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>ChartsDemo-macOS</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>0</integer>
+			<key>signature</key>
+			<string>Building project ChartsDemo-macOS with scheme ChartsDemo-macOS and configuration Debug</string>
+			<key>timeStartedRecording</key>
+			<real>559816017.46683598</real>
+			<key>timeStoppedRecording</key>
+			<real>559816056.86984003</real>
+			<key>title</key>
+			<string>Building project ChartsDemo-macOS with scheme ChartsDemo-macOS and configuration Debug</string>
+			<key>uniqueIdentifier</key>
+			<string>FEDA8F3D-FAA3-4745-B5D0-24D67CDA220E</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

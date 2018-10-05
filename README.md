@@ -30,4 +30,4 @@ java -jar ag.jar csv2api csvFileNameWithoutExtension
 
 ## Authors
 
-* **César González Mora** - *Initial work* - [PurpleBooth](https://github.com/cgmora12)
+* **César González Mora** 

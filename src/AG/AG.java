@@ -523,7 +523,7 @@ public class AG {
 		
 	}
 	
-	private static ArrayList<String[]> cleanCSV() {
+	private static void cleanCSV() {
 		
 		/*if(URLisValid(fileName)) {
 			URL url = null;
@@ -549,7 +549,7 @@ public class AG {
 		BufferedReader br = null;
         String line = "";
         String csvSplitBy = ",";
-        ArrayList<String[]> rows = new ArrayList<String[]>();
+        ArrayList<String> rows = new ArrayList<String>();
 
         try {
         	// Read first rows of data file
@@ -557,7 +557,8 @@ public class AG {
             while ((line = br.readLine()) != null) {
                 // use comma as separator
             	//TODO: replace all rare characters
-                rows.add(line.replaceAll(" ", "").replaceAll("\"", "").replaceAll("\'", "").split(csvSplitBy));
+                rows.add(StringUtils.stripAccents(line.replaceAll(" ", "").replaceAll("\"", "").replaceAll("\'", ""))
+                			.replaceAll("\\P{Print}", "").trim());
 
             }
             br.close();
@@ -587,26 +588,49 @@ public class AG {
 	        	if(i > 0) {
 		        	writer.write("\n");
 	        	}
-	        	for (int j = 0; j < rows.get(i).length; j++) {
-	        		if(j == 0) {
-			        	writer.write(rows.get(i)[j]);
-	        		} else {
-			        	writer.write(csvSplitBy + rows.get(i)[j]);
-	        		}
-	        	}
+			    writer.write(rows.get(i));
 	        }
 	    } catch (IOException ex) {
 	        // Report
 	    } finally {
 	       try {writer.close();} catch (Exception ex) {/*ignore*/}
 	    }
-	    
-	    return rows;
 	}
 
 	private static void convertCSVIntoXMI() {
 	
-		ArrayList<String[]> rows = cleanCSV();
+		cleanCSV();
+		
+		String csvFile = apiCodeFolderName + File.separator + newfileName + "." + fileType;
+		
+		BufferedReader br = null;
+        String line = "";
+        String csvSplitBy = ",";
+        ArrayList<String[]> rows = new ArrayList<String[]>();
+
+        try {
+        	// Read first rows of data file
+            br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                // use comma as separator
+            	//TODO: replace all rare characters
+                rows.add(line.split(csvSplitBy));
+
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         
         try {
 	        System.out.println("create xmi");
