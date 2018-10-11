@@ -82,7 +82,7 @@ public class AG {
 	public static String resFolderName = "AG";
 	public static String apiFolderName = "api";
 	public static String tempFolderName = "generated";
-	public static String visualizationMainFolderName = "PruebaVisualizacion";
+	public static String visualizationMainFolderName = "Visualizacion";
 	public static String visualizationZipFileName = visualizationMainFolderName + ".zip";
 	public static String visualizationProjectName = "ChartsDemo-macOS";
 	public static String visualizationFolderName = "Demos";
@@ -557,7 +557,8 @@ public class AG {
             while ((line = br.readLine()) != null) {
                 // use comma as separator
             	//TODO: replace all rare characters
-                rows.add(StringUtils.stripAccents(line.replaceAll(" ", "").replaceAll("\"", "").replaceAll("\'", ""))
+                rows.add(StringUtils.stripAccents(line.replaceAll(" ", "").replaceAll("\"", "").replaceAll("\'", "")
+                			.replaceAll("\\(", "_").replaceAll("\\)", "_"))
                 			.replaceAll("\\P{Print}", "").trim());
 
             }
@@ -1410,7 +1411,7 @@ public class AG {
 	private static void generateVisualization() {
 		try {
             Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "visualization" 
-            		+ File.separator + "PruebaVisualizacion.zip"), 
+            		+ File.separator + visualizationMainFolderName + ".zip"), 
             		new File(visualizationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -1595,19 +1596,21 @@ public class AG {
 
     	for(int n_cell = 0; n_cell < rows.get(0).length; n_cell++) {
     		for(int n_row = 1; n_row < rows.size() && classification; n_row++) {
-        		for(int n_value = 0; n_value < classifiedValues.size() && distinct_value; n_value++) {
-        			String cell = rows.get(n_row)[n_cell];
-        			if(classifiedValues.get(n_value).equals(rows.get(n_row)[n_cell]) || StringUtils.isBlank(rows.get(n_row)[n_cell])) {
-        				distinct_value = false;
-        			}
-        		}
-        		if(distinct_value && !StringUtils.isBlank(rows.get(n_row)[n_cell])) {
-        			classifiedValues.add(rows.get(n_row)[n_cell]);
-        		}
-        		distinct_value = true;
-        		if(classifiedValues.size() > 5) {
-        			classification = false;
-        		}
+    			if(n_cell < rows.get(n_row).length) {
+	        		for(int n_value = 0; n_value < classifiedValues.size() && distinct_value; n_value++) {
+	        			String cell = rows.get(n_row)[n_cell];
+	        			if(classifiedValues.get(n_value).equals(cell) || StringUtils.isBlank(cell)) {
+	        				distinct_value = false;
+	        			}
+	        		}
+	        		if(distinct_value && !StringUtils.isBlank(rows.get(n_row)[n_cell])) {
+	        			classifiedValues.add(rows.get(n_row)[n_cell]);
+	        		}
+	        		distinct_value = true;
+	        		if(classifiedValues.size() > 5) {
+	        			classification = false;
+	        		}
+    			}
         	}
     		if(classifiedValues.size() <= 1) {
     			classification = false;
@@ -1644,6 +1647,7 @@ public class AG {
     				    			"\"" + classifiedColumnNames.get(i-1) + "\"" + ", " + "\"" + classifiedColumnNames.get(i) + "\"");
     		    		}
     		    	}
+    		    	content = content.replaceFirst("filename", fileName);
     		    }
     		    
     		    File swiftFile = new File(swiftFilePath3);

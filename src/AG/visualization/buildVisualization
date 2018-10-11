@@ -2,7 +2,7 @@
 echo "building visualization"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 echo $DIR
-cd $DIR/PruebaVisualizacion
+cd $DIR/Visualizacion
 xcodebuild -project Charts.xcodeproj -scheme Charts -configuration Debug BUILD_DIR=./
 cp -r Debug/Charts.framework ChartsDemo-macOS/Build-command-line/Products/Debug
 cd ChartsDemo-macOS
