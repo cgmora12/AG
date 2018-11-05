@@ -65,7 +65,8 @@ rule Main {
 			operationId <- 'get' + s.filename,
 			description <- 'Use value \'all\' in a parameter for non-empty values',
 			responses <- operation_responses_basic,
-			parameters <- Sequence{operation_parameter_limit, operation_parameter_offset}.union(firstTableRow -> collect(e | thisModule.OperationParemetersBasic(e)))
+			parameters <- Sequence{operation_parameter_limit, operation_parameter_offset}
+				.union(firstTableRow -> collect(e | thisModule.OperationParemetersBasic(e)))
 		),
 		operation_parameter_limit: Openapi!Parameter (
 				in <- 'query',
@@ -185,7 +186,8 @@ lazy rule PathOperation {
 			operationId <- 'get' + cell.value,
 			description <- 'Use value \'all\' in a parameter for non-empty values',
 			responses <- thisModule.OperationResponses(cell),
-			parameters <- Sequence{thisModule.OperationParameters(cell)}
+			parameters <- Sequence{thisModule.OperationParameterLimit(cell), 
+				thisModule.OperationParameterOffset(cell), thisModule.OperationParameters(cell)}
 		)
 }
 
@@ -281,12 +283,54 @@ lazy rule OperationParameters {
 		)
 }
 
+lazy rule OperationParameterLimit {
+	from 
+		cell: Table!Cell
+	to
+		operation_parameters: Openapi!Parameter (
+				in <- 'query',
+				name <- 'limit',
+				description <- 'Maximum number of results',
+				schema <- thisModule.ParameterSchemaLimit(cell)
+		)
+}
+
+lazy rule OperationParameterOffset {
+	from 
+		cell: Table!Cell
+	to
+		operation_parameters: Openapi!Parameter (
+				in <- 'query',
+				name <- 'offset',
+				description <- 'Starting index for results',
+				schema <- thisModule.ParameterSchemaOffset(cell)
+		)
+}
+
 lazy rule ParameterSchema {
 	from
 		cell: Table!Cell
 	to
 		parameter_schema: Openapi!Schema (
 				type <- cell.type
+		)
+}
+
+lazy rule ParameterSchemaLimit {
+	from
+		cell: Table!Cell
+	to
+		parameter_schema: Openapi!Schema (
+				type <- 'integer'
+		)
+}
+
+lazy rule ParameterSchemaOffset {
+	from
+		cell: Table!Cell
+	to
+		parameter_schema: Openapi!Schema (
+				type <- 'integer'
 		)
 }
 
