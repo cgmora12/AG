@@ -65,7 +65,25 @@ rule Main {
 			operationId <- 'get' + s.filename,
 			description <- 'Use value \'all\' in a parameter for non-empty values',
 			responses <- operation_responses_basic,
-			parameters <- firstTableRow -> collect(e | thisModule.OperationParemetersBasic(e))
+			parameters <- Sequence{operation_parameter_limit, operation_parameter_offset}.union(firstTableRow -> collect(e | thisModule.OperationParemetersBasic(e)))
+		),
+		operation_parameter_limit: Openapi!Parameter (
+				in <- 'query',
+				name <- 'limit',
+				description <- 'Maximum number of results',
+				schema <- operation_parameter_limit_schema
+		),
+		operation_parameter_limit_schema: Openapi!Schema (
+				type <- 'integer'
+		),
+		operation_parameter_offset: Openapi!Parameter (
+				in <- 'query',
+				name <- 'offset',
+				description <- 'Starting index for results',
+				schema <- operation_parameter_offset_schema
+		),
+		operation_parameter_offset_schema: Openapi!Schema (
+				type <- 'integer'
 		),
 		--path_operation: distinct Openapi!Operation foreach (cell in firstTableRow) (
 		--	summary <- 'GET ' + cell.value,

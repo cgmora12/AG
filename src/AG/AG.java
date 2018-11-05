@@ -1378,11 +1378,15 @@ public class AG {
             Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "api" 
             		+ File.separator + "runApi"), 
             		new File("runApi").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "api" 
+            		+ File.separator + "runApi2"), 
+            		new File("runApi2").toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
 		File execFile = new File("runApi");
 		execFile.setExecutable(true);
+		
 	    try {
 	        Process p = new ProcessBuilder("./runApi", "").start();
 	        /*BufferedReader reader = 
