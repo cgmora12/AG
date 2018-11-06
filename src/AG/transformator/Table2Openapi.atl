@@ -345,7 +345,10 @@ lazy rule SchemaProperties {
 	to
 		schema_properties: Openapi!Property (
 			name <- cell.value,
-			content <- thisModule.PropertyContent(lastTableRow->at(firstTableRow->indexOf(cell)))
+			content <- if lastTableRow->size() < firstTableRow->size() 
+				then thisModule.PropertyContent(firstTableRow->at(firstTableRow->indexOf(cell)))
+				else thisModule.PropertyContent(lastTableRow->at(firstTableRow->indexOf(cell)))
+				endif
 		)
 }
 

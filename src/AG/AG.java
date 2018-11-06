@@ -557,9 +557,7 @@ public class AG {
             while ((line = br.readLine()) != null) {
                 // use comma as separator
             	//TODO: replace all rare characters
-                rows.add(StringUtils.stripAccents(line.replaceAll(" ", "").replaceAll("\"", "").replaceAll("\'", "")
-                			.replaceAll("\\(", "_").replaceAll("\\)", "_"))
-                			.replaceAll("\\P{Print}", "").trim());
+                rows.add(cleanString(line));
 
             }
             br.close();
@@ -596,6 +594,13 @@ public class AG {
 	    } finally {
 	       try {writer.close();} catch (Exception ex) {/*ignore*/}
 	    }
+	}
+	
+	private static String cleanString(String s) {
+		return StringUtils.stripAccents(s.replaceAll(" ", "").replaceAll("/", "_").replaceAll("\"", "").replaceAll("\'", "")
+        		.replaceAll("\\?", "").replaceAll("\\+", "plus").replaceAll("\\-", "minus").replaceAll("\\(", "_").replaceAll("\\)", "_")
+        		.replaceAll("\\[", "_").replaceAll("\\]", "_").replaceAll("\\{", "_").replaceAll("\\}", "_"))
+        		.replaceAll("\\P{Print}", "").trim();
 	}
 
 	private static void convertCSVIntoXMI() {
@@ -659,7 +664,7 @@ public class AG {
     		rootElement.setAttributeNode(attrsXmi4);
 
     		Attr attr = doc.createAttribute("filename");
-    		attr.setValue(fileName);
+    		attr.setValue(cleanString(fileName));
     		rootElement.setAttributeNode(attr);
     		
     		doc.appendChild(rootElement);
