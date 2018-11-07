@@ -17,6 +17,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "stop_id"
         in: "query"
         description: "stop_id"
@@ -93,6 +103,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "location_type"
         in: "path"
         description: "location_type"
@@ -114,6 +134,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "parent_station"
         in: "path"
         description: "parent_station"
@@ -135,6 +165,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "stop_code"
         in: "path"
         description: "stop_code"
@@ -156,6 +196,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "stop_desc"
         in: "path"
         description: "stop_desc"
@@ -177,6 +227,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "stop_id"
         in: "path"
         description: "stop_id"
@@ -198,6 +258,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "stop_lat"
         in: "path"
         description: "stop_lat"
@@ -219,6 +289,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "stop_lon"
         in: "path"
         description: "stop_lon"
@@ -240,6 +320,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "stop_name"
         in: "path"
         description: "stop_name"
@@ -261,6 +351,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "stop_timezone"
         in: "path"
         description: "stop_timezone"
@@ -282,6 +382,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "stop_url"
         in: "path"
         description: "stop_url"
@@ -303,6 +413,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "wheelchair_boarding"
         in: "path"
         description: "wheelchair_boarding"
@@ -324,6 +444,16 @@ paths:
       produces:
       - "application/json"
       parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
       - name: "zone_id"
         in: "path"
         description: "zone_id"
@@ -349,7 +479,7 @@ definitions:
         example: "A"
       stop_lon:
         type: "string"
-        example: "-3.77462"
+        example: "minus3.77462"
       stop_id:
         type: "string"
         example: "par_4_202"
@@ -361,13 +491,13 @@ definitions:
         example: "40.39698"
       stop_url:
         type: "string"
-        example: "http://www.crtm.es"
+        example: "http:__www.crtm.es"
       stop_desc:
         type: "string"
         example: ""
       stop_timezone:
         type: "string"
-        example: "Europe/Madrid"
+        example: "Europe_Madrid"
       stop_name:
         type: "string"
         example: "COLONIAJARDIN"

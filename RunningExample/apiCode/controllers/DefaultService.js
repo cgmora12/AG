@@ -6,63 +6,74 @@ exports.getOperation = function(args, res, next) {
   
   var examples = {};
   var fileName = "./data.csv";
+  var result;
+  var jsonResult = new Object();
+  var rowNumber = 0;
+  var limit = 100;
+  var offset = 0;
 
   if (fs.existsSync(fileName)) {
     console.log('file exists');
 
     fs.readFile(fileName, {encoding: 'utf-8'}, function(err,data){
       if (!err) {
+        jsonResult.results = [];
+
+        // Checking arguments
+
+        var argsUndefined = true;
+        var filters = false;
+
+        for(var i = 0; i < Object.keys(args).length; i++){
+          if (Object.keys(args)[i] === "limit" || Object.keys(args)[i] === "offset"){
+            if (Object.keys(args)[i] === "limit" && args[Object.keys(args)[i]].value != undefined){
+              limit = parseInt(args[Object.keys(args)[i]].value);
+            } 
+            else if (Object.keys(args)[i] === "offset" && args[Object.keys(args)[i]].value != undefined){
+              offset = parseInt(args[Object.keys(args)[i]].value);
+            }
+          }
+          else if(args[Object.keys(args)[i]].value != undefined){
+            argsUndefined = false;
+          }
+        }
+        
         // From csv to json
         papa.parse(data, 
           { 
             header: true,
-            complete: function ReturnJSONFile(result){
-              console.log('ReturnJSONFile');
-              result = result.data;
-              try{
-                // Creating json object
-                result = "{ \"results\": " + JSON.stringify(result) + " }";
-                var jsonObj = JSON.parse(result);
-                var jsonResult = new Object();
-                jsonResult.results = [];
+            step: function(row) {
+              result = row.data[0];
 
-                // Filtering results
-                var argsUndefined = true;
-                var filters = false;
-                var object_number = 0;
-
-                for(var i = 0; i < Object.keys(args).length; i++){
-                  if(args[Object.keys(args)[i]].value != undefined){
-                    argsUndefined = false;
-                  }
-                }
+              // Filtering results
+              if(rowNumber < limit + offset && rowNumber >= offset) {
                 if(argsUndefined){
-                  jsonResult.results = jsonObj.results;
+                  jsonResult.results = jsonResult.results.concat(result);
                 }
                 else {
                   for(var j = 0; j < Object.keys(args).length; j++){
                     if(args[Object.keys(args)[j]].value != undefined){
-                      if(jsonResult.results.length > 0 || filters){
-                        jsonObj.results = jsonResult.results;
-                        jsonResult.results = [];
-                        object_number = 0;
-                      }
-                      filters = true;
-                      for(var i in jsonObj.results){
-                        if(Object.keys(args)[j] === Object.keys(jsonObj.results[i])[Object.keys(jsonObj.results[i]).indexOf(Object.keys(args)[j])]){
-                          if(jsonObj.results[i][Object.keys(jsonObj.results[i])[Object.keys(jsonObj.results[i]).indexOf(Object.keys(args)[j])]] === args[Object.keys(args)[j]].value + ""){
-                            jsonResult.results[object_number] = jsonObj.results[i];
-                            object_number++;
-                          }
-                          else if(args[Object.keys(args)[j]].value + "" === "all" && jsonObj.results[i][Object.keys(jsonObj.results[i])[Object.keys(jsonObj.results[i]).indexOf(Object.keys(args)[j])]].replace(/\s+/g, '') != ""){
-                            jsonResult.results[object_number] = jsonObj.results[i];
-                            object_number++;
-                          }
+                      if(Object.keys(args)[j] === Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]){
+                        if(result[Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]] === args[Object.keys(args)[j]].value + ""){
+                          jsonResult.results = jsonResult.results.concat(result);
+                        }
+                        else if(args[Object.keys(args)[j]].value + "" === "all" && result[Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]].replace(/\s+/g, '') != ""){
+                          jsonResult.results = jsonResult.results.concat(result);
                         }
                       }
                     } 
                   }
                 }
+              }
+
+              rowNumber++;
+            },
+            complete: function(){
+              console.log('ReturnJSONFile');
+              //result = result.data;
+              try{
+                // Creating json object
+                result = "{ \"results\": " + JSON.stringify(result) + " }";
 
                 console.log("Completed!");
                 examples['application/json'] = jsonResult;

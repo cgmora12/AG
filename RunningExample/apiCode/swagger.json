@@ -19,6 +19,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "stop_name",
           "description" : "stop_name",
@@ -45,6 +55,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "parent_station",
           "description" : "parent_station",
@@ -71,6 +91,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "stop_lon",
           "description" : "stop_lon",
@@ -97,6 +127,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "wheelchair_boarding",
           "description" : "wheelchair_boarding",
@@ -123,6 +163,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "stop_url",
           "description" : "stop_url",
@@ -149,6 +199,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "stop_timezone",
           "description" : "stop_timezone",
@@ -175,6 +235,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "stop_desc",
           "description" : "stop_desc",
@@ -201,6 +271,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "stop_code",
           "description" : "stop_code",
@@ -227,6 +307,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "query",
           "name" : "stop_id",
           "description" : "stop_id",
@@ -307,6 +397,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "location_type",
           "description" : "location_type",
@@ -333,6 +433,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "zone_id",
           "description" : "zone_id",
@@ -359,6 +469,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "stop_id",
           "description" : "stop_id",
@@ -385,6 +505,16 @@
           }
         },
         "parameters" : [ {
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
           "in" : "path",
           "name" : "stop_lat",
           "description" : "stop_lat",
@@ -413,7 +543,7 @@
         },
         "stop_lon" : {
           "type" : "string",
-          "example" : -3.77462
+          "example" : "minus3.77462"
         },
         "stop_id" : {
           "type" : "string",
@@ -429,7 +559,7 @@
         },
         "stop_url" : {
           "type" : "string",
-          "example" : "http://www.crtm.es"
+          "example" : "http:__www.crtm.es"
         },
         "stop_desc" : {
           "type" : "string",
@@ -437,7 +567,7 @@
         },
         "stop_timezone" : {
           "type" : "string",
-          "example" : "Europe/Madrid"
+          "example" : "Europe_Madrid"
         },
         "stop_name" : {
           "type" : "string",

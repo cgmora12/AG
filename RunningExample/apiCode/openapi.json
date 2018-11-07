@@ -17,7 +17,7 @@
           },
           "stop_lon" : {
             "type" : "string",
-            "example" : -3.77462
+            "example" : "minus3.77462"
           },
           "stop_id" : {
             "type" : "string",
@@ -33,7 +33,7 @@
           },
           "stop_url" : {
             "type" : "string",
-            "example" : "http://www.crtm.es"
+            "example" : "http:__www.crtm.es"
           },
           "stop_desc" : {
             "type" : "string",
@@ -41,7 +41,7 @@
           },
           "stop_timezone" : {
             "type" : "string",
-            "example" : "Europe/Madrid"
+            "example" : "Europe_Madrid"
           },
           "stop_name" : {
             "type" : "string",
@@ -86,6 +86,20 @@
         },
         "parameters" : [ {
           "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
+          "schema" : {
             "type" : "string"
           },
           "in" : "path",
@@ -116,6 +130,20 @@
           }
         },
         "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
           "schema" : {
             "type" : "string"
           },
@@ -148,6 +176,20 @@
         },
         "parameters" : [ {
           "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
+          "schema" : {
             "type" : "string"
           },
           "in" : "path",
@@ -178,6 +220,20 @@
           }
         },
         "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
           "schema" : {
             "type" : "string"
           },
@@ -210,6 +266,20 @@
         },
         "parameters" : [ {
           "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
+          "schema" : {
             "type" : "string"
           },
           "in" : "path",
@@ -240,6 +310,20 @@
           }
         },
         "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
           "schema" : {
             "type" : "string"
           },
@@ -272,6 +356,20 @@
         },
         "parameters" : [ {
           "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
+          "schema" : {
             "type" : "string"
           },
           "in" : "path",
@@ -303,6 +401,20 @@
         },
         "parameters" : [ {
           "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
+          "schema" : {
             "type" : "string"
           },
           "in" : "path",
@@ -333,6 +445,20 @@
           }
         },
         "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
           "schema" : {
             "type" : "string"
           },
@@ -441,6 +567,20 @@
         },
         "parameters" : [ {
           "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
+          "schema" : {
             "type" : "string"
           },
           "in" : "path",
@@ -471,6 +611,20 @@
           }
         },
         "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
           "schema" : {
             "type" : "string"
           },
@@ -503,6 +657,20 @@
         },
         "parameters" : [ {
           "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
+          "schema" : {
             "type" : "string"
           },
           "in" : "path",
@@ -533,6 +701,20 @@
           }
         },
         "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results"
+        }, {
           "schema" : {
             "type" : "string"
           },

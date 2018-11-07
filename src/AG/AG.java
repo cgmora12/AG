@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -1410,7 +1411,13 @@ public class AG {
 		execFile.setExecutable(true);
 		
 	    try {
-	        Process p = new ProcessBuilder("runApi.bat", "").start();
+	    	String executable = "./runApi.bat";
+	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
+	    		executable = "runApi.bat";
+	    	}
+	        Process p = new ProcessBuilder(executable, "").start();
+	        //Runtime rt = Runtime.getRuntime();
+            //Process p = rt.exec("runApi");
 	        /*BufferedReader reader = 
 	                new BufferedReader(new InputStreamReader(p.getInputStream()));
 			StringBuilder builder = new StringBuilder();
