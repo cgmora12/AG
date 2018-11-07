@@ -1,8 +1,0 @@
-version: "Apple Swift version 4.2 (swiftlang-1000.11.37.1 clang-1000.11.45.1)"
-options: "86fc4ce8aae15ce0f2cd5e8d6102dbaf"
-build_time: [1538123239, 737361000]
-inputs:
-  "/Users/cesargonzalezmora/eclipse-workspace/AG/RunningExample/PruebaVisualizacion/ChartsDemo-macOS/ChartsDemo-macOS/AppDelegate.swift": [1538123144, 0]
-  "/Users/cesargonzalezmora/eclipse-workspace/AG/RunningExample/PruebaVisualizacion/ChartsDemo-macOS/ChartsDemo-macOS/Demos/CustomPieTab.swift": [1538123144, 0]
-  "/Users/cesargonzalezmora/eclipse-workspace/AG/RunningExample/PruebaVisualizacion/ChartsDemo-macOS/ChartsDemo-macOS/Demos/LineDemoViewController.swift": [1538123144, 0]
-  "/Users/cesargonzalezmora/eclipse-workspace/AG/RunningExample/PruebaVisualizacion/ChartsDemo-macOS/ChartsDemo-macOS/Demos/BarDemoViewController.swift": [1538123144, 0]
