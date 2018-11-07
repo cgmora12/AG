@@ -82,6 +82,7 @@ public class AG {
 	public static String resFolderName = "AG";
 	public static String apiFolderName = "api";
 	public static String tempFolderName = "generated";
+	public static String fileSeparatorForResources = "/";
 	public static String visualizationMainFolderName = "Visualizacion";
 	public static String visualizationZipFileName = visualizationMainFolderName + ".zip";
 	public static String visualizationProjectName = "ChartsDemo-macOS";
@@ -747,22 +748,36 @@ public class AG {
 		}*/
 
 		try {
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "metamodels" + File.separator + "Table.ecore"), 
-            		new File(tempFolderName + File.separator + "Table.ecore").toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "metamodels" + File.separator + "Openapi.ecore"), 
-            		new File(tempFolderName + File.separator + "Openapi.ecore").toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "transformator" + File.separator + "Table2Openapi.atl"), 
-            		new File(tempFolderName + File.separator + "Table2Openapi.atl").toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "transformator" + File.separator + "Table2Openapi.emftvm"), 
-            		new File(tempFolderName + File.separator + "Table2Openapi.emftvm").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+            		+ fileSeparatorForResources + "metamodels" + fileSeparatorForResources + "Table.ecore"), 
+            		new File(tempFolderName + File.separator + "Table.ecore").toPath(), 
+            		StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
+            		fileSeparatorForResources + "metamodels" + fileSeparatorForResources + "Openapi.ecore"), 
+            		new File(tempFolderName + File.separator + "Openapi.ecore").toPath(), 
+            		StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
+            		fileSeparatorForResources + "transformator" + fileSeparatorForResources + "Table2Openapi.atl"), 
+            		new File(tempFolderName + File.separator + "Table2Openapi.atl").toPath(), 
+            		StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
+            		fileSeparatorForResources + "transformator" + fileSeparatorForResources
+            		+ "Table2Openapi.emftvm"), 
+            		new File(tempFolderName + File.separator + "Table2Openapi.emftvm").toPath(), 
+            		StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
 		
+		String tableEcore = tempFolderName + fileSeparatorForResources + "Table.ecore";
+		String tableModel = tempFolderName + fileSeparatorForResources + modelFileName;
+		String openapiEcore = tempFolderName + fileSeparatorForResources + "Openapi.ecore";
+		String openapiModel = tempFolderName + fileSeparatorForResources + openAPIXMIFileName;
+		String folder = tempFolderName + fileSeparatorForResources;
 		Launcher launcher = new Launcher();
-		launcher.runATL(tempFolderName + File.separator + "Table.ecore", "Table", 
-				tempFolderName + File.separator + modelFileName, tempFolderName + File.separator + "Openapi.ecore", "Openapi", 
-				tempFolderName + File.separator + openAPIXMIFileName, "Table2Openapi", tempFolderName + File.separator);
+		launcher.runATL(tableEcore, "Table", 
+				tableModel, openapiEcore, "Openapi", 
+				openapiModel, "Table2Openapi", folder);
 		
 	}
 
@@ -770,7 +785,8 @@ public class AG {
 		String jsonString = "", jsonStringFormatted = "", swaggerString = "", swaggerStringFormatted = "";
 		
 		try {
-            JSONObject xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(tempFolderName + File.separator + openAPIXMIFileName)));
+            JSONObject xmlJSONObj = XML.toJSONObject(
+            		FileUtils.readFileToString(new File(tempFolderName + File.separator + openAPIXMIFileName)));
             
             xmlJSONObj = xmlJSONObj.getJSONObject("openapi:API");
             xmlJSONObj.remove("openapi:API");
@@ -1262,8 +1278,9 @@ public class AG {
         String lineServer = "";
 		try {
 			brServer = new BufferedReader(new InputStreamReader
-					(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator 
-							+ apiFolderName + File.separator + serverCodeFileName)));
+					(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+							+ fileSeparatorForResources + apiFolderName 
+							+ fileSeparatorForResources + serverCodeFileName)));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1380,20 +1397,20 @@ public class AG {
 
 		System.out.println("Launching API to localhost...");
 		try {
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "api" 
-            		+ File.separator + "runApi"), 
-            		new File("runApi").toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "api" 
-            		+ File.separator + "runApi2"), 
-            		new File("runApi2").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+            		+ fileSeparatorForResources + "api" + fileSeparatorForResources + "runApi.bat"), 
+            		new File("runApi.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
+            		fileSeparatorForResources + "api" + fileSeparatorForResources + "runApi2.bat"), 
+            		new File("runApi2.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
-		File execFile = new File("runApi");
+		File execFile = new File("runApi.bat");
 		execFile.setExecutable(true);
 		
 	    try {
-	        Process p = new ProcessBuilder("./runApi", "").start();
+	        Process p = new ProcessBuilder("runApi.bat", "").start();
 	        /*BufferedReader reader = 
 	                new BufferedReader(new InputStreamReader(p.getInputStream()));
 			StringBuilder builder = new StringBuilder();
@@ -1419,8 +1436,9 @@ public class AG {
 
 	private static void generateVisualization() {
 		try {
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "visualization" 
-            		+ File.separator + visualizationMainFolderName + ".zip"), 
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+            		+ fileSeparatorForResources + "visualization" 
+            		+ fileSeparatorForResources + visualizationMainFolderName + ".zip"), 
             		new File(visualizationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -1653,7 +1671,8 @@ public class AG {
     				    	content = content.replaceFirst("\"columnNames\"", "\"" + classifiedColumnNames.get(i) +  "\"");
     		    		} else {
     				    	content = content.replaceFirst("\"" + classifiedColumnNames.get(i-1) + "\"", 
-    				    			"\"" + classifiedColumnNames.get(i-1) + "\"" + ", " + "\"" + classifiedColumnNames.get(i) + "\"");
+    				    			"\"" + classifiedColumnNames.get(i-1) + "\"" + ", " + "\"" 
+    				    					+ classifiedColumnNames.get(i) + "\"");
     		    		}
     		    	}
     		    	content = content.replaceFirst("filename", fileName);
@@ -1675,16 +1694,18 @@ public class AG {
 		// Build and open visualization generated
 		System.out.println("Waiting for building and opening visualization...");
 		try {
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "visualization" 
-            		+ File.separator + "buildVisualization"), 
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+            		+ fileSeparatorForResources + "visualization" 
+            		+ fileSeparatorForResources + "buildVisualization"), 
             		new File("buildVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
 
 		try {
-            Files.copy(AG.class.getResourceAsStream(File.separator + resFolderName + File.separator + "visualization" 
-            		+ File.separator + "openVisualization"), 
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+            		+ fileSeparatorForResources + "visualization" 
+            		+ fileSeparatorForResources + "openVisualization"), 
             		new File("openVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
