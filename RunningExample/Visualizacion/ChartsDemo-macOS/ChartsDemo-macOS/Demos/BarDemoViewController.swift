@@ -35,7 +35,6 @@ open class BarDemoViewController: NSViewController
                         if let jsonResults = json["results"] as? [Any] {
                             var ids = Array<String>()
                             let ids_name = "stop_id"
-                            var id_int = false;
                             var column_values = [Int]()
                             var column_array = [[Int]]()
                             let column_names = ["stop_code", "location_type", "wheelchair_boarding"]
@@ -49,10 +48,6 @@ open class BarDemoViewController: NSViewController
                             for result in jsonResults  as! [[String : Any]] {
                                 if result[ids_name] != nil {
                                     ids.append(result[ids_name] as! String)
-                                    if type(of: result[ids_name]!) == type(of: 0) {
-                                        print(type(of: result[ids_name]!))
-                                        id_int = true
-                                    }
                                 }
                             }
                             for column in column_names {
@@ -77,44 +72,47 @@ open class BarDemoViewController: NSViewController
                             
                             var i = 0
                             while i < column_array.count {
-                                var yse : [BarChartDataEntry]! = nil
-                                if id_int {
-                                    yse = column_array[i].enumerated().map { (arg) -> BarChartDataEntry in let (x, y) = arg; return BarChartDataEntry(x: Double(ids[x])!, y: Double(y)) }
-                                } else {
-                                    yse = column_array[i].enumerated().map { (arg) -> BarChartDataEntry in let (x, y) = arg; return BarChartDataEntry(x: Double(x), y: Double(y)) }
-                                }
+                                let yse : [BarChartDataEntry]! = column_array[i].enumerated().map { (arg) -> BarChartDataEntry in let (x, y) = arg; return BarChartDataEntry(x: Double(x), y: Double(y)) }
                                 let ds = BarChartDataSet(values: yse, label: column_names[i])
                                 ds.setColor(NSUIColor(calibratedRed: CGFloat(arc4random() % 256 ) / 256, green: CGFloat(arc4random() % 256 ) / 256, blue: CGFloat(arc4random() % 256 ) / 256, alpha: 1.0))
                                 data.addDataSet(ds)
                                 i += 1
                             }
                             
-                            let barWidth = 0.4
-                            let barSpace = 0.05
-                            let groupSpace = 0.1
+                            /*let barWidth = 0.4
+                             let barSpace = 0.05
+                             let groupSpace = 0.1*/
+                            let groupSpace = 0.4
+                            let barSpace = 0.03
+                            let barWidth = 0.2
                             
                             data.barWidth = barWidth
+                            self.barChartView.xAxis.axisMinimum = 0
+                            self.barChartView.xAxis.axisMaximum = data.groupWidth(groupSpace: groupSpace, barSpace: barSpace) * Double(ids.count)
+                            data.groupBars(fromX: 0, groupSpace: groupSpace, barSpace: barSpace)
                             
-                            if id_int {
-                                self.barChartView.xAxis.axisMinimum = Double(Int(ids.min() ?? "0") ?? 0)
-                                self.barChartView.xAxis.axisMaximum = Double(Int(ids.min() ?? "0") ?? 0) + Double(Int(ids.max()!)!) * 0.1
-                                data.groupBars(fromX: Double(Int(ids.min() ?? "0") ?? 0), groupSpace: groupSpace, barSpace: barSpace)
-                            } else {
-                                /*self.barChartView.xAxis.axisMinimum = Double(Int(stops_ids.min() ?? "0") ?? 0)
-                                self.barChartView.xAxis.axisMaximum = Double(Int(stops_ids.min() ?? "0") ?? 0) + data.groupWidth(groupSpace: groupSpace, barSpace: barSpace) * Double(stops_ids.count)
-                                 // (0.4 + 0.05) * 2 (data set count) + 0.1 = 1
-                                data.groupBars(fromX: Double(Int(stops_ids.min() ?? "0") ?? 0), groupSpace: groupSpace, barSpace: barSpace)*/
-                                self.barChartView.xAxis.valueFormatter = DefaultAxisValueFormatter { (value, axis) -> String in return ids[Int(value)] }
-                            }
-                            self.barChartView.data = data
                             
-                            //self.barChartView.gridBackgroundColor = NSUIColor.white
                             
-                            self.barChartView.xAxis.setLabelCount(ids.count, force: true)
                             self.barChartView.xAxis.granularityEnabled = true
                             self.barChartView.xAxis.drawLabelsEnabled = true
-                            self.barChartView.xAxis.granularity = 1.0
+                            //self.barChartView.xAxis.granularity = 1
                             self.barChartView.xAxis.decimals = 0
+                            
+                            self.barChartView.xAxis.labelCount = ids.count
+                            self.barChartView.pinchZoomEnabled = true
+                            self.barChartView.scaleYEnabled = true
+                            self.barChartView.scaleXEnabled = true
+                            self.barChartView.highlighter = nil
+                            self.barChartView.doubleTapToZoomEnabled = true
+                            self.barChartView.xAxis.granularity = self.barChartView.xAxis.axisMaximum / Double(ids.count)
+                            self.barChartView.xAxis.centerAxisLabelsEnabled = true
+                            self.barChartView.data = data
+                            
+                            
+                            //self.barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: ids)
+                            let formatterLabels = CustomLabelsAxisValueFormatter()
+                            formatterLabels.labels = ids
+                            self.barChartView.xAxis.valueFormatter = formatterLabels
                             
                             let formatter = NumberFormatter()
                             formatter.numberStyle = .none
@@ -131,6 +129,7 @@ open class BarDemoViewController: NSViewController
                             self.barChartView.legend.enabled = true
                             self.barChartView.rightAxis.enabled = false
                             self.barChartView.chartDescription?.text = "Barchart"
+                            self.barChartView.notifyDataSetChanged()
                         }
                     }
                     
@@ -193,5 +192,31 @@ open class BarDemoViewController: NSViewController
     override open func viewWillAppear()
     {
         self.barChartView.animate(xAxisDuration: 1.0, yAxisDuration: 1.0)
+    }
+}
+
+class CustomLabelsAxisValueFormatter : NSObject, IAxisValueFormatter {
+    
+    var labels: [String] = []
+    
+    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        
+        let count = self.labels.count
+        
+        guard let axis = axis, count > 0 else {
+            
+            return ""
+        }
+        
+        let factor = axis.axisMaximum / Double(count)
+        
+        let index = Int((value / factor).rounded())
+        
+        if index >= 0 && index < count {
+            
+            return self.labels[index]
+        }
+        
+        return ""
     }
 }
