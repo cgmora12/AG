@@ -83,6 +83,7 @@ public class AG {
 	public static String resFolderName = "AG";
 	public static String apiFolderName = "api";
 	public static String tempFolderName = "generated";
+	public static String mainFolderName = "AG_data";
 	public static String fileSeparatorForResources = "/";
 	public static String visualizationMainFolderName = "Visualizacion";
 	public static String visualizationZipFileName = visualizationMainFolderName + ".zip";
@@ -144,6 +145,8 @@ public class AG {
 			modelFileName = args[2];
 			openAPIXMIFileName = args[3];
 		}
+
+		mainFolderName = "AG_" + cleanString(fileName);
 
 		convertCSVIntoXMI();
 		model2modelTransformation();
@@ -207,8 +210,10 @@ public class AG {
 			openAPIFileName = args[3];
 		}
 
+		mainFolderName = "AG_" + cleanString(fileName);
+
 		File source = new File(openAPIXMIFileName);
-		File dest = new File(tempFolderName + File.separator + openAPIXMIFileName);
+		File dest = new File(mainFolderName + File.separator + tempFolderName + File.separator + openAPIXMIFileName);
 		try {
 		    FileUtils.copyFile(source, dest);
 		} catch (IOException e) {
@@ -243,9 +248,11 @@ public class AG {
 			openAPIFileName = args[2];
 		}
 
+		mainFolderName = "AG_" + cleanString(fileName);
+
 		// Move source files to temp folder
 		File source = new File(openAPIXMIFileName);
-		File dest = new File(tempFolderName + File.separator + openAPIXMIFileName);
+		File dest = new File(mainFolderName + File.separator + tempFolderName + File.separator + openAPIXMIFileName);
 		try {
 		    FileUtils.copyFile(source, dest);
 		} catch (IOException e) {
@@ -264,6 +271,8 @@ public class AG {
 			fileName = args[1];
 			alternativeFileType = args[2];
 		}
+
+		mainFolderName = "AG_" + cleanString(fileName);
 		
 	    convertDataFileIntoCSV();
 		convertCSVIntoXMI();
@@ -293,9 +302,11 @@ public class AG {
 			openAPIXMIFileName = args[2];
 		}
 
+		mainFolderName = "AG_" + cleanString(fileName);
+
 		// Move source files to temp folder
 		File source = new File(modelFileName);
-		File dest = new File(tempFolderName + File.separator + modelFileName);
+		File dest = new File(mainFolderName + File.separator + tempFolderName + File.separator + modelFileName);
 		try {
 		    FileUtils.copyFile(source, dest);
 		} catch (IOException e) {
@@ -321,6 +332,8 @@ public class AG {
 			fileName = args[1];
 			openAPIFileName = args[2];
 		}
+
+		mainFolderName = "AG_" + cleanString(fileName);
 
 		convertCSVIntoXMI();
 		model2modelTransformation();
@@ -580,11 +593,11 @@ public class AG {
         // Rewrite CSV without rare characters
 	    Writer writer = null;
 	    try {
-			new File(apiCodeFolderName).mkdirs();
-	    	File file = new File(apiCodeFolderName + File.separator + newfileName + "." + fileType);
+			new File(mainFolderName + File.separator + apiCodeFolderName).mkdirs();
+	    	File file = new File(mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType);
 	    	file.delete();
 	        writer = new BufferedWriter(new OutputStreamWriter(
-	              new FileOutputStream(apiCodeFolderName + File.separator + newfileName + "." + fileType), "utf-8"));
+	              new FileOutputStream(mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType), "utf-8"));
 	        for(int i = 0; i < rows.size(); i++) {
 	        	if(i > 0) {
 		        	writer.write("\n");
@@ -609,7 +622,7 @@ public class AG {
 	
 		cleanCSV();
 		
-		String csvFile = apiCodeFolderName + File.separator + newfileName + "." + fileType;
+		String csvFile = mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType;
 		
 		BufferedReader br = null;
         String line = "";
@@ -709,8 +722,8 @@ public class AG {
     		TransformerFactory transformerFactory = TransformerFactory.newInstance();
     		Transformer transformer = transformerFactory.newTransformer();
     		DOMSource source = new DOMSource(doc);
-    		new File(tempFolderName).mkdirs();
-    		StreamResult result = new StreamResult(new File(tempFolderName + File.separator + modelFileName));
+    		new File(mainFolderName + File.separator + tempFolderName).mkdirs();
+    		StreamResult result = new StreamResult(new File(mainFolderName + File.separator + tempFolderName + File.separator + modelFileName));
 
     		// Output to console for testing
     		// StreamResult result = new StreamResult(System.out);
@@ -751,30 +764,30 @@ public class AG {
 		try {
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
             		+ fileSeparatorForResources + "metamodels" + fileSeparatorForResources + "Table.ecore"), 
-            		new File(tempFolderName + File.separator + "Table.ecore").toPath(), 
+            		new File(mainFolderName + File.separator + tempFolderName + File.separator + "Table.ecore").toPath(), 
             		StandardCopyOption.REPLACE_EXISTING);
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
             		fileSeparatorForResources + "metamodels" + fileSeparatorForResources + "Openapi.ecore"), 
-            		new File(tempFolderName + File.separator + "Openapi.ecore").toPath(), 
+            		new File(mainFolderName + File.separator + tempFolderName + File.separator + "Openapi.ecore").toPath(), 
             		StandardCopyOption.REPLACE_EXISTING);
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
             		fileSeparatorForResources + "transformator" + fileSeparatorForResources + "Table2Openapi.atl"), 
-            		new File(tempFolderName + File.separator + "Table2Openapi.atl").toPath(), 
+            		new File(mainFolderName + File.separator + tempFolderName + File.separator + "Table2Openapi.atl").toPath(), 
             		StandardCopyOption.REPLACE_EXISTING);
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
             		fileSeparatorForResources + "transformator" + fileSeparatorForResources
             		+ "Table2Openapi.emftvm"), 
-            		new File(tempFolderName + File.separator + "Table2Openapi.emftvm").toPath(), 
+            		new File(mainFolderName + File.separator + tempFolderName + File.separator + "Table2Openapi.emftvm").toPath(), 
             		StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
 		
-		String tableEcore = tempFolderName + fileSeparatorForResources + "Table.ecore";
-		String tableModel = tempFolderName + fileSeparatorForResources + modelFileName;
-		String openapiEcore = tempFolderName + fileSeparatorForResources + "Openapi.ecore";
-		String openapiModel = tempFolderName + fileSeparatorForResources + openAPIXMIFileName;
-		String folder = tempFolderName + fileSeparatorForResources;
+		String tableEcore = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources + "Table.ecore";
+		String tableModel = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources + modelFileName;
+		String openapiEcore = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources + "Openapi.ecore";
+		String openapiModel = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources + openAPIXMIFileName;
+		String folder = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources;
 		Launcher launcher = new Launcher();
 		launcher.runATL(tableEcore, "Table", 
 				tableModel, openapiEcore, "Openapi", 
@@ -787,7 +800,7 @@ public class AG {
 		
 		try {
             JSONObject xmlJSONObj = XML.toJSONObject(
-            		FileUtils.readFileToString(new File(tempFolderName + File.separator + openAPIXMIFileName)));
+            		FileUtils.readFileToString(new File(mainFolderName + File.separator + tempFolderName + File.separator + openAPIXMIFileName)));
             
             xmlJSONObj = xmlJSONObj.getJSONObject("openapi:API");
             xmlJSONObj.remove("openapi:API");
@@ -942,13 +955,13 @@ public class AG {
 			System.out.println(e.getMessage());
 		}
 		
-		try (PrintWriter out = new PrintWriter(tempFolderName + File.separator + openAPIFileName)) {
+		try (PrintWriter out = new PrintWriter(mainFolderName + File.separator + tempFolderName + File.separator + openAPIFileName)) {
 		    out.println(jsonStringFormatted);
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
 		
-		try (PrintWriter out = new PrintWriter(tempFolderName + File.separator + swaggerFileName)) {
+		try (PrintWriter out = new PrintWriter(mainFolderName + File.separator + tempFolderName + File.separator + swaggerFileName)) {
 		    out.println(swaggerStringFormatted);
 		} catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());
@@ -1130,19 +1143,19 @@ public class AG {
 
 		// TODO: Swagger 2.0 to OpenAPI
 		if(openapi2api || xmi2api || csv2api) {
-			String sourcePath = tempFolderName + File.separator + swaggerFileName;
-			new File(apiCodeFolderName).mkdirs();
+			String sourcePath = mainFolderName + File.separator + tempFolderName + File.separator + swaggerFileName;
+			new File(mainFolderName + File.separator + apiCodeFolderName).mkdirs();
 			File source = new File(sourcePath);
-			File dest = new File(apiCodeFolderName + File.separator + swaggerFileName);
+			File dest = new File(mainFolderName + File.separator + apiCodeFolderName + File.separator + swaggerFileName);
 			try {
 			    FileUtils.copyFile(source, dest);
 			} catch (IOException e) {
 			    e.printStackTrace();
 			}
 
-			String sourcePath2 = tempFolderName + File.separator + openAPIFileName;
+			String sourcePath2 = mainFolderName + File.separator + tempFolderName + File.separator + openAPIFileName;
 			File source2 = new File(sourcePath2);
-			File dest2 = new File(apiCodeFolderName + File.separator + openAPIFileName);
+			File dest2 = new File(mainFolderName + File.separator + apiCodeFolderName + File.separator + openAPIFileName);
 			try {
 			    FileUtils.copyFile(source2, dest2);
 			} catch (IOException e) {
@@ -1155,9 +1168,9 @@ public class AG {
 		args[1] = "--lang";
 		args[2] = "nodejs-server";
 		args[3] = "--input-spec";
-		args[4] = apiCodeFolderName + File.separator + swaggerFileName;
+		args[4] = mainFolderName + File.separator + apiCodeFolderName + File.separator + swaggerFileName;
 		args[5] = "--output";
-		args[6] = apiCodeFolderName;
+		args[6] = mainFolderName + File.separator + apiCodeFolderName;
 		SwaggerCodegen.main(args);
 		
 		/*Process proc = null;
@@ -1187,7 +1200,7 @@ public class AG {
         String lines = "";
         BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(apiCodeFolderName + "/package.json"));
+			br = new BufferedReader(new FileReader(mainFolderName + File.separator + apiCodeFolderName + "/package.json"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1216,7 +1229,7 @@ public class AG {
 		}
         PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(apiCodeFolderName + "/package.json", "UTF-8");
+			writer = new PrintWriter(mainFolderName + File.separator + apiCodeFolderName + "/package.json", "UTF-8");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1249,7 +1262,7 @@ public class AG {
 		String line = "";
         ArrayList<String> lineFunctionNames = new ArrayList<String>();
 		try {
-			br = new BufferedReader(new FileReader(apiCodeFolderName + "/controllers/DefaultService.js"));
+			br = new BufferedReader(new FileReader(mainFolderName + File.separator + apiCodeFolderName + "/controllers/DefaultService.js"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1319,7 +1332,7 @@ public class AG {
         
         PrintWriter writer = null;
 		try {
-			writer = new PrintWriter(apiCodeFolderName + "/controllers/DefaultService.js", "UTF-8");
+			writer = new PrintWriter(mainFolderName + File.separator + apiCodeFolderName + "/controllers/DefaultService.js", "UTF-8");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1400,20 +1413,20 @@ public class AG {
 		try {
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
             		+ fileSeparatorForResources + "api" + fileSeparatorForResources + "runApi.bat"), 
-            		new File("runApi.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            		new File(mainFolderName + File.separator + "runApi.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
             		fileSeparatorForResources + "api" + fileSeparatorForResources + "runApi2.bat"), 
-            		new File("runApi2.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            		new File(mainFolderName + File.separator + "runApi2.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
-		File execFile = new File("runApi.bat");
+		File execFile = new File(mainFolderName + File.separator + "runApi.bat");
 		execFile.setExecutable(true);
 		
 	    try {
-	    	String executable = "./runApi.bat";
+	    	String executable = "./" + mainFolderName + File.separator + "runApi.bat";
 	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
-	    		executable = "runApi.bat";
+	    		executable = mainFolderName + File.separator + "runApi.bat";
 	    	}
 	        Process p = new ProcessBuilder(executable, "").start();
 	        //Runtime rt = Runtime.getRuntime();
@@ -1446,13 +1459,19 @@ public class AG {
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
             		+ fileSeparatorForResources + "visualization" 
             		+ fileSeparatorForResources + visualizationMainFolderName + ".zip"), 
-            		new File(visualizationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            		new File(mainFolderName + File.separator + visualizationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
 		
 		try {
-			ZipFile zipFile = new ZipFile(visualizationZipFileName);
+			FileUtils.deleteDirectory(new File(mainFolderName + File.separator + visualizationMainFolderName));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		try {
+			ZipFile zipFile = new ZipFile(mainFolderName + File.separator + visualizationZipFileName);
 			Enumeration<?> enu = zipFile.entries();
 			while (enu.hasMoreElements()) {
 				ZipEntry zipEntry = (ZipEntry) enu.nextElement();
@@ -1462,7 +1481,7 @@ public class AG {
 				long compressedSize = zipEntry.getCompressedSize();
 				System.out.printf("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize);*/
 
-				File file = new File(name);
+				File file = new File(mainFolderName + File.separator + name);
 				if (name.endsWith("/")) {
 					file.mkdirs();
 					continue;
@@ -1489,7 +1508,7 @@ public class AG {
 			e.printStackTrace();
 		}
 		
-		File file = new File(visualizationZipFileName);
+		File file = new File(mainFolderName + File.separator + visualizationZipFileName);
 		if (file.exists()) {
 		    file.delete();
 		} else {
@@ -1501,7 +1520,7 @@ public class AG {
 		ArrayList<String> columnNames = new ArrayList<String>();
 		String columnNameId = "";
 		try {
-			xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(tempFolderName + File.separator + openAPIXMIFileName)));
+			xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(mainFolderName + File.separator + tempFolderName + File.separator + openAPIXMIFileName)));
 			JSONArray xmlJSONObjAux = xmlJSONObj.getJSONObject("openapi:API").getJSONObject("components")
 					.getJSONObject("schemas").getJSONObject("mainComponent").getJSONArray("properties");
 			
@@ -1519,7 +1538,7 @@ public class AG {
 		}
 		
 		//Create graphs in swift
-		String swiftFilePath = visualizationMainFolderName + File.separator + visualizationProjectName 
+		String swiftFilePath = mainFolderName + File.separator + visualizationMainFolderName + File.separator + visualizationProjectName 
 				+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
 				+ File.separator + visualizationSwiftFileName;
 		try(BufferedReader br = new BufferedReader(new FileReader(swiftFilePath))) {
@@ -1555,7 +1574,7 @@ public class AG {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String swiftFilePath2 = visualizationMainFolderName + File.separator + visualizationProjectName 
+		String swiftFilePath2 = mainFolderName + File.separator + visualizationMainFolderName + File.separator + visualizationProjectName 
 				+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
 				+ File.separator + visualizationSwiftFileName2;
 		try(BufferedReader br = new BufferedReader(new FileReader(swiftFilePath2))) {
@@ -1594,7 +1613,7 @@ public class AG {
 		
 		// Pie chart
 
-		String csvFile = apiCodeFolderName + File.separator + newfileName + "." + fileType;
+		String csvFile = mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType;
 		BufferedReader br = null;
         String line = "";
         String csvSplitBy = ",";
@@ -1659,7 +1678,7 @@ public class AG {
     	
     	// TODO: create pie chart for each classification column
     	if(classifiedColumnNames.size() > 0) {
-    		String swiftFilePath3 = visualizationMainFolderName + File.separator + visualizationProjectName 
+    		String swiftFilePath3 = mainFolderName + File.separator + visualizationMainFolderName + File.separator + visualizationProjectName 
     				+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
     				+ File.separator + visualizationSwiftFileName3Tab;
     		try(BufferedReader br3= new BufferedReader(new FileReader(swiftFilePath3))) {
@@ -1704,7 +1723,7 @@ public class AG {
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
             		+ fileSeparatorForResources + "visualization" 
             		+ fileSeparatorForResources + "buildVisualization"), 
-            		new File("buildVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            		new File(mainFolderName + File.separator + "buildVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
@@ -1713,18 +1732,18 @@ public class AG {
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
             		+ fileSeparatorForResources + "visualization" 
             		+ fileSeparatorForResources + "openVisualization"), 
-            		new File("openVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            		new File(mainFolderName + File.separator + "openVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
 			System.out.println(e.getMessage());
         }
 		
-		File execFile1 = new File("buildVisualization");
+		File execFile1 = new File(mainFolderName + File.separator + "buildVisualization");
 		execFile1.setExecutable(true);
-		File execFile2 = new File("openVisualization");
+		File execFile2 = new File(mainFolderName + File.separator + "openVisualization");
 		execFile2.setExecutable(true);
         
 	    try {
-	        Process p = new ProcessBuilder("./buildVisualization", "").start();
+	        Process p = new ProcessBuilder("./" + mainFolderName + File.separator + "buildVisualization", "").start();
 	        BufferedReader reader = 
 	                new BufferedReader(new InputStreamReader(p.getInputStream()));
 			StringBuilder builder = new StringBuilder();
@@ -1745,7 +1764,7 @@ public class AG {
 		}
 
 	    try {
-	        Process p = new ProcessBuilder("./openVisualization", "").start();
+	        Process p = new ProcessBuilder("./" + mainFolderName + File.separator +  "openVisualization", "").start();
 	        /*BufferedReader reader = 
 	                new BufferedReader(new InputStreamReader(p.getInputStream()));
 			StringBuilder builder = new StringBuilder();
