@@ -12,15 +12,59 @@ import Foundation
 import Cocoa
 import Charts
 
-open class LineDemoViewController: NSViewController
+open class LineDemoViewController: NSViewController, NSTextFieldDelegate
 {
     @IBOutlet var lineChartView: LineChartView!
+    
+    @IBOutlet weak var limitTextField: NSTextField!
+    @IBOutlet weak var offsetTextField: NSTextField!
+    
+    @IBAction func refreshButtonAction(_ sender: Any) {
+        print("Refresh")
+        if limitTextField.stringValue.isEmpty {
+            limitTextField.stringValue = "100"
+        }
+        if offsetTextField.stringValue.isEmpty {
+            offsetTextField.stringValue = "0"
+        }
+        let url : String = "http://localhost:8080/v1/?limit=" + limitTextField.stringValue + "&offset=" + offsetTextField.stringValue
+        callApi(url: url)
+    }
+    
+    override open func controlTextDidChange(_ obj: Notification) {
+        let object = obj.object as! NSTextField
+        
+        if object == limitTextField {
+            guard let typed = object.stringValue.last else { return }
+            if !"0123456789".contains(typed) {
+                limitTextField!.stringValue = String(limitTextField!.stringValue.dropLast())
+            }
+        }
+        else if object == offsetTextField {
+            guard let typed = object.stringValue.last else { return }
+            if !"0123456789".contains(typed) {
+                limitTextField!.stringValue = String(limitTextField!.stringValue.dropLast())
+            }
+        }
+    }
     
     override open func viewDidLoad()
     {
         super.viewDidLoad()
         
+        self.limitTextField.delegate = self
+        self.offsetTextField.delegate = self
+        
         let url : String = "http://localhost:8080/v1/"
+        callApi(url: url)
+    }
+    
+    override open func viewWillAppear()
+    {
+        self.lineChartView.animate(xAxisDuration: 0.0, yAxisDuration: 1.0)
+    }
+    
+    func callApi(url: String){
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         
@@ -111,6 +155,10 @@ open class LineDemoViewController: NSViewController
                             self.lineChartView.legend.enabled = true
                             self.lineChartView.rightAxis.enabled = false
                             self.lineChartView.chartDescription?.text = "Linechart"
+                            
+                            self.lineChartView.notifyDataSetChanged(); // let the chart know it's data changed
+                            self.lineChartView.data?.notifyDataChanged(); // let the chart know it's data changed
+                            self.lineChartView.animate(xAxisDuration: 0.0, yAxisDuration: 1.0)
                         }
                     }
                     
@@ -121,31 +169,5 @@ open class LineDemoViewController: NSViewController
         })
         
         task.resume()
-        
-        // Do any additional setup after loading the view.
-        /*let ys1 = Array(1..<10).map { x in return sin(Double(x) / 2.0 / 3.141 * 1.5) }
-         let ys2 = Array(1..<10).map { x in return cos(Double(x) / 2.0 / 3.141) }
-         
-         let yse1 = ys1.enumerated().map { x, y in return ChartDataEntry(x: Double(x), y: y) }
-         let yse2 = ys2.enumerated().map { x, y in return ChartDataEntry(x: Double(x), y: y) }
-         
-         let data = LineChartData()
-         let ds1 = LineChartDataSet(values: yse1, label: "Hello")
-         ds1.colors = [NSUIColor.red]
-         data.addDataSet(ds1)
-         
-         let ds2 = LineChartDataSet(values: yse2, label: "World")
-         ds2.colors = [NSUIColor.blue]
-         data.addDataSet(ds2)
-         self.lineChartView.data = data
-         
-         self.lineChartView.gridBackgroundColor = NSUIColor.white
-         
-         self.lineChartView.chartDescription?.text = "Linechart Demo"*/
-    }
-    
-    override open func viewWillAppear()
-    {
-        self.lineChartView.animate(xAxisDuration: 0.0, yAxisDuration: 1.0)
     }
 }

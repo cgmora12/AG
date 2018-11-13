@@ -12,15 +12,74 @@ import Foundation
 import Cocoa
 import Charts
 
-open class BarDemoViewController: NSViewController
+open class BarDemoViewController: NSViewController, NSTextFieldDelegate
 {
     @IBOutlet var barChartView: BarChartView!
+    
+    @IBOutlet weak var limitTextField: NSTextField!
+    @IBOutlet weak var offsetTextField: NSTextField!
+    
+    @IBAction func refreshButtonAction(_ sender: Any) {
+        print("Refresh")
+        if limitTextField.stringValue.isEmpty {
+            limitTextField.stringValue = "100"
+        }
+        if offsetTextField.stringValue.isEmpty {
+            offsetTextField.stringValue = "0"
+        }
+        let url : String = "http://localhost:8080/v1/?limit=" + limitTextField.stringValue + "&offset=" + offsetTextField.stringValue
+        callApi(url: url)
+    }
+    
+    override open func controlTextDidChange(_ obj: Notification) {
+        let object = obj.object as! NSTextField
+        
+        if object == limitTextField {
+            guard let typed = object.stringValue.last else { return }
+            if !"0123456789".contains(typed) {
+                limitTextField!.stringValue = String(limitTextField!.stringValue.dropLast())
+            }
+        }
+        else if object == offsetTextField {
+            guard let typed = object.stringValue.last else { return }
+            if !"0123456789".contains(typed) {
+                limitTextField!.stringValue = String(limitTextField!.stringValue.dropLast())
+            }
+        }
+    }
     
     override open func viewDidLoad()
     {
         super.viewDidLoad()
         
+        self.limitTextField.delegate = self
+        self.offsetTextField.delegate = self
+        
         let url : String = "http://localhost:8080/v1/"
+        callApi(url: url)
+    }
+    
+    @IBAction func save(_ sender: AnyObject)
+    {
+        let panel = NSSavePanel()
+        panel.allowedFileTypes = ["png"]
+        panel.beginSheetModal(for: self.view.window!) { (result) -> Void in
+            if result.rawValue == NSFileHandlingPanelOKButton
+            {
+                if let path = panel.url?.path
+                {
+                    let _ = self.barChartView.save(to: path, format: .png, compressionQuality: 1.0)
+                }
+            }
+        }
+    }
+    
+    override open func viewWillAppear()
+    {
+        self.barChartView.animate(xAxisDuration: 1.0, yAxisDuration: 1.0)
+    }
+    
+    func callApi(url: String){
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         
@@ -129,7 +188,10 @@ open class BarDemoViewController: NSViewController
                             self.barChartView.legend.enabled = true
                             self.barChartView.rightAxis.enabled = false
                             self.barChartView.chartDescription?.text = "Barchart"
-                            self.barChartView.notifyDataSetChanged()
+                            
+                            self.barChartView.notifyDataSetChanged(); // let the chart know it's data changed
+                            self.barChartView.data?.notifyDataChanged(); // let the chart know it's data changed
+                            self.barChartView.animate(xAxisDuration: 1.0, yAxisDuration: 1.0)
                         }
                     }
                     
@@ -140,58 +202,6 @@ open class BarDemoViewController: NSViewController
         })
         
         task.resume()
-        
-        /*let xArray = Array(1..<10)
-         let ys1 = xArray.map { x in return sin(Double(x) / 2.0 / 3.141 * 1.5) }
-         let ys2 = xArray.map { x in return cos(Double(x) / 2.0 / 3.141) }
-         let yse1 = ys1.enumerated().map { x, y in return BarChartDataEntry(x: Double(x), y: y) }
-         let yse2 = ys2.enumerated().map { x, y in return BarChartDataEntry(x: Double(x), y: y) }
-         
-         let data = BarChartData()
-         let ds1 = BarChartDataSet(values: yse1, label: "Hello")
-         ds1.colors = [NSUIColor.red]
-         data.addDataSet(ds1)
-         
-         let ds2 = BarChartDataSet(values: yse2, label: "World")
-         ds2.colors = [NSUIColor.blue]
-         data.addDataSet(ds2)
-         
-         let barWidth = 0.4
-         let barSpace = 0.05
-         let groupSpace = 0.1
-         
-         data.barWidth = barWidth
-         self.barChartView.xAxis.axisMinimum = Double(xArray[0])
-         self.barChartView.xAxis.axisMaximum = Double(xArray[0]) + data.groupWidth(groupSpace: groupSpace, barSpace: barSpace) * Double(xArray.count)
-         // (0.4 + 0.05) * 2 (data set count) + 0.1 = 1
-         data.groupBars(fromX: Double(xArray[0]), groupSpace: groupSpace, barSpace: barSpace)
-         
-         self.barChartView.data = data
-         
-         self.barChartView.gridBackgroundColor = NSUIColor.white
-         
-         self.barChartView.chartDescription?.text = "Barchart Demo"*/
-        
-    }
-    
-    @IBAction func save(_ sender: AnyObject)
-    {
-        let panel = NSSavePanel()
-        panel.allowedFileTypes = ["png"]
-        panel.beginSheetModal(for: self.view.window!) { (result) -> Void in
-            if result.rawValue == NSFileHandlingPanelOKButton
-            {
-                if let path = panel.url?.path
-                {
-                    let _ = self.barChartView.save(to: path, format: .png, compressionQuality: 1.0)
-                }
-            }
-        }
-    }
-    
-    override open func viewWillAppear()
-    {
-        self.barChartView.animate(xAxisDuration: 1.0, yAxisDuration: 1.0)
     }
 }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -705,9 +705,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="ElM-1T-Mza" customClass="BarChartView" customModule="Charts">
-                                <rect key="frame" x="5" y="31" width="440" height="264"/>
-                            </customView>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="v1O-3R-4Mc">
+                                <rect key="frame" x="5" y="273" width="96" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="JrA-UV-xfx"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Limit" drawsBackground="YES" id="3H8-rx-mXt">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zeP-Mj-hKG">
                                 <rect key="frame" x="-1" y="-2" width="118" height="32"/>
                                 <buttonCell key="cell" type="push" title="Save as PNG" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4id-uC-82a">
@@ -718,18 +726,54 @@
                                     <action selector="save:" target="4fu-uG-om0" id="JFi-f7-B43"/>
                                 </connections>
                             </button>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fk6-FQ-iU7">
+                                <rect key="frame" x="109" y="273" width="96" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="QL0-tb-1hc"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Offset" drawsBackground="YES" id="MlN-VH-u3I">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="RYc-UM-T53">
+                                <rect key="frame" x="213" y="273" width="22" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="u0d-Tb-ihd"/>
+                                    <constraint firstAttribute="width" constant="22" id="zlQ-f1-MJa"/>
+                                </constraints>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="refresh" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="E6C-kV-Wkc">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="refreshButtonAction:" target="4fu-uG-om0" id="AZO-vz-4N4"/>
+                                </connections>
+                            </button>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="ElM-1T-Mza" customClass="BarChartView" customModule="Charts">
+                                <rect key="frame" x="5" y="31" width="440" height="237"/>
+                            </customView>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="Fk6-FQ-iU7" firstAttribute="leading" secondItem="v1O-3R-4Mc" secondAttribute="trailing" constant="8" id="AvR-i8-VuX"/>
+                            <constraint firstItem="RYc-UM-T53" firstAttribute="leading" secondItem="Fk6-FQ-iU7" secondAttribute="trailing" constant="8" id="FY0-HC-5Oy"/>
+                            <constraint firstItem="v1O-3R-4Mc" firstAttribute="top" secondItem="U2J-4p-9ti" secondAttribute="top" constant="5" id="GWr-W9-SDp"/>
                             <constraint firstItem="ElM-1T-Mza" firstAttribute="leading" secondItem="U2J-4p-9ti" secondAttribute="leading" constant="5" id="KwD-j8-5I4"/>
                             <constraint firstItem="zeP-Mj-hKG" firstAttribute="top" secondItem="ElM-1T-Mza" secondAttribute="bottom" constant="5" id="LX8-qy-0Z5"/>
+                            <constraint firstItem="ElM-1T-Mza" firstAttribute="top" secondItem="v1O-3R-4Mc" secondAttribute="bottom" constant="5" id="OjY-QE-bvV"/>
+                            <constraint firstItem="Fk6-FQ-iU7" firstAttribute="top" secondItem="U2J-4p-9ti" secondAttribute="top" constant="5" id="YuX-E2-Cmu"/>
+                            <constraint firstItem="RYc-UM-T53" firstAttribute="top" secondItem="U2J-4p-9ti" secondAttribute="top" constant="5" id="Z8q-cf-MdL"/>
                             <constraint firstAttribute="trailing" secondItem="ElM-1T-Mza" secondAttribute="trailing" constant="5" id="Z91-lG-orc"/>
+                            <constraint firstItem="v1O-3R-4Mc" firstAttribute="leading" secondItem="U2J-4p-9ti" secondAttribute="leading" constant="5" id="bPt-Mf-oim"/>
                             <constraint firstItem="zeP-Mj-hKG" firstAttribute="leading" secondItem="U2J-4p-9ti" secondAttribute="leading" constant="5" id="hww-5P-BKM"/>
-                            <constraint firstItem="ElM-1T-Mza" firstAttribute="top" secondItem="U2J-4p-9ti" secondAttribute="top" constant="5" id="sRD-ZS-Eoa"/>
                             <constraint firstAttribute="bottom" secondItem="zeP-Mj-hKG" secondAttribute="bottom" constant="5" id="x9Q-cI-FVn"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="barChartView" destination="ElM-1T-Mza" id="cPE-0H-sHY"/>
+                        <outlet property="limitTextField" destination="v1O-3R-4Mc" id="9du-M8-ryZ"/>
+                        <outlet property="offsetTextField" destination="Fk6-FQ-iU7" id="4ED-NI-iE7"/>
                     </connections>
                 </viewController>
                 <customObject id="DVo-MQ-urk" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -744,19 +788,63 @@
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fRd-Ku-mf4">
+                                <rect key="frame" x="109" y="273" width="96" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="PcK-1C-Azi"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Offset" drawsBackground="YES" id="6c0-sA-UNB">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E0x-Pp-zFO">
+                                <rect key="frame" x="5" y="273" width="96" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="KTW-d3-Upr"/>
+                                </constraints>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" placeholderString="Limit" drawsBackground="YES" id="ZAP-TI-0Zk">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="UZ4-Tp-UjR" customClass="LineChartView" customModule="Charts">
-                                <rect key="frame" x="5" y="5" width="440" height="290"/>
+                                <rect key="frame" x="5" y="5" width="440" height="263"/>
                             </customView>
+                            <button translatesAutoresizingMaskIntoConstraints="NO" id="sLu-DK-rvA">
+                                <rect key="frame" x="213" y="273" width="22" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="3ES-eU-TZT"/>
+                                    <constraint firstAttribute="width" constant="22" id="gy9-4W-wlK"/>
+                                </constraints>
+                                <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="refresh" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="L3G-Sc-h09">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="refreshButtonAction:" target="vkP-1b-D8k" id="9c8-jc-XrJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstItem="UZ4-Tp-UjR" firstAttribute="leading" secondItem="bwI-de-txf" secondAttribute="leading" constant="5" id="1VX-dH-Bv5"/>
-                            <constraint firstItem="UZ4-Tp-UjR" firstAttribute="top" secondItem="bwI-de-txf" secondAttribute="top" constant="5" id="7K4-G5-Yzx"/>
+                            <constraint firstItem="fRd-Ku-mf4" firstAttribute="top" secondItem="bwI-de-txf" secondAttribute="top" constant="5" id="4jL-7A-6Hu"/>
+                            <constraint firstItem="fRd-Ku-mf4" firstAttribute="leading" secondItem="E0x-Pp-zFO" secondAttribute="trailing" constant="8" id="5Yi-Cs-XG1"/>
                             <constraint firstAttribute="bottom" secondItem="UZ4-Tp-UjR" secondAttribute="bottom" constant="5" id="DIe-5j-9Zl"/>
                             <constraint firstAttribute="trailing" secondItem="UZ4-Tp-UjR" secondAttribute="trailing" constant="5" id="ERZ-9q-ctd"/>
+                            <constraint firstItem="E0x-Pp-zFO" firstAttribute="leading" secondItem="bwI-de-txf" secondAttribute="leading" constant="5" id="QEK-BZ-UZk"/>
+                            <constraint firstItem="sLu-DK-rvA" firstAttribute="leading" secondItem="fRd-Ku-mf4" secondAttribute="trailing" constant="8" id="c99-Cl-Pn4"/>
+                            <constraint firstItem="UZ4-Tp-UjR" firstAttribute="top" secondItem="E0x-Pp-zFO" secondAttribute="bottom" constant="5" id="sa6-0P-qzB"/>
+                            <constraint firstItem="E0x-Pp-zFO" firstAttribute="top" secondItem="bwI-de-txf" secondAttribute="top" constant="5" id="ty2-EF-UBv"/>
+                            <constraint firstItem="sLu-DK-rvA" firstAttribute="top" secondItem="bwI-de-txf" secondAttribute="top" constant="5" id="zmi-Nu-JQr"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="limitTextField" destination="E0x-Pp-zFO" id="DvM-ix-0ls"/>
                         <outlet property="lineChartView" destination="UZ4-Tp-UjR" id="Q0o-Eh-qLo"/>
+                        <outlet property="offsetTextField" destination="fRd-Ku-mf4" id="Iv3-I5-EfL"/>
                     </connections>
                 </viewController>
                 <customObject id="wYh-tX-8oy" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -801,4 +889,7 @@
             <point key="canvasLocation" x="726" y="1449"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="refresh" width="2000" height="2000"/>
+    </resources>
 </document>

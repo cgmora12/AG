@@ -10,18 +10,25 @@ import AppKit
 import Cocoa
 import Charts
 
-open class CustomPieTab: NSTabViewController {
+open class CustomPieTab: NSTabViewController, NSTextFieldDelegate {
+    
+    var limitTextField : NSTextField?
+    var offsetTextField : NSTextField?
+    var piecharts : [PieChartView] = []
+    
     override open func viewDidLoad() {
         
         super.viewDidLoad()
         
+        let url : String = "http://localhost:8080/v1/"
         let columns = ["stop_desc", "zone_id", "location_type", "wheelchair_boarding"]
         
         for column in columns {
             let view = PieChartView()
             let controller = NSViewController()
             controller.view = view
-            loadChart(columnName: column, pieChartView: view)
+            piecharts.append(view)
+            loadChart(url: url, columnName: column, pieChartView: view)
             let tabItem = NSTabViewItem.init(viewController: controller)
             tabItem.label = column
             self.addTabViewItem(tabItem)
@@ -33,10 +40,62 @@ open class CustomPieTab: NSTabViewController {
             }
         }
         
+        self.limitTextField = NSTextField(frame: CGRect(x: 10, y: 100, width: 60, height: 30))
+        self.limitTextField!.placeholderString = "Limit"
+        self.limitTextField!.delegate = self
+        self.view.addSubview(self.limitTextField!)
+        self.offsetTextField = NSTextField(frame: CGRect(x: 80, y: 100, width: 60, height: 30))
+        self.offsetTextField!.placeholderString = "Offset"
+        self.offsetTextField!.delegate = self
+        self.view.addSubview(offsetTextField!)
+        let button = NSButton(frame: CGRect(x: 150, y: 100, width: 60, height: 30))
+        button.title = "Refresh"
+        //button.setButtonType(NSButton.ButtonType.momentaryPushIn)
+        //button.imagePosition = NSControl.ImagePosition.imageOnly
+        //button.image = NSImage(named: NSImage.Name("refresh")) as NSImage?
+        button.target = self
+        button.action = #selector(CustomPieTab.refresh)
+        self.view.addSubview(button)
+        
     }
     
-    open func loadChart(columnName: String, pieChartView: PieChartView) {
-        let url : String = "http://localhost:8080/v1/"
+    override open func controlTextDidChange(_ obj: Notification) {
+        let object = obj.object as! NSTextField
+        
+        if object == limitTextField {
+            guard let typed = object.stringValue.last else { return }
+            if !"0123456789".contains(typed) {
+                self.limitTextField!.stringValue = String(self.limitTextField!.stringValue.dropLast())
+            }
+        }
+        else if object == offsetTextField {
+            guard let typed = object.stringValue.last else { return }
+            if !"0123456789".contains(typed) {
+                self.limitTextField!.stringValue = String(self.limitTextField!.stringValue.dropLast())
+            }
+        }
+    }
+    
+    @objc func refresh() {
+        print("Refresh")
+        if self.limitTextField!.stringValue.isEmpty {
+            self.limitTextField!.stringValue = "100"
+        }
+        if self.offsetTextField!.stringValue.isEmpty {
+            self.offsetTextField!.stringValue = "0"
+        }
+        let url : String = "http://localhost:8080/v1/?limit=" + self.limitTextField!.stringValue + "&offset=" + self.offsetTextField!.stringValue
+        
+        let columns = ["stop_desc", "zone_id", "location_type", "wheelchair_boarding"]
+        
+        var i = 0
+        while i < columns.count {
+            loadChart(url: url, columnName: columns[i], pieChartView: piecharts[i])
+            i+=1
+        }
+    }
+    
+    open func loadChart(url: String, columnName: String, pieChartView: PieChartView) {
         var request = URLRequest(url: URL(string: url)!)
         request.httpMethod = "GET"
         
@@ -101,6 +160,10 @@ open class CustomPieTab: NSTabViewController {
                             pieChartView.data = data
                             
                             pieChartView.chartDescription?.text = "Piechart"
+                            
+                            pieChartView.notifyDataSetChanged(); // let the chart know it's data changed
+                            pieChartView.data?.notifyDataChanged(); // let the chart know it's data changed
+                            pieChartView.animate(xAxisDuration: 0.0, yAxisDuration: 1.0)
                         }
                     }
                     
@@ -111,31 +174,5 @@ open class CustomPieTab: NSTabViewController {
         })
         
         task.resume()
-        
-        // Do any additional setup after loading the view.
-        /*let ys1 = Array(1..<10).map { x in return sin(Double(x) / 2.0 / 3.141 * 1.5) * 100.0 }
-         
-         let yse1 = ys1.enumerated().map { x, y in return PieChartDataEntry(value: y, label: String(x)) }
-         
-         let data = PieChartData()
-         let ds1 = PieChartDataSet(values: yse1, label: "Hello")
-         
-         ds1.colors = ChartColorTemplates.vordiplom()
-         
-         data.addDataSet(ds1)
-         
-         let paragraphStyle: NSMutableParagraphStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
-         paragraphStyle.lineBreakMode = .byTruncatingTail
-         paragraphStyle.alignment = .center
-         let centerText: NSMutableAttributedString = NSMutableAttributedString(string: "Charts\nby Daniel Cohen Gindi")
-         centerText.setAttributes([NSAttributedStringKey.font: NSFont(name: "HelveticaNeue-Light", size: 15.0)!, NSAttributedStringKey.paragraphStyle: paragraphStyle], range: NSMakeRange(0, centerText.length))
-         centerText.addAttributes([NSAttributedStringKey.font: NSFont(name: "HelveticaNeue-Light", size: 13.0)!, NSAttributedStringKey.foregroundColor: NSColor.gray], range: NSMakeRange(10, centerText.length - 10))
-         centerText.addAttributes([NSAttributedStringKey.font: NSFont(name: "HelveticaNeue-LightItalic", size: 13.0)!, NSAttributedStringKey.foregroundColor: NSColor(red: 51 / 255.0, green: 181 / 255.0, blue: 229 / 255.0, alpha: 1.0)], range: NSMakeRange(centerText.length - 19, 19))
-         
-         self.pieChartView.centerAttributedText = centerText
-         
-         self.pieChartView.data = data
-         
-         self.pieChartView.chartDescription?.text = "Piechart Demo"*/
     }
 }
