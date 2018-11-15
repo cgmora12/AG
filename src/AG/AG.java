@@ -138,6 +138,9 @@ public class AG {
 		//args: csv2api data
 		if(args.length == 2) {
 			fileName = args[1];
+			if(fileName.contains(".csv")) {
+				fileName = fileName.replace(".csv", "");
+			}
 		} 
 		//args: csv2api data table.xmi openapi.xmi 
 		else if(args.length == 4) {
