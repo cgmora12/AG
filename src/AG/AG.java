@@ -213,7 +213,7 @@ public class AG {
 			openAPIFileName = args[3];
 		}
 
-		mainFolderName = "AG_" + cleanString(fileName);
+		//mainFolderName = "AG_" + cleanString(fileName);
 
 		File source = new File(openAPIXMIFileName);
 		File dest = new File(mainFolderName + File.separator + tempFolderName + File.separator + openAPIXMIFileName);
@@ -251,7 +251,7 @@ public class AG {
 			openAPIFileName = args[2];
 		}
 
-		mainFolderName = "AG_" + cleanString(fileName);
+		//mainFolderName = "AG_" + cleanString(fileName);
 
 		// Move source files to temp folder
 		File source = new File(openAPIXMIFileName);
@@ -305,7 +305,7 @@ public class AG {
 			openAPIXMIFileName = args[2];
 		}
 
-		mainFolderName = "AG_" + cleanString(fileName);
+		//mainFolderName = "AG_" + cleanString(fileName);
 
 		// Move source files to temp folder
 		File source = new File(modelFileName);
@@ -329,6 +329,9 @@ public class AG {
 		//args: csv2openapi data
 		if(args.length == 2) {
 			fileName = args[1];
+			if(fileName.contains(".csv")) {
+				fileName = fileName.replace(".csv", "");
+			}
 		} 
 		//args: csv2openapi data openapi.json
 		else if(args.length == 3) {
