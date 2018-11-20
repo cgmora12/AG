@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Array;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -789,11 +790,18 @@ public class AG {
 			System.out.println(e.getMessage());
         }
 		
-		String tableEcore = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources + "Table.ecore";
-		String tableModel = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources + modelFileName;
-		String openapiEcore = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources + "Openapi.ecore";
-		String openapiModel = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources + openAPIXMIFileName;
-		String folder = mainFolderName + File.separator + tempFolderName + fileSeparatorForResources;
+		String tableEcore = mainFolderName + fileSeparatorForResources + tempFolderName + fileSeparatorForResources + "Table.ecore";
+		String tableModel = mainFolderName + fileSeparatorForResources + tempFolderName + fileSeparatorForResources + modelFileName;
+		String openapiEcore = mainFolderName + fileSeparatorForResources + tempFolderName + fileSeparatorForResources + "Openapi.ecore";
+		String openapiModel = mainFolderName + fileSeparatorForResources + tempFolderName + fileSeparatorForResources + openAPIXMIFileName;
+		String folder = mainFolderName + fileSeparatorForResources + tempFolderName + fileSeparatorForResources;
+
+		System.out.println("tableEcore" + tableEcore);
+		System.out.println("tableModel" + tableModel);
+		System.out.println("openapiEcore" + openapiEcore);
+		System.out.println("openapiModel" + openapiModel);
+		System.out.println("folder" + folder);
+		
 		Launcher launcher = new Launcher();
 		launcher.runATL(tableEcore, "Table", 
 				tableModel, openapiEcore, "Openapi", 
@@ -1433,21 +1441,25 @@ public class AG {
 	    	String executable = "./" + mainFolderName + File.separator + "runApi.bat";
 	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
 	    		executable = mainFolderName + File.separator + "runApi.bat";
+	    		Runtime.getRuntime().exec("cmd.exe /C start " + executable);
 	    	}
-	        Process p = new ProcessBuilder(executable, "").start();
-	        //Runtime rt = Runtime.getRuntime();
-            //Process p = rt.exec("runApi");
-	        /*BufferedReader reader = 
-	                new BufferedReader(new InputStreamReader(p.getInputStream()));
-			StringBuilder builder = new StringBuilder();
-			String line = null;
-			while ( (line = reader.readLine()) != null) {
-			   builder.append(line);
-			   builder.append(System.getProperty("line.separator"));
-			}
-			String result = builder.toString();
-			System.out.println(result);*/
-			p.waitFor(5000, TimeUnit.MILLISECONDS);
+	    	else {
+	    		Process p = new ProcessBuilder(executable, "").start();
+	        
+		        //Runtime rt = Runtime.getRuntime();
+	            //Process p = rt.exec("runApi");
+		        /*BufferedReader reader = 
+		                new BufferedReader(new InputStreamReader(p.getInputStream()));
+				StringBuilder builder = new StringBuilder();
+				String line = null;
+				while ( (line = reader.readLine()) != null) {
+				   builder.append(line);
+				   builder.append(System.getProperty("line.separator"));
+				}
+				String result = builder.toString();
+				System.out.println(result);*/
+				p.waitFor(5000, TimeUnit.MILLISECONDS);
+	    	}
 	    } catch (IOException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
@@ -1749,18 +1761,22 @@ public class AG {
 		execFile2.setExecutable(true);
         
 	    try {
-	        Process p = new ProcessBuilder("./" + mainFolderName + File.separator + "buildVisualization", "").start();
-	        BufferedReader reader = 
-	                new BufferedReader(new InputStreamReader(p.getInputStream()));
-			StringBuilder builder = new StringBuilder();
-			String builder_line = null;
-			while ((builder_line = reader.readLine()) != null) {
-			   builder.append(builder_line);
-			   builder.append(System.getProperty("line.separator"));
-			}
-			String result = builder.toString();
-			System.out.println(result);
-	        p.waitFor();
+	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
+	    		System.out.println("The build visualization process is only for MacOS");
+	    	} else {
+	    		Process p = new ProcessBuilder("./" + mainFolderName + File.separator + "buildVisualization", "").start();
+		        BufferedReader reader = 
+		                new BufferedReader(new InputStreamReader(p.getInputStream()));
+				StringBuilder builder = new StringBuilder();
+				String builder_line = null;
+				while ((builder_line = reader.readLine()) != null) {
+				   builder.append(builder_line);
+				   builder.append(System.getProperty("line.separator"));
+				}
+				String result = builder.toString();
+				System.out.println(result);
+		        p.waitFor();
+	    	}
 	    } catch (IOException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
@@ -1770,17 +1786,21 @@ public class AG {
 		}
 
 	    try {
-	        Process p = new ProcessBuilder("./" + mainFolderName + File.separator +  "openVisualization", "").start();
-	        /*BufferedReader reader = 
-	                new BufferedReader(new InputStreamReader(p.getInputStream()));
-			StringBuilder builder = new StringBuilder();
-			String line = null;
-			while ( (line = reader.readLine()) != null) {
-			   builder.append(line);
-			   builder.append(System.getProperty("line.separator"));
-			}
-			String result = builder.toString();
-			System.out.println(result);*/
+	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
+	    		System.out.println("The visualization is built only for MacOS");
+	    	} else {
+		        Process p = new ProcessBuilder("./" + mainFolderName + File.separator +  "openVisualization", "").start();
+		        /*BufferedReader reader = 
+		                new BufferedReader(new InputStreamReader(p.getInputStream()));
+				StringBuilder builder = new StringBuilder();
+				String line = null;
+				while ( (line = reader.readLine()) != null) {
+				   builder.append(line);
+				   builder.append(System.getProperty("line.separator"));
+				}
+				String result = builder.toString();
+				System.out.println(result);*/
+	    	}
 	    } catch (IOException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
