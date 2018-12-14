@@ -87,6 +87,7 @@ public class AG {
 	public static String mainFolderName = "AG_data";
 	public static String fileSeparatorForResources = "/";
 	public static String visualizationMainFolderName = "Visualizacion";
+	public static String visualizationChartJS = "visualization.html";
 	public static String visualizationZipFileName = visualizationMainFolderName + ".zip";
 	public static String visualizationProjectName = "ChartsDemo-macOS";
 	public static String visualizationFolderName = "Demos";
@@ -1473,7 +1474,140 @@ public class AG {
 	}
 
 	private static void generateVisualization() {
+
+		
+		// ChartJS
+		
+		//Determine the columns to generate the graph
+		JSONObject xmlJSONObj;
+		ArrayList<String> columnNames = new ArrayList<String>();
+		String columnNameId = "";
 		try {
+			xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(mainFolderName + File.separator + tempFolderName + File.separator + openAPIXMIFileName)));
+			JSONArray xmlJSONObjAux = xmlJSONObj.getJSONObject("openapi:API").getJSONObject("components")
+					.getJSONObject("schemas").getJSONObject("mainComponent").getJSONArray("properties");
+			
+			for(int i = 0; i < xmlJSONObjAux.length(); i++) {
+				if(i == 0) {
+					columnNameId = xmlJSONObjAux.getJSONObject(i).get("name").toString();
+				}
+				else if(xmlJSONObjAux.getJSONObject(i).getJSONObject("content").get("type").equals("integer")) {
+					columnNames.add(xmlJSONObjAux.getJSONObject(i).get("name").toString());
+				}
+			}
+		} catch (JSONException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		String visualizationCode = "";
+		BufferedReader brVisualization = null;
+        String lineVisualization = "";
+		try {
+			brVisualization = new BufferedReader(new InputStreamReader
+					(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+		            		+ fileSeparatorForResources + "visualization" 
+		            		+ fileSeparatorForResources + visualizationChartJS)));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			while ((lineVisualization = brVisualization.readLine()) != null) {
+				//TODO: aqui no hay que cambiar las labels, solo hay que ver cuantos datasets hay que crear
+				// Los labels y data se establecen en la api
+				if(lineVisualization.contains("datasetsLineChart") || lineVisualization.contains("datasetsBarChart")) {
+					
+					String datasets = "";
+					for(int i = 0; i < columnNames.size(); i ++) {
+						if (i > 0) {
+							datasets += ",";
+						}
+						String dataset = "{\n" + 
+								"	label: '"+ columnNames.get(i) + "',\n" + 
+								"	backgroundColor: color(colorsArray[" + i + "% colorsArray.length]).alpha(0.5).rgbString(),\n" + 
+								"	borderColor: colorsArray[" + i + "% colorsArray.length],\n" + 
+								"	borderWidth: 3,\n" + 
+								"	data: [\n" + 
+								"		dataLineOrBarChart" +
+								"	]\n" + 
+								"}";
+						datasets += dataset;
+					}
+					
+					if(lineVisualization.contains("datasetsLineChart")) {
+						visualizationCode += lineVisualization.replace("datasetsLineChart", datasets) + "\n";
+					}
+					else if(lineVisualization.contains("datasetsBarChart")) {
+						visualizationCode += lineVisualization.replace("datasetsBarChart", datasets) + "\n";
+					}
+				} 
+				else if(lineVisualization.contains("datasetsPieChart")) {
+					String datasets = "";
+					//TODO: categorias --> labels
+					for(int i = 0; i < columnNames.size(); i ++) {
+						if (i > 0) {
+							datasets += ",";
+						}
+						String dataset = "{\n" + 
+							"					data: [\n" + 
+							"						dataPieChart\n" +
+							"					],\n" + 
+							"					backgroundColor: [\n" + 
+							"						window.chartColors.red,\n" + 
+							"						window.chartColors.orange,\n" + 
+							"						window.chartColors.yellow,\n" + 
+							"						window.chartColors.green,\n" + 
+							"						window.chartColors.blue,\n" + 
+							"					],\n" + 
+							"					label: '" + columnNames.get(i) + "'\n" + 
+							"				}";
+						datasets += dataset;
+					}
+					visualizationCode += lineVisualization.replace("datasetsPieChart", datasets) + "\n";
+				}
+				else {
+					visualizationCode += lineVisualization + "\n";
+				}
+			}
+			System.out.println("Visualization.html generated");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+        	brVisualization.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(mainFolderName + File.separator + apiCodeFolderName + File.separator + 
+    				"controllers" + File.separator + visualizationChartJS, "UTF-8");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			writer.println(visualizationCode);
+			writer.close();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Visualization.html saved");
+		
+		/*try {
             Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
             		+ fileSeparatorForResources + "visualization" 
             		+ fileSeparatorForResources + visualizationMainFolderName + ".zip"), 
@@ -1495,9 +1629,6 @@ public class AG {
 				ZipEntry zipEntry = (ZipEntry) enu.nextElement();
 
 				String name = zipEntry.getName();
-				/*long size = zipEntry.getSize();
-				long compressedSize = zipEntry.getCompressedSize();
-				System.out.printf("name: %-20s | size: %6d | compressed size: %6d\n", name, size, compressedSize);*/
 
 				File file = new File(mainFolderName + File.separator + name);
 				if (name.endsWith("/")) {
@@ -1790,21 +1921,11 @@ public class AG {
 	    		System.out.println("The visualization is built only for MacOS");
 	    	} else {
 		        Process p = new ProcessBuilder("./" + mainFolderName + File.separator +  "openVisualization", "").start();
-		        /*BufferedReader reader = 
-		                new BufferedReader(new InputStreamReader(p.getInputStream()));
-				StringBuilder builder = new StringBuilder();
-				String line = null;
-				while ( (line = reader.readLine()) != null) {
-				   builder.append(line);
-				   builder.append(System.getProperty("line.separator"));
-				}
-				String result = builder.toString();
-				System.out.println(result);*/
 	    	}
 	    } catch (IOException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
-	    }
+	    }*/
 	}
 	
 }

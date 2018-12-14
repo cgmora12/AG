@@ -7,10 +7,13 @@ exports.getOperation = function(args, res, next) {
   var examples = {};
   var fileName = "./data.csv";
   var result;
+  var resultVisualization;
   var jsonResult = new Object();
   var rowNumber = 0;
   var limit = 100;
   var offset = 0;
+  var labels = new Array(0);
+  var datasets = new Array(0);
 
   if (fs.existsSync(fileName)) {
     console.log('file exists');
@@ -23,14 +26,18 @@ exports.getOperation = function(args, res, next) {
 
         var argsUndefined = true;
         var filters = false;
+        var visualization = false;
 
         for(var i = 0; i < Object.keys(args).length; i++){
-          if (Object.keys(args)[i] === "limit" || Object.keys(args)[i] === "offset"){
+          if (Object.keys(args)[i] === "limit" || Object.keys(args)[i] === "offset"|| Object.keys(args)[i] === "visualization"){
             if (Object.keys(args)[i] === "limit" && args[Object.keys(args)[i]].value != undefined){
               limit = parseInt(args[Object.keys(args)[i]].value);
             } 
             else if (Object.keys(args)[i] === "offset" && args[Object.keys(args)[i]].value != undefined){
               offset = parseInt(args[Object.keys(args)[i]].value);
+            }
+            else if (Object.keys(args)[i] === "visualization" && args[Object.keys(args)[i]].value != undefined){
+              visualization = true;
             }
           }
           else if(args[Object.keys(args)[i]].value != undefined){
@@ -47,6 +54,8 @@ exports.getOperation = function(args, res, next) {
 
               // Filtering results
               if(rowNumber < limit + offset && rowNumber >= offset) {
+                labels.push(result[Object.keys(result)[0]]);
+                
                 if(argsUndefined){
                   jsonResult.results = jsonResult.results.concat(result);
                 }
@@ -73,7 +82,7 @@ exports.getOperation = function(args, res, next) {
               //result = result.data;
               try{
                 // Creating json object
-                result = "{ \"results\": " + JSON.stringify(result) + " }";
+                //result = "{ \"results\": " + JSON.stringify(result) + " }";
 
                 console.log("Completed!");
                 examples['application/json'] = jsonResult;
@@ -82,8 +91,18 @@ exports.getOperation = function(args, res, next) {
               }
 
               if(Object.keys(examples).length > 0) {
-                res.setHeader('Content-Type', 'application/json');
-                res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+                if(visualization){
+                  res.setHeader('Content-Type' , 'text/html');
+                  var visualizationHtmlFile = readTextFile("./Controllers/visualization.html");
+                  visualizationHtmlFile = visualizationHtmlFile.replace("labelsLineChart", labels);
+                  visualizationHtmlFile = visualizationHtmlFile.replace("labelsBarChart", labels);
+                  visualizationHtmlFile = visualizationHtmlFile.replace("labelsPieChart", labels);
+                  res.write(visualizationHtmlFile);
+                  res.end();
+                } else {
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify(examples[Object.keys(examples)[0]] || {}, null, 2));
+                }
               }
               else {
                 res.end();
@@ -103,4 +122,17 @@ exports.getOperation = function(args, res, next) {
   else {
         res.end();
   }
+}
+
+function readTextFile(file)
+{
+  var fs = require('fs');
+ 
+  try {  
+    var data = fs.readFileSync(file, 'utf8');
+    return(data.toString());    
+  } catch(e) {
+    console.log('Error:', e.stack);
+  }
+  return("error reading file");
 }
