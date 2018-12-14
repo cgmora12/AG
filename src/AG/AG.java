@@ -1514,31 +1514,47 @@ public class AG {
 		}
         try {
 			while ((lineVisualization = brVisualization.readLine()) != null) {
-				//TODO: aqui no hay que cambiar las labels, solo hay que ver cuantos datasets hay que crear
-				// Los labels y data se establecen en la api
+				//TODO: arreglar pie chart (con botones como en Charts de iOS)
 				if(lineVisualization.contains("datasetsLineChart") || lineVisualization.contains("datasetsBarChart")) {
 					
 					String datasets = "";
-					for(int i = 0; i < columnNames.size(); i ++) {
-						if (i > 0) {
-							datasets += ",";
-						}
-						String dataset = "{\n" + 
-								"	label: '"+ columnNames.get(i) + "',\n" + 
-								"	backgroundColor: color(colorsArray[" + i + "% colorsArray.length]).alpha(0.5).rgbString(),\n" + 
-								"	borderColor: colorsArray[" + i + "% colorsArray.length],\n" + 
-								"	borderWidth: 3,\n" + 
-								"	data: [\n" + 
-								"		dataLineOrBarChart" +
-								"	]\n" + 
-								"}";
-						datasets += dataset;
-					}
 					
 					if(lineVisualization.contains("datasetsLineChart")) {
+						for(int i = 0; i < columnNames.size(); i ++) {
+							if (i > 0) {
+								datasets += ",";
+							}
+							String dataset = "{\n" + 
+									"	label: '"+ columnNames.get(i) + "',\n" + 
+									"	backgroundColor: color(colorsArray[" + i + "% colorsArray.length]).alpha(0.5).rgbString(),\n" + 
+									"	borderColor: colorsArray[" + i + "% colorsArray.length],\n" + 
+									"	borderWidth: 3,\n" + 
+									"	data: [\n" + 
+									"		dataLineChart" + //columnNames.get(i) +
+									"	]\n" + 
+									"}";
+							datasets += dataset;
+						}
+						
 						visualizationCode += lineVisualization.replace("datasetsLineChart", datasets) + "\n";
 					}
 					else if(lineVisualization.contains("datasetsBarChart")) {
+						for(int i = 0; i < columnNames.size(); i ++) {
+							if (i > 0) {
+								datasets += ",";
+							}
+							String dataset = "{\n" + 
+									"	label: '"+ columnNames.get(i) + "',\n" + 
+									"	backgroundColor: color(colorsArray[" + i + "% colorsArray.length]).alpha(0.5).rgbString(),\n" + 
+									"	borderColor: colorsArray[" + i + "% colorsArray.length],\n" + 
+									"	borderWidth: 3,\n" + 
+									"	data: [\n" + 
+									"		dataBarChart" + //columnNames.get(i) +
+									"	]\n" + 
+									"}";
+							datasets += dataset;
+						}
+						
 						visualizationCode += lineVisualization.replace("datasetsBarChart", datasets) + "\n";
 					}
 				} 
@@ -1551,7 +1567,8 @@ public class AG {
 						}
 						String dataset = "{\n" + 
 							"					data: [\n" + 
-							"						dataPieChart\n" +
+							"						dataPieChart" + //columnNames.get(i) 
+							"\n" +
 							"					],\n" + 
 							"					backgroundColor: [\n" + 
 							"						window.chartColors.red,\n" + 
