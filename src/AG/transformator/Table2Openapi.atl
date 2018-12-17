@@ -43,7 +43,7 @@ rule Main {
 			summary <- 'GET visualization charts',
 			operationId <- 'getvisualization',
 			description <- 'Get visualization charts of the data',
-			responses <- thisModule.OperationResponsesVisualization(s),
+			responses <- thisModule.OperationResponsesVisualization(firstTableRow->first()),
 			parameters <- Sequence{thisModule.OperationParameterLimit(firstTableRow->first()), 
 				thisModule.OperationParameterOffset(firstTableRow->first())}
 		),
@@ -126,7 +126,7 @@ rule Main {
 		--),
 		response_code_basic: Openapi!ResponseCode (
 			description <- 'successful operation',
-			content <- Sequence{response_content_basic, thisModule.ResponseContentVisualization(s)}
+			content <- Sequence{response_content_basic, thisModule.ResponseContentVisualization(firstTableRow->first())}
 		),
 		--response_code: distinct Openapi!ResponseCode foreach (cell in firstTableRow) (
 		--	description <- 'successful operation',
@@ -217,46 +217,46 @@ lazy rule PathOperation {
 
 lazy rule OperationResponsesVisualization {
 	from
-		table: Table!Table
+		cell: Table!Cell
 	to
 		operation_responses: Openapi!Response (
 			code <- '200',
-			responseCode <- thisModule.ResponseCodeVisualization(table)
+			responseCode <- thisModule.ResponseCodeVisualization(cell)
 		)
 }
 
 lazy rule ResponseCodeVisualization {
 	from
-		table: Table!Table
+		cell: Table!Cell
 	to
 		response_code: Openapi!ResponseCode (
 			description <- 'successful operation',
-			content <- Sequence{thisModule.ResponseContentVisualization(table)}
+			content <- Sequence{thisModule.ResponseContentVisualization(cell)}
 		)
 }
 
 lazy rule ResponseContentVisualization {
 	from
-		table: Table!Table
+		cell: Table!Cell
 	to
 		response_content: Openapi!ResponseContent (
 			contentTypeName <- 'text/html',
-			contentType <- thisModule.ResponseContentTypeVisualization(table)
+			contentType <- thisModule.ResponseContentTypeVisualization(cell)
 		)
 }
 
 lazy rule ResponseContentTypeVisualization {
 	from
-		table: Table!Table
+		cell: Table!Cell
 	to
 		response_content_type: Openapi!ResponseContentType (
-			schema <- thisModule.ResponseSchemaVisualization(table)
+			schema <- thisModule.ResponseSchemaVisualization(cell)
 		)
 }
 
 lazy rule ResponseSchemaVisualization {
 	from
-		table: Table!Table
+		cell: Table!Cell
 	to
 		response_schema: Openapi!Schema (
 			type <- 'string'
@@ -279,7 +279,7 @@ lazy rule ResponseCode {
 	to
 		response_code: Openapi!ResponseCode (
 			description <- 'successful operation',
-			content <- Sequence{thisModule.ResponseContent(cell)}
+			content <- Sequence{thisModule.ResponseContent(cell), thisModule.ResponseContentVisualization(cell)}
 		)
 }
 

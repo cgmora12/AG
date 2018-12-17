@@ -825,17 +825,15 @@ public class AG {
             
             JSONArray pathsArray = xmlJSONObj.getJSONArray("paths");
             xmlJSONObj.remove("paths");
-            
-            try {
-            	JSONArray servers = xmlJSONObj.getJSONArray("servers");
-            } catch (JSONException e) {
+
+        	if (xmlJSONObj.get("servers") instanceof JSONObject) {
             	JSONObject servers = xmlJSONObj.getJSONObject("servers");
                 xmlJSONObj.remove("servers");
                 JSONArray serversArray = new JSONArray();
                 serversArray.put(servers);
                 xmlJSONObj.put("servers", serversArray);
-            }
-            
+        	}
+        	
             for(int i = 0; i < pathsArray.length(); i++) {
             	JSONObject jsonobj = pathsArray.getJSONObject(i);
             	String path = jsonobj.getString("pattern");
@@ -860,24 +858,48 @@ public class AG {
                 xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").put("responses", new JSONObject());
             	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("responses").put("200", jsonobjAux);
             	
-            	JSONObject jsonobjAuxContent = jsonobjAux.getJSONObject("content").getJSONObject("contentType");
-            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
-            		.getJSONObject("responses").getJSONObject("200").remove("content");
-                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
-                	.getJSONObject("responses").getJSONObject("200").put("content", new JSONObject());
-            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
-            		.getJSONObject("responses").getJSONObject("200").getJSONObject("content").put("application/json", jsonobjAuxContent);
+            	if (jsonobjAux.get("content") instanceof JSONArray)
+                {
+	            	JSONArray jsonobjAuxContentArray = jsonobjAux.getJSONArray("content");
+	            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+            			.getJSONObject("responses").getJSONObject("200").remove("content");
+	                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+                		.getJSONObject("responses").getJSONObject("200").put("content", new JSONObject());
+	                
+	            	for (int j = 0; j < jsonobjAuxContentArray.length(); j++) {
+	            		String contentType = jsonobjAuxContentArray.getJSONObject(j).getString("contentTypeName");
+		            	JSONObject jsonobjAuxContent = jsonobjAuxContentArray.getJSONObject(j).getJSONObject("contentType");
+
+		            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+		            		.getJSONObject("responses").getJSONObject("200").getJSONObject("content").put(contentType, jsonobjAuxContent);
+		            	
+		            	if(contentType.contains("json")) {
+			            	String ref = jsonobjAuxContent.getJSONObject("schema").getJSONObject("items").getString("ref");
+			            	jsonobjAuxContent.getJSONObject("schema").remove("items");
+			            	jsonobjAuxContent.getJSONObject("schema").put("items", new JSONObject());
+			            	jsonobjAuxContent.getJSONObject("schema").getJSONObject("items").put("$ref", ref);
+		            	}
+		            	
+	            	}
+                } else {
+	            	JSONObject jsonobjAuxContentObject = jsonobjAux.getJSONObject("content");
+                	String contentType = jsonobjAuxContentObject.getString("contentTypeName");
+	            	JSONObject jsonobjAuxContent = jsonobjAuxContentObject.getJSONObject("contentType");
+	            	
+	            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+	            		.getJSONObject("responses").getJSONObject("200").remove("content");
+	                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+	                	.getJSONObject("responses").getJSONObject("200").put("content", new JSONObject());
+	            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
+	            		.getJSONObject("responses").getJSONObject("200").getJSONObject("content").put(contentType, jsonobjAuxContent);
             	
-            	String ref = jsonobjAuxContent.getJSONObject("schema").getJSONObject("items").getString("ref");
-            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
-            		.getJSONObject("responses").getJSONObject("200").getJSONObject("content")
-            		.getJSONObject("application/json").getJSONObject("schema").remove("items");
-                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
-                	.getJSONObject("responses").getJSONObject("200").getJSONObject("content")
-                	.getJSONObject("application/json").getJSONObject("schema").put("items", new JSONObject());
-            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get")
-            		.getJSONObject("responses").getJSONObject("200").getJSONObject("content")
-            		.getJSONObject("application/json").getJSONObject("schema").getJSONObject("items").put("$ref", ref);
+	            	if(contentType.contains("json")) {
+		            	String ref = jsonobjAuxContent.getJSONObject("schema").getJSONObject("items").getString("ref");
+		            	jsonobjAuxContent.getJSONObject("schema").remove("items");
+		            	jsonobjAuxContent.getJSONObject("schema").put("items", new JSONObject());
+		            	jsonobjAuxContent.getJSONObject("schema").getJSONObject("items").put("$ref", ref);
+	            	}
+                }
             	
             }
             
@@ -922,7 +944,23 @@ public class AG {
             	String pathSwagger = xmlSwaggerObj.getJSONObject("paths").names().getString(i);
             	JSONObject jsonobj = xmlSwaggerObj.getJSONObject("paths").getJSONObject(pathSwagger);
             	JSONArray produces = new JSONArray();
-            	produces.put("application/json");
+            	JSONObject getProduces = xmlSwaggerObj.getJSONObject("paths").getJSONObject(pathSwagger).getJSONObject("get").getJSONObject("responses").getJSONObject("200")
+            			.getJSONObject("content");
+            	try {
+                	if(getProduces.getJSONObject("application/json") != null) {
+                		produces.put("application/json");
+                	}
+            	} catch(JSONException e) {
+            		e.printStackTrace();
+            	}
+            	try {
+	            	if(getProduces.getJSONObject("text/html") != null) {
+	            		produces.put("text/html");
+	            	}
+            	} catch(JSONException e) {
+            		e.printStackTrace();
+            	}
+            	
             	jsonobj.getJSONObject("get").put("produces", produces);
             	
             	
@@ -937,13 +975,31 @@ public class AG {
         			System.out.println(e.getMessage());
             	}
             	
-            	JSONObject jsonobjAuxSwagger = jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content").getJSONObject("application/json").getJSONObject("schema");
-            	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").remove("content");
-            	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").put("schema", jsonobjAuxSwagger);
+            	JSONObject contentObject = jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("content");
             	
-            	String ref = jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("schema").getJSONObject("items").getString("$ref");
-            	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("schema").getJSONObject("items").remove("$ref");
-            	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("schema").getJSONObject("items").put("$ref", "#/definitions" + ref.substring(ref.lastIndexOf("/")));
+            	try {
+	            	if(contentObject.getJSONObject("application/json") != null) {
+	            		JSONObject jsonobjAuxSwagger = contentObject.getJSONObject("application/json").getJSONObject("schema");
+	                	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").remove("content");
+	                	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").put("schema", jsonobjAuxSwagger);
+	                	
+	                	String ref = jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("schema").getJSONObject("items").getString("$ref");
+	                	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("schema").getJSONObject("items").remove("$ref");
+	                	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").getJSONObject("schema").getJSONObject("items").put("$ref", "#/definitions" + ref.substring(ref.lastIndexOf("/")));
+	            	}
+            	} catch(JSONException e) {
+            		e.printStackTrace();
+            	}
+
+            	try {
+                	if(contentObject.getJSONObject("text/html") != null) {
+                		JSONObject jsonobjAuxSwagger = contentObject.getJSONObject("text/html").getJSONObject("schema");
+                    	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").remove("content");
+                    	jsonobj.getJSONObject("get").getJSONObject("responses").getJSONObject("200").put("schema", jsonobjAuxSwagger);	
+                    }
+            	} catch(JSONException e) {
+            		e.printStackTrace();
+            	}
             	
             }
             
