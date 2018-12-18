@@ -1381,7 +1381,12 @@ public class AG {
 				}
 			}
 			for(String lineFunctionName: lineFunctionNames) {
-				servercode += lineFunctionName + "\t" + "exports.getOperation(args, res, next); \n}\n";
+				if(lineFunctionName.contains("getvisualization")) {
+					servercode += lineFunctionName + "\t" + "args[\"visualization\"] = \"visualization\"\n"
+							+ "\t" + "exports.getOperation(args, res, next); \n}\n";
+				} else {
+					servercode += lineFunctionName + "\t" + "exports.getOperation(args, res, next); \n}\n";
+				}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -1585,6 +1590,7 @@ public class AG {
 									"	backgroundColor: color(colorsArray[" + i + "% colorsArray.length]).alpha(0.5).rgbString(),\n" + 
 									"	borderColor: colorsArray[" + i + "% colorsArray.length],\n" + 
 									"	borderWidth: 3,\n" + 
+									"	fill: false,\n" + 
 									"	data: [\n" + 
 									"		dataLineChart" + //columnNames.get(i) +
 									"	]\n" + 
