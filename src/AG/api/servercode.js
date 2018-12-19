@@ -14,6 +14,7 @@ exports.getOperation = function(args, res, next) {
   var offset = 0;
   var labels = [];
   var datasets = [];
+  var allDatasets = [];
 
   if (fs.existsSync(fileName)) {
     console.log('file exists');
@@ -61,6 +62,7 @@ exports.getOperation = function(args, res, next) {
                   if(visualization){
                     labels.push("'" + result[Object.keys(result)[0]] + "'");
                     datasets = resultToDataset(visualization, result, datasets);
+                    allDatasets = resultToAllDataset(visualization, result, allDatasets);
                   }
                 }
                 else {
@@ -72,6 +74,7 @@ exports.getOperation = function(args, res, next) {
                           if(visualization){
                             labels.push("'" + result[Object.keys(result)[0]] + "'");
                             datasets = resultToDataset(visualization, result, datasets);
+                            allDatasets = resultToAllDataset(visualization, result, allDatasets);
                           }
                         }
                         else if(args[Object.keys(args)[j]].value + "" === "all" && result[Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]].replace(/\s+/g, '') != ""){
@@ -79,6 +82,7 @@ exports.getOperation = function(args, res, next) {
                           if(visualization){
                             labels.push("'" + result[Object.keys(result)[0]] + "'");
                             datasets = resultToDataset(visualization, result, datasets);
+                            allDatasets = resultToAllDataset(visualization, result, allDatasets);
                           }
                         }
                       }
@@ -109,12 +113,12 @@ exports.getOperation = function(args, res, next) {
                   if (typeof labels !== 'undefined' && labels !== null && labels.length > 0){
                     visualizationHtmlFile = visualizationHtmlFile.replace("labelsLineChart", labels.join());
                     visualizationHtmlFile = visualizationHtmlFile.replace("labelsBarChart", labels.join());
-                    visualizationHtmlFile = visualizationHtmlFile.replace("labelsPieChart", labels.join());
                   }
 
                   //console.log(datasets.toString());
 
                   if (typeof datasets !== 'undefined' && datasets !== null && datasets.length > 0){
+
                     var iteratorLineChart = 0;
                     while(visualizationHtmlFile.indexOf("dataLineChart") >= 0) {
                     	visualizationHtmlFile = visualizationHtmlFile.replace("dataLineChart", datasets[iteratorLineChart].join());
@@ -125,12 +129,30 @@ exports.getOperation = function(args, res, next) {
                     	visualizationHtmlFile = visualizationHtmlFile.replace("dataBarChart", datasets[iteratorBarChart].join());
                     	iteratorBarChart++;
                     }
-                    var iteratorPieChart = 0;
-                    while(visualizationHtmlFile.indexOf("dataPieChart") >= 0) {
-                    	visualizationHtmlFile = visualizationHtmlFile.replace("dataPieChart", datasets[iteratorPieChart].join());
-                    	iteratorPieChart++;
+
+                    if (typeof allDatasets !== 'undefined' && allDatasets !== null && allDatasets.length > 0){
+                      var iteratorPieChart = 0;
+                      while(visualizationHtmlFile.indexOf("dataPieChart") >= 0) {
+                        var differentValues = 0;
+                        let unique = [...new Set(allDatasets[iteratorPieChart])]; 
+                        differentValues = unique.length
+
+                      	if(differentValues <= 6 && differentValues > 0) {
+                          var arr = allDatasets[iteratorPieChart];
+                          var result = pieAux(arr);
+
+                          visualizationHtmlFile = visualizationHtmlFile.replace("dataPieChart", result[1].join());
+                          visualizationHtmlFile = visualizationHtmlFile.replace("labelsPieChart", result[0].join());
+                        }else {
+                          visualizationHtmlFile = visualizationHtmlFile.replace("dataPieChart", "'1'");
+                          visualizationHtmlFile = visualizationHtmlFile.replace("labelsPieChart", "'data not classifiable'");
+                        }
+                        iteratorPieChart++;
+                      }
                     }
+
                   }
+
                   writeTextFile("./Controllers/visualizationGenerated.html", visualizationHtmlFile);
                   res.write(visualizationHtmlFile);
                   res.end();
@@ -159,6 +181,23 @@ exports.getOperation = function(args, res, next) {
   }
 }
 
+function pieAux(arr) {
+    var a = [], b = [], prev;
+
+    arr.sort();
+    for ( var i = 0; i < arr.length; i++ ) {
+        if ( arr[i] !== prev ) {
+            a.push(arr[i]);
+            b.push(1);
+        } else {
+            b[b.length-1]++;
+        }
+        prev = arr[i];
+    }
+
+    return [a, b];
+}
+
 function resultToDataset(visualization, result, datasets)
 {
   // Check columns types for visualization
@@ -181,6 +220,24 @@ function resultToDataset(visualization, result, datasets)
   return datasets;
 }
 
+function resultToAllDataset(visualization, result, allDatasets)
+{
+  // Check columns types for visualization
+  var datasetsInserted = 0;
+  for(var columnIt = 0; columnIt < Object.keys(result).length; columnIt++){
+      datasetsInserted +=1;
+      if(allDatasets.length < datasetsInserted){
+        var dataset = [];
+        dataset.push("'" + result[Object.keys(result)[columnIt]] + "'");
+        allDatasets.push(dataset);
+      } else {
+        allDatasets[datasetsInserted - 1].push("'" +result[Object.keys(result)[columnIt]] + "'");
+      }
+  }
+
+  return allDatasets;
+}
+
 function readTextFile(file)
 {
   var fs = require('fs');
@@ -193,6 +250,7 @@ function readTextFile(file)
   }
   return("error reading file");
 }
+
 function writeTextFile(file, content)
 {
   var fs = require('fs');

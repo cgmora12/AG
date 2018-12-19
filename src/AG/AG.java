@@ -1382,7 +1382,7 @@ public class AG {
 			}
 			for(String lineFunctionName: lineFunctionNames) {
 				if(lineFunctionName.contains("getvisualization")) {
-					servercode += lineFunctionName + "\t" + "args[\"visualization\"] = \"visualization\"\n"
+					servercode += lineFunctionName + "\t" + "var obj = new Object();obj.value = \"visualization\";args.visualization = obj;\n"
 							+ "\t" + "exports.getOperation(args, res, next); \n}\n";
 				} else {
 					servercode += lineFunctionName + "\t" + "exports.getOperation(args, res, next); \n}\n";
@@ -1542,6 +1542,7 @@ public class AG {
 		//Determine the columns to generate the graph
 		JSONObject xmlJSONObj;
 		ArrayList<String> columnNames = new ArrayList<String>();
+		ArrayList<String> allColumnNames = new ArrayList<String>();
 		String columnNameId = "";
 		try {
 			xmlJSONObj = XML.toJSONObject(FileUtils.readFileToString(new File(mainFolderName + File.separator + tempFolderName + File.separator + openAPIXMIFileName)));
@@ -1555,6 +1556,7 @@ public class AG {
 				else if(xmlJSONObjAux.getJSONObject(i).getJSONObject("content").get("type").equals("integer")) {
 					columnNames.add(xmlJSONObjAux.getJSONObject(i).get("name").toString());
 				}
+				allColumnNames.add(xmlJSONObjAux.getJSONObject(i).get("name").toString());
 			}
 		} catch (JSONException | IOException e1) {
 			// TODO Auto-generated catch block
@@ -1620,30 +1622,42 @@ public class AG {
 						visualizationCode += lineVisualization.replace("datasetsBarChart", datasets) + "\n";
 					}
 				} 
-				else if(lineVisualization.contains("datasetsPieChart")) {
-					String datasets = "";
-					//TODO: categorias --> labels
-					for(int i = 0; i < columnNames.size(); i ++) {
-						if (i > 0) {
-							datasets += ",";
-						}
-						String dataset = "{\n" + 
-							"					data: [\n" + 
-							"						dataPieChart" + //columnNames.get(i) 
-							"\n" +
-							"					],\n" + 
-							"					backgroundColor: [\n" + 
-							"						window.chartColors.red,\n" + 
-							"						window.chartColors.orange,\n" + 
-							"						window.chartColors.yellow,\n" + 
-							"						window.chartColors.green,\n" + 
-							"						window.chartColors.blue,\n" + 
-							"					],\n" + 
-							"					label: '" + columnNames.get(i) + "'\n" + 
-							"				}";
-						datasets += dataset;
+				else if(lineVisualization.contains("configPie0")) {
+					String pies = "";
+					for(int i = 0; i < allColumnNames.size(); i ++) {
+						String pie = "var configPie" + i + " = {\n" + 
+						"			type: 'pie',\n" + 
+						"			data: {\n" + 
+						"				datasets: [{\n" + 
+						"					data: [ " +
+						"						dataPieChart\n" + 
+						"					],\n" + 
+						"					backgroundColor: [\n" + 
+						"						window.chartColors.red,\n" + 
+						"						window.chartColors.orange,\n" + 
+						"						window.chartColors.yellow,\n" + 
+						"						window.chartColors.green,\n" + 
+						"						window.chartColors.blue,\n" + 
+						"					],\n" + 
+						"					label: '" + allColumnNames.get(i) + "'\n" + 
+						"				}"+
+						"				],\n" + 
+						"				labels: [\n" + 
+						"					labelsPieChart\n" + 
+						"				]\n" + 
+						"			},\n" + 
+						"			options: {\n" + 
+						"				responsive: true\n" + 
+						"			}\n" + 
+						"		};\n\n";
+						pie += "</script>\n\n<button id=\"pieChartButton" + i + "\">PieChart " + allColumnNames.get(i) + "</button>\n\n<script>\n\n";
+						pie += "		document.getElementById('pieChartButton" + i + "').addEventListener('click', function() {\n" + 
+								"			var pie = document.getElementById('chart-area').getContext('2d');\n" + 
+								"			window.myPie = new Chart(pie, configPie" + i + ");\n" + 
+								"		});\n\n";
+						pies += pie;
 					}
-					visualizationCode += lineVisualization.replace("datasetsPieChart", datasets) + "\n";
+					visualizationCode += lineVisualization.replace("var configPie0;", pies) + "\n";
 				}
 				else {
 					visualizationCode += lineVisualization + "\n";

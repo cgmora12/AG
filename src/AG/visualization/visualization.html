@@ -114,20 +114,7 @@
 			}
 		};
 
-		var configPie = {
-			type: 'pie',
-			data: {
-				datasets: [
-					datasetsPieChart
-				],
-				labels: [
-					labelsPieChart
-				]
-			},
-			options: {
-				responsive: true
-			}
-		};
+		var configPie0;
 
 		window.onload = function() {
 			var canvasLine = document.getElementById('canvasLine').getContext('2d');
@@ -135,7 +122,7 @@
 			var canvasBar = document.getElementById('canvasBar').getContext('2d');
 			window.myLine = new Chart(canvasBar, configBar);
 			var pie = document.getElementById('chart-area').getContext('2d');
-			window.myPie = new Chart(pie, configPie);
+			window.myPie = new Chart(pie, configPie0);
 		};
 	</script>
 </body>
