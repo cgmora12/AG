@@ -1520,15 +1520,15 @@ public class AG {
 				}
 				String result = builder.toString();
 				System.out.println(result);*/
-				p.waitFor(5000, TimeUnit.MILLISECONDS);
+				//p.waitFor(5000, TimeUnit.MILLISECONDS);
 	    	}
 	    } catch (IOException e) {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
-	    } catch (InterruptedException e) {
+	    }/* catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
 		System.out.println("Server listening in http://localhost:8080/v1/");
 		
@@ -1647,13 +1647,18 @@ public class AG {
 						"				]\n" + 
 						"			},\n" + 
 						"			options: {\n" + 
-						"				responsive: true\n" + 
+						"				responsive: true,\n" + 
+						"				title: {\n" + 
+						"					display: true,\n" + 
+						"					text: 'Chart.js Pie Chart (" + allColumnNames.get(i) + ")'\n" + 
+						"				}" +
 						"			}\n" + 
 						"		};\n\n";
 						pie += "</script>\n\n<button id=\"pieChartButton" + i + "\">PieChart " + allColumnNames.get(i) + "</button>\n\n<script>\n\n";
 						pie += "		document.getElementById('pieChartButton" + i + "').addEventListener('click', function() {\n" + 
 								"			var pie = document.getElementById('chart-area').getContext('2d');\n" + 
 								"			window.myPie = new Chart(pie, configPie" + i + ");\n" + 
+								//"			document.getElementById('pieChartLabel').innerHTML = '" + allColumnNames.get(i) + "';\n" +
 								"		});\n\n";
 						pies += pie;
 					}

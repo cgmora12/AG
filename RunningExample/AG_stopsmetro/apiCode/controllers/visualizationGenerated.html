@@ -14,17 +14,20 @@
 </head>
 
 <body>
-	<div style="width:75%;">
+	<div style="width:80%;margin: 0 auto;">
 		<canvas id="canvasLine"></canvas>
 	</div>
 	<br>
-	<div style="width:75%;">
+	<br>
+	<div style="width:80%;margin: 0 auto;">
 		<canvas id="canvasBar"></canvas>
 	</div>
 	<br>
-	<div id="canvas-holder" style="width:40%">
+	<br>
+	<div id="canvas-holder" style="width:50%;margin: 0 auto;">
 		<canvas id="chart-area"></canvas>
 	</div>
+	<label id="pieChartLabel"></label>
 	<br>
 	<br>
 	<script>
@@ -179,15 +182,20 @@
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_id)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton0">PieChart stop_id</button>
 
-<script>		document.getElementById('pieChartButton0').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton0').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie0);
 		});
@@ -212,15 +220,20 @@ var configPie1 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_code)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton1">PieChart stop_code</button>
 
-<script>		document.getElementById('pieChartButton1').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton1').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie1);
 		});
@@ -245,15 +258,20 @@ var configPie2 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_name)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton2">PieChart stop_name</button>
 
-<script>		document.getElementById('pieChartButton2').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton2').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie2);
 		});
@@ -278,15 +296,20 @@ var configPie3 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_desc)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton3">PieChart stop_desc</button>
 
-<script>		document.getElementById('pieChartButton3').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton3').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie3);
 		});
@@ -311,15 +334,20 @@ var configPie4 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_lat)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton4">PieChart stop_lat</button>
 
-<script>		document.getElementById('pieChartButton4').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton4').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie4);
 		});
@@ -344,15 +372,20 @@ var configPie5 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_lon)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton5">PieChart stop_lon</button>
 
-<script>		document.getElementById('pieChartButton5').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton5').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie5);
 		});
@@ -377,15 +410,20 @@ var configPie6 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (zone_id)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton6">PieChart zone_id</button>
 
-<script>		document.getElementById('pieChartButton6').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton6').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie6);
 		});
@@ -410,15 +448,20 @@ var configPie7 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_url)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton7">PieChart stop_url</button>
 
-<script>		document.getElementById('pieChartButton7').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton7').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie7);
 		});
@@ -443,15 +486,20 @@ var configPie8 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (location_type)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton8">PieChart location_type</button>
 
-<script>		document.getElementById('pieChartButton8').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton8').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie8);
 		});
@@ -476,15 +524,20 @@ var configPie9 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (parent_station)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton9">PieChart parent_station</button>
 
-<script>		document.getElementById('pieChartButton9').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton9').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie9);
 		});
@@ -509,15 +562,20 @@ var configPie10 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_timezone)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton10">PieChart stop_timezone</button>
 
-<script>		document.getElementById('pieChartButton10').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton10').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie10);
 		});
@@ -542,15 +600,20 @@ var configPie11 = {
 				]
 			},
 			options: {
-				responsive: true
-			}
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (wheelchair_boarding)'
+				}			}
 		};
 
 </script>
 
 <button id="pieChartButton11">PieChart wheelchair_boarding</button>
 
-<script>		document.getElementById('pieChartButton11').addEventListener('click', function() {
+<script>
+
+		document.getElementById('pieChartButton11').addEventListener('click', function() {
 			var pie = document.getElementById('chart-area').getContext('2d');
 			window.myPie = new Chart(pie, configPie11);
 		});
