@@ -1,0 +1,635 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Data Visualization Charts</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+	<style>
+	canvas{
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	</style>
+</head>
+
+<body>
+	<div style="width:80%;margin: 0 auto;">
+		<canvas id="canvasLine"></canvas>
+	</div>
+	<br>
+	<br>
+	<div style="width:80%;margin: 0 auto;">
+		<canvas id="canvasBar"></canvas>
+	</div>
+	<br>
+	<br>
+	<div id="canvas-holder" style="width:50%;margin: 0 auto;">
+		<canvas id="chart-area"></canvas>
+	</div>
+	<label id="pieChartLabel"></label>
+	<br>
+	<br>
+	<script>
+		window.chartColors = {
+			red: 'rgb(255, 99, 132)',
+			orange: 'rgb(255, 159, 64)',
+			yellow: 'rgb(255, 205, 86)',
+			green: 'rgb(75, 192, 192)',
+			blue: 'rgb(54, 162, 235)',
+			purple: 'rgb(153, 102, 255)',
+			grey: 'rgb(201, 203, 207)'
+		};
+		var colorsArray = [
+			window.chartColors.red,
+			window.chartColors.orange,
+			window.chartColors.yellow,
+			window.chartColors.green,
+			window.chartColors.blue,
+		];
+		var color = Chart.helpers.color;
+		var configLine = {
+			type: 'line',
+			data: {
+				labels: [
+					'par_4_201','par_4_194','acc_4_279_684','par_4_188','par_4_278','est_4_278','par_4_198','par_4_283','est_4_281','par_4_197','par_4_199','par_4_275','par_4_196','est_4_279','acc_4_281_679','par_4_284','par_4_279','acc_4_281_678','acc_4_280_680','par_4_274','par_4_191','par_4_277','par_4_189','par_4_280','par_4_190','par_4_195','par_4_204','acc_4_278_685','acc_4_279_683','par_4_257','par_4_203','par_4_276','par_4_187','est_4_280','acc_4_280_681','acc_4_278_686','par_4_205','par_4_192','par_4_282','par_4_193','par_4_281','par_4_200','par_4_202'
+				],
+				datasets: [
+					{
+	label: 'stop_code',
+	backgroundColor: color(colorsArray[0% colorsArray.length]).alpha(0.5).rgbString(),
+	borderColor: colorsArray[0% colorsArray.length],
+	borderWidth: 3,
+	fill: false,
+	data: [
+		'201','194','279','188','278','278','198','283','281','197','199','275','196','279','281','284','279','281','280','274','191','277','189','280','190','195','204','278','279','257','203','276','187','280','280','278','205','192','282','193','281','200','202'	]
+},{
+	label: 'location_type',
+	backgroundColor: color(colorsArray[1% colorsArray.length]).alpha(0.5).rgbString(),
+	borderColor: colorsArray[1% colorsArray.length],
+	borderWidth: 3,
+	fill: false,
+	data: [
+		'0','0','2','0','0','1','0','0','1','0','0','0','0','1','2','0','0','2','2','0','0','0','0','0','0','0','0','2','2','0','0','0','0','1','2','2','0','0','0','0','0','0','0'	]
+},{
+	label: 'wheelchair_boarding',
+	backgroundColor: color(colorsArray[2% colorsArray.length]).alpha(0.5).rgbString(),
+	borderColor: colorsArray[2% colorsArray.length],
+	borderWidth: 3,
+	fill: false,
+	data: [
+		'2','2','0','0','2','2','1','2','2','2','2','2','0','2','0','2','2','0','0','2','0','2','2','2','0','0','2','0','0','2','2','2','0','2','0','0','2','0','2','2','2','2','2'	]
+}
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Line Chart'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Id'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						}
+					}]
+				}
+			}
+		};
+
+		
+		var barChartData = {
+			labels: [
+				'par_4_201','par_4_194','acc_4_279_684','par_4_188','par_4_278','est_4_278','par_4_198','par_4_283','est_4_281','par_4_197','par_4_199','par_4_275','par_4_196','est_4_279','acc_4_281_679','par_4_284','par_4_279','acc_4_281_678','acc_4_280_680','par_4_274','par_4_191','par_4_277','par_4_189','par_4_280','par_4_190','par_4_195','par_4_204','acc_4_278_685','acc_4_279_683','par_4_257','par_4_203','par_4_276','par_4_187','est_4_280','acc_4_280_681','acc_4_278_686','par_4_205','par_4_192','par_4_282','par_4_193','par_4_281','par_4_200','par_4_202'
+			],
+			datasets: [
+				{
+	label: 'stop_code',
+	backgroundColor: color(colorsArray[0% colorsArray.length]).alpha(0.5).rgbString(),
+	borderColor: colorsArray[0% colorsArray.length],
+	borderWidth: 3,
+	data: [
+		'201','194','279','188','278','278','198','283','281','197','199','275','196','279','281','284','279','281','280','274','191','277','189','280','190','195','204','278','279','257','203','276','187','280','280','278','205','192','282','193','281','200','202'	]
+},{
+	label: 'location_type',
+	backgroundColor: color(colorsArray[1% colorsArray.length]).alpha(0.5).rgbString(),
+	borderColor: colorsArray[1% colorsArray.length],
+	borderWidth: 3,
+	data: [
+		'0','0','2','0','0','1','0','0','1','0','0','0','0','1','2','0','0','2','2','0','0','0','0','0','0','0','0','2','2','0','0','0','0','1','2','2','0','0','0','0','0','0','0'	]
+},{
+	label: 'wheelchair_boarding',
+	backgroundColor: color(colorsArray[2% colorsArray.length]).alpha(0.5).rgbString(),
+	borderColor: colorsArray[2% colorsArray.length],
+	borderWidth: 3,
+	data: [
+		'2','2','0','0','2','2','1','2','2','2','2','2','0','2','0','2','2','0','0','2','0','2','2','2','0','0','2','0','0','2','2','2','0','2','0','0','2','0','2','2','2','2','2'	]
+}
+			]
+
+		};
+
+		var configBar = {
+			type: 'bar',
+			data: barChartData,
+			options: {
+				responsive: true,
+				legend: {
+					position: 'top',
+				},
+				title: {
+					display: true,
+					text: 'Chart.js Bar Chart'
+				}
+			}
+		};
+
+		var configPie0 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						'1'
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'stop_id'
+				}				],
+				labels: [
+					'data not classifiable'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_id)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton0">PieChart stop_id</button>
+
+<script>
+
+		document.getElementById('pieChartButton0').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie0);
+		});
+
+var configPie1 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						'1'
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'stop_code'
+				}				],
+				labels: [
+					'data not classifiable'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_code)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton1">PieChart stop_code</button>
+
+<script>
+
+		document.getElementById('pieChartButton1').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie1);
+		});
+
+var configPie2 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						'1'
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'stop_name'
+				}				],
+				labels: [
+					'data not classifiable'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_name)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton2">PieChart stop_name</button>
+
+<script>
+
+		document.getElementById('pieChartButton2').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie2);
+		});
+
+var configPie3 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						35,2,2,1,2,1
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'stop_desc'
+				}				],
+				labels: [
+					'','AvdadelaErmita5','CalleManueldeFalla59','CalledeSepulveda1','CalledelMarquesdelaValdavia21','CalledelaGranja14'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_desc)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton3">PieChart stop_desc</button>
+
+<script>
+
+		document.getElementById('pieChartButton3').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie3);
+		});
+
+var configPie4 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						'1'
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'stop_lat'
+				}				],
+				labels: [
+					'data not classifiable'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_lat)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton4">PieChart stop_lat</button>
+
+<script>
+
+		document.getElementById('pieChartButton4').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie4);
+		});
+
+var configPie5 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						'1'
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'stop_lon'
+				}				],
+				labels: [
+					'data not classifiable'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_lon)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton5">PieChart stop_lon</button>
+
+<script>
+
+		document.getElementById('pieChartButton5').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie5);
+		});
+
+var configPie6 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						8,22,13
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'zone_id'
+				}				],
+				labels: [
+					'','A','B1'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (zone_id)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton6">PieChart zone_id</button>
+
+<script>
+
+		document.getElementById('pieChartButton6').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie6);
+		});
+
+var configPie7 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						43
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'stop_url'
+				}				],
+				labels: [
+					'http:__www.crtm.es'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_url)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton7">PieChart stop_url</button>
+
+<script>
+
+		document.getElementById('pieChartButton7').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie7);
+		});
+
+var configPie8 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						31,4,8
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'location_type'
+				}				],
+				labels: [
+					'0','1','2'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (location_type)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton8">PieChart location_type</button>
+
+<script>
+
+		document.getElementById('pieChartButton8').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie8);
+		});
+
+var configPie9 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						'1'
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'parent_station'
+				}				],
+				labels: [
+					'data not classifiable'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (parent_station)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton9">PieChart parent_station</button>
+
+<script>
+
+		document.getElementById('pieChartButton9').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie9);
+		});
+
+var configPie10 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						17,26
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'stop_timezone'
+				}				],
+				labels: [
+					'','Europe_Madrid'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (stop_timezone)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton10">PieChart stop_timezone</button>
+
+<script>
+
+		document.getElementById('pieChartButton10').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie10);
+		});
+
+var configPie11 = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [ 						15,1,27
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.orange,
+						window.chartColors.yellow,
+						window.chartColors.green,
+						window.chartColors.blue,
+					],
+					label: 'wheelchair_boarding'
+				}				],
+				labels: [
+					'0','1','2'
+				]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Chart.js Pie Chart (wheelchair_boarding)'
+				}			}
+		};
+
+</script>
+
+<button id="pieChartButton11">PieChart wheelchair_boarding</button>
+
+<script>
+
+		document.getElementById('pieChartButton11').addEventListener('click', function() {
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie11);
+		});
+
+
+
+		window.onload = function() {
+			var canvasLine = document.getElementById('canvasLine').getContext('2d');
+			window.myLine = new Chart(canvasLine, configLine);
+			var canvasBar = document.getElementById('canvasBar').getContext('2d');
+			window.myLine = new Chart(canvasBar, configBar);
+			var pie = document.getElementById('chart-area').getContext('2d');
+			window.myPie = new Chart(pie, configPie0);
+		};
+	</script>
+</body>
+
+</html>
+

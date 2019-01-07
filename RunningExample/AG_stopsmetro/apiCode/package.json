@@ -13,9 +13,9 @@
   "license": "Apache-2.0",
   "private": true,
   "dependencies": {
-    "papaparse": "^4.3.7",
     "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
-    "swagger-tools": "0.10.1"
+    "papaparse": "^4.3.7",
+    "swagger-tools": "^0.10.4"
   }
 }

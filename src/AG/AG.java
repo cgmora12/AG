@@ -182,8 +182,8 @@ public class AG {
 	    generateServer();
         addServerDependencies();
         generateApiCode();
-        runApi();
         generateVisualization();
+        runApi();
         System.out.println("Automatic API Generation finished!");
 		
 	}
@@ -255,8 +255,8 @@ public class AG {
 	    generateServer();
         addServerDependencies();
         generateApiCode();
-        runApi();
         generateVisualization();
+        runApi();
         System.out.println("Automatic API Generation finished!");
 	}
 	
@@ -309,8 +309,8 @@ public class AG {
 	    generateServer();
         addServerDependencies();
         generateApiCode();
-        runApi();
         generateVisualization();
+        runApi();
         System.out.println("Automatic API Generation finished!");
 	}
 	
@@ -1659,59 +1659,8 @@ public class AG {
 		
 	}
 
-	private static void runApi() {
-
-		System.out.println("Launching API to localhost...");
-		try {
-            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
-            		+ fileSeparatorForResources + "api" + fileSeparatorForResources + "runApi.bat"), 
-            		new File(mainFolderName + File.separator + "runApi.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
-            		fileSeparatorForResources + "api" + fileSeparatorForResources + "runApi2.bat"), 
-            		new File(mainFolderName + File.separator + "runApi2.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-			System.out.println(e.getMessage());
-        }
-		File execFile = new File(mainFolderName + File.separator + "runApi.bat");
-		execFile.setExecutable(true);
-		
-	    try {
-	    	String executable = "./" + mainFolderName + File.separator + "runApi.bat";
-	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
-	    		executable = mainFolderName + File.separator + "runApi.bat";
-	    		Runtime.getRuntime().exec("cmd.exe /C start " + executable);
-	    	}
-	    	else {
-	    		Process p = new ProcessBuilder(executable, "").start();
-	        
-		        //Runtime rt = Runtime.getRuntime();
-	            //Process p = rt.exec("runApi");
-		        /*BufferedReader reader = 
-		                new BufferedReader(new InputStreamReader(p.getInputStream()));
-				StringBuilder builder = new StringBuilder();
-				String line = null;
-				while ( (line = reader.readLine()) != null) {
-				   builder.append(line);
-				   builder.append(System.getProperty("line.separator"));
-				}
-				String result = builder.toString();
-				System.out.println(result);*/
-				//p.waitFor(5000, TimeUnit.MILLISECONDS);
-	    	}
-	    } catch (IOException e) {
-	        // TODO Auto-generated catch block
-	        e.printStackTrace();
-	    }/* catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-
-		System.out.println("Server listening in http://localhost:8080/v1/");
-		
-	}
-
 	private static void generateVisualization() {
-
+	
 		
 		// ChartJS
 		
@@ -1741,7 +1690,7 @@ public class AG {
 		
 		String visualizationCode = "";
 		BufferedReader brVisualization = null;
-        String lineVisualization = "";
+	    String lineVisualization = "";
 		try {
 			brVisualization = new BufferedReader(new InputStreamReader
 					(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
@@ -1751,7 +1700,7 @@ public class AG {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        try {
+	    try {
 			while ((lineVisualization = brVisualization.readLine()) != null) {
 				//TODO: arreglar pie chart (con botones como en Charts de iOS)
 				if(lineVisualization.contains("datasetsLineChart") || lineVisualization.contains("datasetsBarChart")) {
@@ -1852,8 +1801,8 @@ public class AG {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        try {
-        	brVisualization.close();
+	    try {
+	    	brVisualization.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1861,11 +1810,11 @@ public class AG {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-        PrintWriter writer = null;
+	    
+	    PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(mainFolderName + File.separator + apiCodeFolderName + File.separator + 
-    				"controllers" + File.separator + visualizationChartJS, "UTF-8");
+					"controllers" + File.separator + visualizationChartJS, "UTF-8");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1882,13 +1831,13 @@ public class AG {
 		System.out.println("Visualization.html saved");
 		
 		/*try {
-            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
-            		+ fileSeparatorForResources + "visualization" 
-            		+ fileSeparatorForResources + visualizationMainFolderName + ".zip"), 
-            		new File(mainFolderName + File.separator + visualizationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
+	        Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+	        		+ fileSeparatorForResources + "visualization" 
+	        		+ fileSeparatorForResources + visualizationMainFolderName + ".zip"), 
+	        		new File(mainFolderName + File.separator + visualizationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
+	    } catch (IOException e) {
 			System.out.println(e.getMessage());
-        }
+	    }
 		
 		try {
 			FileUtils.deleteDirectory(new File(mainFolderName + File.separator + visualizationMainFolderName));
@@ -1901,20 +1850,20 @@ public class AG {
 			Enumeration<?> enu = zipFile.entries();
 			while (enu.hasMoreElements()) {
 				ZipEntry zipEntry = (ZipEntry) enu.nextElement();
-
+	
 				String name = zipEntry.getName();
-
+	
 				File file = new File(mainFolderName + File.separator + name);
 				if (name.endsWith("/")) {
 					file.mkdirs();
 					continue;
 				}
-
+	
 				File parent = file.getParentFile();
 				if (parent != null) {
 					parent.mkdirs();
 				}
-
+	
 				InputStream is = zipFile.getInputStream(zipEntry);
 				FileOutputStream fos = new FileOutputStream(file);
 				byte[] bytes = new byte[1024];
@@ -1924,7 +1873,7 @@ public class AG {
 				}
 				is.close();
 				fos.close();
-
+	
 			}
 			zipFile.close();
 		} catch (IOException e) {
@@ -1967,7 +1916,7 @@ public class AG {
 		try(BufferedReader br = new BufferedReader(new FileReader(swiftFilePath))) {
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
-
+	
 		    while (line != null) {
 		        sb.append(line);
 		        sb.append(System.lineSeparator());
@@ -2003,7 +1952,7 @@ public class AG {
 		try(BufferedReader br = new BufferedReader(new FileReader(swiftFilePath2))) {
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
-
+	
 		    while (line != null) {
 		        sb.append(line);
 		        sb.append(System.lineSeparator());
@@ -2035,44 +1984,44 @@ public class AG {
 		}
 		
 		// Pie chart
-
+	
 		String csvFile = mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType;
 		BufferedReader br = null;
-        String line = "";
-        String csvSplitBy = ",";
-        ArrayList<String[]> rows = new ArrayList<String[]>();
-        try {
-        	// Read first rows of data file
-            br = new BufferedReader(new FileReader(csvFile));
-            while ((line = br.readLine()) != null) {
-                // use comma as separator
-            	//TODO: replace all rare characters
-                rows.add(line.split(csvSplitBy));
-
-            }
-            br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        
-        ArrayList<String> classifiedValues = new ArrayList<String>();
-        ArrayList<String> classifiedColumnNames = new ArrayList<String>();
-        boolean classification = true;
-        boolean distinct_value = true;
-
-    	for(int n_cell = 0; n_cell < rows.get(0).length; n_cell++) {
-    		for(int n_row = 1; n_row < rows.size() && classification; n_row++) {
-    			if(n_cell < rows.get(n_row).length) {
+	    String line = "";
+	    String csvSplitBy = ",";
+	    ArrayList<String[]> rows = new ArrayList<String[]>();
+	    try {
+	    	// Read first rows of data file
+	        br = new BufferedReader(new FileReader(csvFile));
+	        while ((line = br.readLine()) != null) {
+	            // use comma as separator
+	        	//TODO: replace all rare characters
+	            rows.add(line.split(csvSplitBy));
+	
+	        }
+	        br.close();
+	    } catch (FileNotFoundException e) {
+	        e.printStackTrace();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    } finally {
+	        if (br != null) {
+	            try {
+	                br.close();
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	    
+	    ArrayList<String> classifiedValues = new ArrayList<String>();
+	    ArrayList<String> classifiedColumnNames = new ArrayList<String>();
+	    boolean classification = true;
+	    boolean distinct_value = true;
+	
+		for(int n_cell = 0; n_cell < rows.get(0).length; n_cell++) {
+			for(int n_row = 1; n_row < rows.size() && classification; n_row++) {
+				if(n_cell < rows.get(n_row).length) {
 	        		for(int n_value = 0; n_value < classifiedValues.size() && distinct_value; n_value++) {
 	        			String cell = rows.get(n_row)[n_cell];
 	        			if(classifiedValues.get(n_value).equals(cell) || StringUtils.isBlank(cell)) {
@@ -2086,85 +2035,85 @@ public class AG {
 	        		if(classifiedValues.size() > 5) {
 	        			classification = false;
 	        		}
-    			}
-        	}
-    		if(classifiedValues.size() <= 1) {
-    			classification = false;
-    		}
-    		if(classification) {
-    			System.out.println("Classified values at " + rows.get(0)[n_cell]);
-    			classifiedColumnNames.add(rows.get(0)[n_cell]);
-    		}
-    		classifiedValues.clear();
+				}
+	    	}
+			if(classifiedValues.size() <= 1) {
+				classification = false;
+			}
+			if(classification) {
+				System.out.println("Classified values at " + rows.get(0)[n_cell]);
+				classifiedColumnNames.add(rows.get(0)[n_cell]);
+			}
+			classifiedValues.clear();
 			classification = true;
-        }
-    	
-    	// TODO: create pie chart for each classification column
-    	if(classifiedColumnNames.size() > 0) {
-    		String swiftFilePath3 = mainFolderName + File.separator + visualizationMainFolderName + File.separator + visualizationProjectName 
-    				+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
-    				+ File.separator + visualizationSwiftFileName3Tab;
-    		try(BufferedReader br3= new BufferedReader(new FileReader(swiftFilePath3))) {
-    		    StringBuilder sb = new StringBuilder();
-    		    line = br3.readLine();
-
-    		    while (line != null) {
-    		        sb.append(line);
-    		        sb.append(System.lineSeparator());
-    		        line = br3.readLine();
-    		    }
-    		    String content = sb.toString();
-    		    if(!classifiedColumnNames.isEmpty()) {
-    		    	for(int i = 0; i < classifiedColumnNames.size(); i++) {
-    		    		if(i == 0) {
-    				    	content = content.replaceFirst("\"columnNames\"", "\"" + classifiedColumnNames.get(i) +  "\"");
-    		    		} else {
-    				    	content = content.replaceFirst("\"" + classifiedColumnNames.get(i-1) + "\"", 
-    				    			"\"" + classifiedColumnNames.get(i-1) + "\"" + ", " + "\"" 
-    				    					+ classifiedColumnNames.get(i) + "\"");
-    		    		}
-    		    	}
-    		    	content = content.replaceFirst("filename", fileName);
-    		    }
-    		    
-    		    File swiftFile = new File(swiftFilePath3);
-    		    FileUtils.writeStringToFile(swiftFile, content);
-    		    System.err.println("Visualization created");
-    		    //System.out.println(content);
-    		} catch (FileNotFoundException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
-    	}
-
+	    }
+		
+		// TODO: create pie chart for each classification column
+		if(classifiedColumnNames.size() > 0) {
+			String swiftFilePath3 = mainFolderName + File.separator + visualizationMainFolderName + File.separator + visualizationProjectName 
+					+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
+					+ File.separator + visualizationSwiftFileName3Tab;
+			try(BufferedReader br3= new BufferedReader(new FileReader(swiftFilePath3))) {
+			    StringBuilder sb = new StringBuilder();
+			    line = br3.readLine();
+	
+			    while (line != null) {
+			        sb.append(line);
+			        sb.append(System.lineSeparator());
+			        line = br3.readLine();
+			    }
+			    String content = sb.toString();
+			    if(!classifiedColumnNames.isEmpty()) {
+			    	for(int i = 0; i < classifiedColumnNames.size(); i++) {
+			    		if(i == 0) {
+					    	content = content.replaceFirst("\"columnNames\"", "\"" + classifiedColumnNames.get(i) +  "\"");
+			    		} else {
+					    	content = content.replaceFirst("\"" + classifiedColumnNames.get(i-1) + "\"", 
+					    			"\"" + classifiedColumnNames.get(i-1) + "\"" + ", " + "\"" 
+					    					+ classifiedColumnNames.get(i) + "\"");
+			    		}
+			    	}
+			    	content = content.replaceFirst("filename", fileName);
+			    }
+			    
+			    File swiftFile = new File(swiftFilePath3);
+			    FileUtils.writeStringToFile(swiftFile, content);
+			    System.err.println("Visualization created");
+			    //System.out.println(content);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	
 		// Build and open visualization generated
 		System.out.println("Waiting for building and opening visualization...");
 		try {
-            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
-            		+ fileSeparatorForResources + "visualization" 
-            		+ fileSeparatorForResources + "buildVisualization"), 
-            		new File(mainFolderName + File.separator + "buildVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
+	        Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+	        		+ fileSeparatorForResources + "visualization" 
+	        		+ fileSeparatorForResources + "buildVisualization"), 
+	        		new File(mainFolderName + File.separator + "buildVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
+	    } catch (IOException e) {
 			System.out.println(e.getMessage());
-        }
-
+	    }
+	
 		try {
-            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
-            		+ fileSeparatorForResources + "visualization" 
-            		+ fileSeparatorForResources + "openVisualization"), 
-            		new File(mainFolderName + File.separator + "openVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
+	        Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+	        		+ fileSeparatorForResources + "visualization" 
+	        		+ fileSeparatorForResources + "openVisualization"), 
+	        		new File(mainFolderName + File.separator + "openVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
+	    } catch (IOException e) {
 			System.out.println(e.getMessage());
-        }
+	    }
 		
 		File execFile1 = new File(mainFolderName + File.separator + "buildVisualization");
 		execFile1.setExecutable(true);
 		File execFile2 = new File(mainFolderName + File.separator + "openVisualization");
 		execFile2.setExecutable(true);
-        
+	    
 	    try {
 	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
 	    		System.out.println("The build visualization process is only for MacOS");
@@ -2189,7 +2138,7 @@ public class AG {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+	
 	    try {
 	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
 	    		System.out.println("The visualization is built only for MacOS");
@@ -2200,6 +2149,57 @@ public class AG {
 	        // TODO Auto-generated catch block
 	        e.printStackTrace();
 	    }*/
+	}
+
+	private static void runApi() {
+
+		System.out.println("Launching API to localhost...");
+		try {
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
+            		+ fileSeparatorForResources + "api" + fileSeparatorForResources + "runApi.bat"), 
+            		new File(mainFolderName + File.separator + "runApi.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName + 
+            		fileSeparatorForResources + "api" + fileSeparatorForResources + "runApi2.bat"), 
+            		new File(mainFolderName + File.separator + "runApi2.bat").toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+			System.out.println(e.getMessage());
+        }
+		File execFile = new File(mainFolderName + File.separator + "runApi.bat");
+		execFile.setExecutable(true);
+		
+	    try {
+	    	String executable = "./" + mainFolderName + File.separator + "runApi.bat";
+	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
+	    		executable = mainFolderName + File.separator + "runApi.bat";
+	    		Runtime.getRuntime().exec("cmd.exe /C start " + executable);
+	    	}
+	    	else {
+	    		Process p = new ProcessBuilder(executable, "").start();
+	        
+		        //Runtime rt = Runtime.getRuntime();
+	            //Process p = rt.exec("runApi");
+		        /*BufferedReader reader = 
+		                new BufferedReader(new InputStreamReader(p.getInputStream()));
+				StringBuilder builder = new StringBuilder();
+				String line = null;
+				while ( (line = reader.readLine()) != null) {
+				   builder.append(line);
+				   builder.append(System.getProperty("line.separator"));
+				}
+				String result = builder.toString();
+				System.out.println(result);*/
+				//p.waitFor(5000, TimeUnit.MILLISECONDS);
+	    	}
+	    } catch (IOException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }/* catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+
+		System.out.println("Server listening in http://localhost:8080/v1/");
+		
 	}
 	
 }
