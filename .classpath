@@ -6,9 +6,9 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="res/libs/swagger-codegen-cli-2.2.1.jar"/>
-	<classpathentry kind="lib" path="res/libs/atl-emftvm-fatjar.jar"/>
-	<classpathentry kind="lib" path="res/libs/MTCLauncherJava.jar"/>
-	<classpathentry kind="lib" path="res/libs/java-json.jar"/>
+	<classpathentry exported="true" kind="lib" path="res/libs/swagger-codegen-cli-2.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="res/libs/atl-emftvm-fatjar.jar"/>
+	<classpathentry exported="true" kind="lib" path="res/libs/java-json.jar"/>
+	<classpathentry exported="true" kind="lib" path="res/libs/MTCLauncherJava.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

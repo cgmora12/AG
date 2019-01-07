@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.Array;
@@ -27,6 +29,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -35,13 +38,33 @@ import io.swagger.codegen.SwaggerCodegen;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EFactory;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EcoreFactory;
+import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLResourceFactoryImpl;
 import org.eclipse.m2m.atl.emftvm.standalone.ATLRunner;
+
 import cs.ualberta.launcher.*;
 
 import org.apache.commons.io.FileUtils;
@@ -630,38 +653,137 @@ public class AG {
 	
 		cleanCSV();
 		
+		// TODO: EMF code generation to parse CSV into data model (XMI)
+		/*ResourceSet resourceSet = new ResourceSetImpl(); 
+	    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+	    resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new  XMIResourceFactoryImpl());
+	    Resource tableMetaModel= resourceSet.getResource(URI.createFileURI(fileSeparatorForResources + resFolderName 
+        		+ fileSeparatorForResources + "metamodels" + fileSeparatorForResources + "Table.ecore"), true);
+	    EPackage tableEPackage = (EPackage) tableMetaModel.getContents().get(0);
+	    //resourceSet.getPackageRegistry().put("http://gholizadeh.org", tableEPackage);
+	    Resource tableModel = resourceSet.getResource(URI.createURI(mainFolderName + 
+	    		fileSeparatorForResources + tempFolderName + fileSeparatorForResources + modelFileName), true);
+	    
+	    EcoreFactory theCoreFactory = EcoreFactory.eINSTANCE;
+	    EClass tableClass = tableEPackage.eClass();
+	    
+	    EFactory tableInstance = tableEPackage.getEFactoryInstance();
+	    EObject tableObject = tableInstance.create(tableClass);
+	    
+	    EList tableAttributes = tableClass.getEAttributes();
+		for (int iAttr = 0; iAttr < tableAttributes.size(); iAttr++) {
+			EAttribute tableAttribute = ((EAttribute) tableAttributes.get(iAttr));
+			System.out.println(tableAttribute.getName() + ": "+ tableObject.eGet(tableAttribute));
+			// Set values from CSV
+		}
+
+	    EList<EObject> ModelObjects = new BasicEList<EObject>(); 
+	    ModelObjects.add(tableObject);
+
+	    tableModel.getContents().addAll(ModelObjects);
+	    
+	    try {
+			tableModel.save(null);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+	    
+		
 		String csvFile = mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType;
 		
 		BufferedReader br = null;
         String line = "";
         String csvSplitBy = ",";
-        ArrayList<String[]> rows = new ArrayList<String[]>();
+        //ArrayList<String[]> rows = new ArrayList<String[]>();
 
+
+        System.out.println("create xmi");
+
+        //Using StAX
         try {
-        	// Read first rows of data file
-            br = new BufferedReader(new FileReader(csvFile));
-            while ((line = br.readLine()) != null) {
-                // use comma as separator
-            	//TODO: replace all rare characters
-                rows.add(line.split(csvSplitBy));
+        	
+	        XMLOutputFactory xof = XMLOutputFactory.newInstance();
+	        new File(mainFolderName + File.separator + tempFolderName).mkdirs();
+	        XMLStreamWriter xMLStreamWriter = xof.createXMLStreamWriter(
+	        		new FileWriter(mainFolderName + File.separator + tempFolderName + File.separator + modelFileName));
+    		
+			xMLStreamWriter.writeStartDocument();
+	        xMLStreamWriter.writeStartElement("table:Table");
+	        xMLStreamWriter.writeAttribute("xmi:version", "2.0");
+	        xMLStreamWriter.writeAttribute("xmlns:xmi", "http://www.omg.org/XMI");
+	        xMLStreamWriter.writeAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+	        xMLStreamWriter.writeAttribute("xmlns:table", "platform:/resource/TransformationRules/Table.ecore");
+	        xMLStreamWriter.writeAttribute("filename", cleanString(fileName));
+	        
+	        try {
+            	// Read first rows of data file
+                br = new BufferedReader(new FileReader(csvFile));
+                int i = 0;
+                while ((line = br.readLine()) != null) {
+                    // use comma as separator
+                	//TODO: replace all rare characters
+                    //rows.add(line.split(csvSplitBy));
+                	String[] row = line.split(csvSplitBy);
 
-            }
-            br.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        	        xMLStreamWriter.writeStartElement("rows");
+        	        xMLStreamWriter.writeAttribute("position", i + "");
+        	        
+        			for (int j = 0; j < row.length; j++) {
+        	    		// cells elements
+            	        xMLStreamWriter.writeStartElement("cells");
+            	        xMLStreamWriter.writeAttribute("value", row[j]);
+                		String cellType = "";
+                		try {
+                    		if(row[j].equals("" + Integer.parseInt(row[j]))) {
+                    			cellType = "integer";
+                    		} else if(row[j].equals("" + Float.parseFloat(row[j]))){
+                    			cellType = "number";
+                    		} else {
+                    			cellType = "string";
+                    		}
+                    	} catch (NumberFormatException e) {
+                    		cellType = "string";
+                    	}
+
+            	        xMLStreamWriter.writeAttribute("type", cellType);
+            	        xMLStreamWriter.writeEndElement();
+        				
+        			}
+        			i++;
+        	        xMLStreamWriter.writeEndElement();
+
+                }
+                br.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-        }
-        
-        try {
+	        
+	        xMLStreamWriter.writeEndElement();
+	        xMLStreamWriter.writeEndDocument();
+	        xMLStreamWriter.flush();
+	        xMLStreamWriter.close();
+	        
+		} catch (XMLStreamException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        //Using DOM
+        /*try {
 	        System.out.println("create xmi");
 
         	DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -692,40 +814,64 @@ public class AG {
     		
     		doc.appendChild(rootElement);
 
-    		for(int i = 0; i < rows.size(); i++) {
-        		// rows elements
-        		Element rowsElement = doc.createElement("rows");
-        		Attr attrRow = doc.createAttribute("position");
-        		attrRow.setValue(i + "");
-        		rowsElement.setAttributeNode(attrRow);
-        		rootElement.appendChild(rowsElement);
-    			for (int j = 0; j < rows.get(i).length; j++) {
-    	    		// cells elements
-            		Element cellsElement = doc.createElement("cells");
-            		Attr attrCells = doc.createAttribute("value");
-            		attrCells.setValue(rows.get(i)[j]);
-            		cellsElement.setAttributeNode(attrCells);
-            		String cellType = "";
-            		try {
-                		if(rows.get(i)[j].equals("" + Integer.parseInt(rows.get(i)[j]))) {
-                			cellType = "integer";
-                		} else if(rows.get(i)[j].equals("" + Float.parseFloat(rows.get(i)[j]))){
-                			cellType = "number";
-                		} else {
-                			cellType = "string";
-                		}
-                	} catch (NumberFormatException e) {
-                		cellType = "string";
-                	}
+    		try {
+            	// Read first rows of data file
+                br = new BufferedReader(new FileReader(csvFile));
+                int i = 0;
+                while ((line = br.readLine()) != null) {
+                    // use comma as separator
+                	//TODO: replace all rare characters
+                    //rows.add(line.split(csvSplitBy));
+                	String[] row = line.split(csvSplitBy);
+                	
+                	Element rowsElement = doc.createElement("rows");
+            		Attr attrRow = doc.createAttribute("position");
+            		attrRow.setValue(i + "");
+            		rowsElement.setAttributeNode(attrRow);
+            		rootElement.appendChild(rowsElement);
+        			for (int j = 0; j < row.length; j++) {
+        	    		// cells elements
+                		Element cellsElement = doc.createElement("cells");
+                		Attr attrCells = doc.createAttribute("value");
+                		attrCells.setValue(row[j]);
+                		cellsElement.setAttributeNode(attrCells);
+                		String cellType = "";
+                		try {
+                    		if(row[j].equals("" + Integer.parseInt(row[j]))) {
+                    			cellType = "integer";
+                    		} else if(row[j].equals("" + Float.parseFloat(row[j]))){
+                    			cellType = "number";
+                    		} else {
+                    			cellType = "string";
+                    		}
+                    	} catch (NumberFormatException e) {
+                    		cellType = "string";
+                    	}
 
-            		Attr attrCells2 = doc.createAttribute("type");
-            		attrCells2.setValue(cellType);
-            		cellsElement.setAttributeNode(attrCells2);
-            		rowsElement.appendChild(cellsElement);
-    				
-    			}
-    		}
+                		Attr attrCells2 = doc.createAttribute("type");
+                		attrCells2.setValue(cellType);
+                		cellsElement.setAttributeNode(attrCells2);
+                		rowsElement.appendChild(cellsElement);
+        				
+        			}
+        			i++;
 
+                }
+                br.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+    		
     		// write the content into xml file
     		TransformerFactory transformerFactory = TransformerFactory.newInstance();
     		Transformer transformer = transformerFactory.newTransformer();
@@ -744,7 +890,7 @@ public class AG {
             pce.printStackTrace();
         } catch (TransformerException tfe) {
     		tfe.printStackTrace();
-    	}
+    	}*/
     	
 		
 	}
@@ -811,6 +957,36 @@ public class AG {
 	}
 
 	private static void convertXMIintoJSON() {
+		
+		// Use openapi model (xmi) to json parser (libs)
+		/*ResourceSet resourceSetJson = new ResourceSetImpl();
+		resourceSetJson.getResourceFactoryRegistry()
+		                .getExtensionToFactoryMap()
+		                .put("json", new JsonResourceFactory());
+		 
+		resourceSetJson.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new  XMIResourceFactoryImpl());
+
+		Resource resourceJson = resourceSetJson.createResource
+				  (URI.createFileURI(mainFolderName + File.separator + tempFolderName + File.separator + "jsonopenapi.json"));
+		// Create empty resource with the given URI
+		Resource load_resource = resourceSetJson.getResource(URI
+				.createURI(mainFolderName + fileSeparatorForResources + tempFolderName + fileSeparatorForResources + openAPIXMIFileName), true);
+	    EObject openapiObject = (EObject) load_resource.getContents().get(0);
+	    
+	    if(openapiObject != null) {
+	    	try {
+	    		resourceJson.getContents().add(openapiObject);
+	    	} catch(Exception e) {
+	    		e.printStackTrace();
+	    	}
+	    }
+	    try {
+	    	resourceJson.save(null);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+		
 		String jsonString = "", jsonStringFormatted = "", swaggerString = "", swaggerStringFormatted = "";
 		
 		try {
