@@ -66,28 +66,32 @@ exports.getOperation = function(args, res, next) {
                   }
                 }
                 else {
+                  var resultValidator = true;
                   for(var j = 0; j < Object.keys(args).length; j++){
                     if(args[Object.keys(args)[j]].value != undefined){
                       if(Object.keys(args)[j] === Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]){
                         if(result[Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]] === args[Object.keys(args)[j]].value + ""){
-                          jsonResult.results = jsonResult.results.concat(result);
-                          if(visualization){
-                            labels.push("'" + result[Object.keys(result)[0]] + "'");
-                            datasets = resultToDataset(visualization, result, datasets);
-                            allDatasets = resultToAllDataset(visualization, result, allDatasets);
-                          }
+                          resultValidator = true && resultValidator;
                         }
                         else if(args[Object.keys(args)[j]].value + "" === "all" && result[Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]].replace(/\s+/g, '') != ""){
-                          jsonResult.results = jsonResult.results.concat(result);
-                          if(visualization){
-                            labels.push("'" + result[Object.keys(result)[0]] + "'");
-                            datasets = resultToDataset(visualization, result, datasets);
-                            allDatasets = resultToAllDataset(visualization, result, allDatasets);
-                          }
+                          resultValidator = true && resultValidator;
+                        }
+                        else {
+                          resultValidator = false && resultValidator;
                         }
                       }
                     } 
                   }
+
+                  if(resultValidator) {
+                    jsonResult.results = jsonResult.results.concat(result);
+                    if(visualization){
+                      labels.push("'" + result[Object.keys(result)[0]] + "'");
+                      datasets = resultToDataset(visualization, result, datasets);
+                      allDatasets = resultToAllDataset(visualization, result, allDatasets);
+                    }
+                  }
+
                 }
               }
 
