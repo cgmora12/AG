@@ -1,5 +1,5 @@
 {
-  "basePath" : "/v1",
+  "basePath" : "/RunningExample",
   "paths" : {
     "/stop_name/{stop_name}" : {
       "get" : {

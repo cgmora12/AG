@@ -109,7 +109,7 @@ exports.getOperation = function(args, res, next) {
               if(Object.keys(examples).length > 0) {
                 if(visualization){
                   res.setHeader('Content-Type' , 'text/html');
-                  var visualizationHtmlFile = readTextFile("./Controllers/visualization.html");
+                  var visualizationHtmlFile = readTextFile("./controllers/visualization.html");
                   if (typeof labels !== 'undefined' && labels !== null && labels.length > 0){
                     visualizationHtmlFile = visualizationHtmlFile.replace("labelsLineChart", labels.join());
                     visualizationHtmlFile = visualizationHtmlFile.replace("labelsBarChart", labels.join());
@@ -153,7 +153,7 @@ exports.getOperation = function(args, res, next) {
 
                   }
 
-                  writeTextFile("./Controllers/visualizationGenerated.html", visualizationHtmlFile);
+                  writeTextFile("./controllers/visualizationGenerated.html", visualizationHtmlFile);
                   res.write(visualizationHtmlFile);
                   res.end();
                 } else {

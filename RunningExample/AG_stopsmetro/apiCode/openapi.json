@@ -60,7 +60,7 @@
     }
   },
   "servers" : [ {
-    "url" : "http://www.urlprueba.com/v1"
+    "url" : "http://www.urlprueba.com/RunningExample"
   } ],
   "openapi" : "3.0.0",
   "paths" : {
