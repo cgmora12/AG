@@ -23,7 +23,7 @@ Download the ag.jar file and start using the tool as follows
 
 
 ```
-java -jar ag.jar csv2api csvFileNameWithoutExtension
+java -jar ag.jar csv2api csvFileName
 ```
 
 
