@@ -10,7 +10,7 @@ exports.getOperation = function(args, res, next) {
   var resultVisualization;
   var jsonResult = new Object();
   var rowNumber = 0;
-  var limit = 100;
+  var limit = 10000; //by default
   var offset = 0;
   var labels = [];
   var datasets = [];

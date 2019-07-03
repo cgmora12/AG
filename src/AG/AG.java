@@ -1,15 +1,19 @@
 package AG;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -19,9 +23,13 @@ import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -67,7 +75,10 @@ import org.eclipse.m2m.atl.emftvm.standalone.ATLRunner;
 
 import cs.ualberta.launcher.*;
 
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.input.BOMInputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -718,12 +729,94 @@ public class AG {
 	        
 	        try {
             	// Read first rows of data file
-                br = new BufferedReader(new FileReader(csvFile));
+                //br = new BufferedReader(new FileReader(csvFile));
+
+	        	/*try (OutputStream out = new FileOutputStream(csvFile)) {
+	        		 
+	        		// write a byte sequence
+	        		out.write(0xEF);
+	        		out.write(0xBB);
+	        		out.write(0xBF);
+	        	        
+	        		out.close();
+	        	} catch (IOException e) {
+	        		e.printStackTrace();
+	        	}*/
+	        	
+	            /*String[] charsetsToBeTested = 
+	            	{"hol", "UTF8", "windows-1252", 
+	            	"Windows-1252", "Windows-1251", "Windows-1250", "Windows-1253", 
+	            	"ISO-8859-7", "ISO-646", "ISO-8859", 
+	            	"UTF-16", "UTF-32", "UTF-8"
+	            	};
+
+	            CharsetDetector cd = new CharsetDetector();
+	            File f = new File(csvFile);
+	            Charset charset = cd.detectCharset(f, charsetsToBeTested);
+
+	            String content = FileUtils.readFileToString(f, charset);
+	            if(content.startsWith("\uFEFF")) {
+	            	content = content.substring(1);
+            		System.out.println("Remove char (UTF-8 BOM)");
+            	} else {
+            		System.out.println("First char " + content.charAt(0));
+            	}
+	            String content2 = FileUtils.readFileToString(f, "Windows-1252");
+	            if(content2.startsWith("\uFEFF")) {
+	            	content2 = content2.substring(1);
+            		System.out.println("Remove char (UTF-8 BOM)");
+            	} else {
+            		System.out.println("First char " + content2.charAt(0));
+            	}
+	            
+	            FileUtils.write(new File("prueba.csv"), content, "Windows-1252");
+	            Charset charset2 = cd.detectCharset(new File("prueba.csv"), charsetsToBeTested);
+	            */
+	        	
+	        	/*byte[] fileContent = Files.readAllBytes(new File(csvFile).toPath());
+	        	//Convert byte[] to String
+	        	String s = new String(fileContent);	        	 
+	        	System.out.println("sub " + s.substring(0, 10));
+	        	if ((fileContent[0] == (byte)0xFF) &&
+	                    (fileContent[1] == (byte)0xFE) &&
+	                    (fileContent[2] == (byte)0x00) &&
+	                    (fileContent[3] == (byte)0x00))
+	                {
+		        	System.out.println("bomba");
+	                }
+	        	else {
+		        	System.out.println(fileContent[0]);
+	        	}
+
+	            FileInputStream fis = new FileInputStream(csvFile); 
+	            FilterInputStream  filter = new BufferedInputStream(fis); 
+	        	BOMInputStream bomIn = new BOMInputStream(filter, ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE,
+	        	        ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE, ByteOrderMark.UTF_32LE);
+	        	
+	        	if (bomIn.hasBOM()) {
+	        	    // has a UTF-8 BOM
+            		System.out.println("has a UTF-8 BOM");
+	        	}
+	        	int firstNonBOMByte = bomIn.read(); // Skips BOM
+	        	 */
+	        	
+                br = new BufferedReader(new InputStreamReader(new FileInputStream(csvFile), "UTF8"));
                 int i = 0;
+                //boolean firstLine = true;
                 while ((line = br.readLine()) != null) {
                     // use comma as separator
                 	//TODO: replace all rare characters
                     //rows.add(line.split(csvSplitBy));
+                	/*if(firstLine) {
+	                	if(line.startsWith("\uFEFF")) {
+	                		line = line.substring(1);
+	                		System.out.println("Remove char (UTF-8 BOM)");
+	                	} else {
+	                		System.out.println("First char " + line.charAt(0));
+	                	}
+                	}
+                	firstLine = false;*/
+                	
                 	String[] row = line.split(csvSplitBy);
 
         	        xMLStreamWriter.writeStartElement("rows");
@@ -2203,6 +2296,90 @@ public class AG {
 	}
 	
 }
+
+/*class CharsetDetector {
+
+    public Charset detectCharset(File f, String[] charsets) {
+
+        Charset charset = null;
+
+        for (String charsetName : charsets) {
+        	try {
+        		charset = detectCharset(f, Charset.forName(charsetName));
+        	} catch(Exception e) {
+        		
+        	}
+            if (charset != null) {
+                break;
+            }
+        }
+
+        return charset;
+    }
+
+    private Charset detectCharset(File f, Charset charset) {
+        try {
+            BufferedInputStream input = new BufferedInputStream(new FileInputStream(f));
+
+            CharsetDecoder decoder = charset.newDecoder();
+            decoder.reset();
+
+            byte[] buffer = new byte[512];
+            boolean identified = false;
+            while ((input.read(buffer) != -1) && (!identified)) {
+                identified = identify(buffer, decoder);
+            }
+
+            input.close();
+
+            if (identified) {
+            	System.out.println("Charset: " + charset.displayName());
+                return charset;
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private boolean identify(byte[] bytes, CharsetDecoder decoder) {
+        try {
+            decoder.decode(ByteBuffer.wrap(bytes));
+        } catch (CharacterCodingException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) {
+        File f = new File("example.txt");
+
+        String[] charsetsToBeTested = {"UTF-8", "windows-1253", "ISO-8859-7"};
+
+        CharsetDetector cd = new CharsetDetector();
+        Charset charset = cd.detectCharset(f, charsetsToBeTested);
+
+        if (charset != null) {
+            try {
+                InputStreamReader reader = new InputStreamReader(new FileInputStream(f), charset);
+                int c = 0;
+                while ((c = reader.read()) != -1) {
+                    System.out.print((char)c);
+                }
+                reader.close();
+            } catch (FileNotFoundException fnfe) {
+                fnfe.printStackTrace();
+            }catch(IOException ioe){
+                ioe.printStackTrace();
+            }
+
+        }else{
+            System.out.println("Unrecognized charset.");
+        }
+    }
+}*/
 
 // Auxiliar classes to parse specific xml file
 class XmlObject {
