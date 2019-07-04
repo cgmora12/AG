@@ -7,4 +7,4 @@ set mypath=%~dp0
 echo %mypath%
 cd %mypath%
 start cmd /k runApi2.bat
-pause
+exit

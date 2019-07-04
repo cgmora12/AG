@@ -7,4 +7,5 @@
 echo "running API in windows"
 cd apiCode
 npm install & npm audit fix & npm start
+
 pause
