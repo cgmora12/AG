@@ -608,9 +608,36 @@ public class AG {
         String csvSplitBy = ",";
         ArrayList<String> rows = new ArrayList<String>();
 
+
+        FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(csvFile);
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} 
+        FilterInputStream  filter = new BufferedInputStream(fis); 
+    	BOMInputStream bomIn = new BOMInputStream(filter, ByteOrderMark.UTF_8, ByteOrderMark.UTF_16BE,
+    	        ByteOrderMark.UTF_16LE, ByteOrderMark.UTF_32BE, ByteOrderMark.UTF_32LE);
+    	
+    	try {
+			if (bomIn.hasBOM()) {
+			    // has a UTF-8 BOM
+				System.out.println("has a UTF-8 BOM");
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+    	try {
+			int firstNonBOMByte = bomIn.read();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} // Skips BOM
+    	
+        
         try {
         	// Read first rows of data file
-            br = new BufferedReader(new FileReader(csvFile));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(csvFile), "UTF8"));
+            //br = new BufferedReader(new FileReader(csvFile));
             while ((line = br.readLine()) != null) {
                 // use comma as separator
             	//TODO: replace all rare characters
