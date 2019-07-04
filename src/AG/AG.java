@@ -30,7 +30,10 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -634,15 +637,16 @@ public class AG {
 		} // Skips BOM
     	
         
-        try {
+        /*try {
         	// Read first rows of data file
             br = new BufferedReader(new InputStreamReader(new FileInputStream(csvFile), "UTF8"));
             //br = new BufferedReader(new FileReader(csvFile));
-            while ((line = br.readLine()) != null) {
+            int limit = 2, counter = 0;            
+            while ((line = br.readLine()) != null && counter < limit) {
                 // use comma as separator
             	//TODO: replace all rare characters
                 rows.add(cleanString(line));
-
+                counter++;
             }
             br.close();
         } catch (FileNotFoundException e) {
@@ -657,10 +661,24 @@ public class AG {
                     e.printStackTrace();
                 }
             }
-        }
+        }*/
         
         // Rewrite CSV without rare characters
-	    Writer writer = null;
+	    try {
+			new File(mainFolderName + File.separator + apiCodeFolderName).mkdirs();
+	        Path FROM = Paths.get(csvFile);
+	        Path TO = Paths.get(mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType);
+	        //overwrite the destination file if it exists, and copy
+	        // the file attributes, including the rwx permissions
+	        CopyOption[] options = new CopyOption[]{
+	          StandardCopyOption.REPLACE_EXISTING,
+	          StandardCopyOption.COPY_ATTRIBUTES
+	        }; 
+	        Files.copy(FROM, TO, options);
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    }
+	    /*Writer writer = null;
 	    try {
 			new File(mainFolderName + File.separator + apiCodeFolderName).mkdirs();
 	    	File file = new File(mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType);
@@ -676,8 +694,8 @@ public class AG {
 	    } catch (IOException ex) {
 	        // Report
 	    } finally {
-	       try {writer.close();} catch (Exception ex) {/*ignore*/}
-	    }
+	       try {writer.close();} catch (Exception ex) {}
+	    }*/
 	}
 	
 	private static String cleanString(String s) {
@@ -830,7 +848,8 @@ public class AG {
                 br = new BufferedReader(new InputStreamReader(new FileInputStream(csvFile), "UTF8"));
                 int i = 0;
                 //boolean firstLine = true;
-                while ((line = br.readLine()) != null) {
+                int limit = 2, counter = 0;            
+                while ((line = br.readLine()) != null && counter < limit) {
                     // use comma as separator
                 	//TODO: replace all rare characters
                     //rows.add(line.split(csvSplitBy));
@@ -843,6 +862,9 @@ public class AG {
 	                	}
                 	}
                 	firstLine = false;*/
+                	
+                	// Cleaning
+                	line = cleanString(line);
                 	
                 	String[] row = line.split(csvSplitBy);
 
@@ -873,6 +895,7 @@ public class AG {
         			i++;
         	        xMLStreamWriter.writeEndElement();
 
+                    counter++;
                 }
                 br.close();
             } catch (FileNotFoundException e) {
