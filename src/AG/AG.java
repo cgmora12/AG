@@ -845,10 +845,11 @@ public class AG {
 	        	int firstNonBOMByte = bomIn.read(); // Skips BOM
 	        	 */
 	        	
-                br = new BufferedReader(new InputStreamReader(new FileInputStream(csvFile), "UTF8"));
+	        	br = new BufferedReader(new InputStreamReader(new FileInputStream(csvFile), "UTF8"));
                 int i = 0;
                 //boolean firstLine = true;
-                int limit = 2, counter = 0;            
+                int limit = 2, counter = 0; 
+                int firstLineCells = 0;
                 while ((line = br.readLine()) != null && counter < limit) {
                     // use comma as separator
                 	//TODO: replace all rare characters
@@ -867,6 +868,9 @@ public class AG {
                 	line = cleanString(line);
                 	
                 	String[] row = line.split(csvSplitBy);
+                	if(i==0) {
+                		firstLineCells = row.length;
+                	}
 
         	        xMLStreamWriter.writeStartElement("rows");
         	        xMLStreamWriter.writeAttribute("position", i + "");
@@ -891,6 +895,16 @@ public class AG {
             	        xMLStreamWriter.writeAttribute("type", cellType);
             	        xMLStreamWriter.writeEndElement();
         				
+        			}
+        			if(i>0 && row.length < firstLineCells) {
+        				for(int k = row.length; k < firstLineCells; k++) {
+                	        xMLStreamWriter.writeStartElement("cells");
+                	        xMLStreamWriter.writeAttribute("value", "");
+                    		String cellType = "string";
+
+                	        xMLStreamWriter.writeAttribute("type", cellType);
+                	        xMLStreamWriter.writeEndElement();
+        				}
         			}
         			i++;
         	        xMLStreamWriter.writeEndElement();

@@ -6,6 +6,6 @@
 
 echo "running API in windows"
 cd apiCode
-npm install & npm audit fix & npm start
+npm install & npm audit fix & npm install https://github.com/cgmora12/swagger-tools --save & npm start
 
 pause
