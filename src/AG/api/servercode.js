@@ -17,6 +17,8 @@ exports.getOperation = function(args, res, next) {
   var datasets = [];
   var allDatasets = [];
   var firstLine = "";
+  var lineCount = 0;
+  var rowNumber = 0;
 
 
   if (fs.existsSync(fileName)) {
@@ -43,13 +45,11 @@ exports.getOperation = function(args, res, next) {
       else if(args[Object.keys(args)[i]].value != undefined){
         argsUndefined = false;
       }
-    }
+    } 
 
     var instream = fs.createReadStream(fileName);
     var outstream = new stream();
     var rl = readline.createInterface(instream, outstream);
-    var lineCount = 0;
-    var rowNumber = 0;
 
     rl.on('line', function(data){      
 
@@ -58,7 +58,7 @@ exports.getOperation = function(args, res, next) {
         firstLine = cleanString(data) + "\n";
         //console.log("firstLine " + firstLine)
       } 
-      else if(lineCount <= limit + offset && lineCount > offset) {
+      else if(rowNumber < limit + offset) {
         var dataToParse;      
         dataToParse = firstLine + data;
 
@@ -68,12 +68,14 @@ exports.getOperation = function(args, res, next) {
             header: true,
             step: function(row) {
 
-              rowNumber++;
               result = row.data[0];
               //console.log("result row " + JSON.stringify(result));
                 
               if(argsUndefined){
-                jsonResult.results = jsonResult.results.concat(result);
+                if(rowNumber >= offset){
+                  jsonResult.results = jsonResult.results.concat(result);
+                }
+                rowNumber++;
                 if(visualization){
                   labels.push("'" + result[Object.keys(result)[0]] + "'");
                   datasets = resultToDataset(visualization, result, datasets);
@@ -99,7 +101,10 @@ exports.getOperation = function(args, res, next) {
                 }
 
                 if(resultValidator) {
-                  jsonResult.results = jsonResult.results.concat(result);
+                  if(rowNumber >= offset){
+                    jsonResult.results = jsonResult.results.concat(result);
+                  }
+                  rowNumber++;
                   if(visualization){
                     labels.push("'" + result[Object.keys(result)[0]] + "'");
                     datasets = resultToDataset(visualization, result, datasets);
@@ -126,7 +131,16 @@ exports.getOperation = function(args, res, next) {
 
 
     rl.on('close', function(){
-      console.log('ReturnJSONFile');
+      console.log('ReturnJSONFile'); 
+
+      lineCount--;
+      rowNumber-=offset;
+      jsonResult.limit = limit;
+      jsonResult.offset = offset;
+      jsonResult.visualization = visualization;  
+      jsonResult.fileSize = lineCount + " records";  
+      jsonResult.resultsSize = rowNumber + " records";  
+
       //result = result.data;
       try{
         // Creating json object
