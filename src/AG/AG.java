@@ -37,6 +37,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -115,7 +116,7 @@ public class AG {
 	public static String swaggerFileName = "swagger.json";
 	public static String openAPIFileName = "openapi.json";
 	public static String openAPIXMIFileName = "openapi.xmi";
-	public static String swaggerCodegeneFileName = "swagger-codegen-cli-2.2.1.jar";
+	//public static String swaggerCodegeneFileName = "swagger-codegen-cli-2.2.1.jar";
 	public static String apiCodeFolderName = "apiCode";
 	public static String serverCodeFileName = "servercode.js";
 	public static String resFolderName = "AG";
@@ -123,15 +124,15 @@ public class AG {
 	public static String tempFolderName = "generated";
 	public static String mainFolderName = "AG_data";
 	public static String fileSeparatorForResources = "/";
-	public static String visualizationMainFolderName = "Visualizacion";
-	public static String visualizationChartJS = "visualization.html";
-	public static String visualizationZipFileName = visualizationMainFolderName + ".zip";
-	public static String visualizationProjectName = "ChartsDemo-macOS";
-	public static String visualizationFolderName = "Demos";
-	public static String visualizationSwiftFileName = "BarDemoViewController.swift";
-	public static String visualizationSwiftFileName2 = "LineDemoViewController.swift";
-	public static String visualizationSwiftFileName3 = "PieDemoViewController.swift";
-	public static String visualizationSwiftFileName3Tab = "CustomPieTab.swift";
+	public static String visualisationMainFolderName = "Visualisacion";
+	public static String visualisationChartJS = "visualisation.html";
+	public static String visualisationZipFileName = visualisationMainFolderName + ".zip";
+	public static String visualisationProjectName = "ChartsDemo-macOS";
+	public static String visualisationFolderName = "Demos";
+	public static String visualisationSwiftFileName = "BarDemoViewController.swift";
+	public static String visualisationSwiftFileName2 = "LineDemoViewController.swift";
+	public static String visualisationSwiftFileName3 = "PieDemoViewController.swift";
+	public static String visualisationSwiftFileName3Tab = "CustomPieTab.swift";
 
 	public static boolean m2mTransformation = false;
 	public static boolean openapi2api = false;
@@ -196,7 +197,7 @@ public class AG {
 	    generateServer();
         addServerDependencies();
         generateApiCode();
-        generateVisualization();
+        generateVisualisation();
         runApi();
         System.out.println("Automatic API Generation finished!");
 		
@@ -226,7 +227,7 @@ public class AG {
         addServerDependencies();
         generateApiCode();
         runApi();
-        generateVisualization();
+        generateVisualisation();
         System.out.println("Automatic API Generation finished!");
 	}*/
 	
@@ -269,7 +270,7 @@ public class AG {
 	    generateServer();
         addServerDependencies();
         generateApiCode();
-        generateVisualization();
+        generateVisualisation();
         runApi();
         System.out.println("Automatic API Generation finished!");
 	}
@@ -323,7 +324,7 @@ public class AG {
 	    generateServer();
         addServerDependencies();
         generateApiCode();
-        generateVisualization();
+        generateVisualisation();
         runApi();
         System.out.println("Automatic API Generation finished!");
 	}
@@ -1143,6 +1144,15 @@ public class AG {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}*/
+
+		ArrayList<HashMap<String,String>> fullParametersList = new ArrayList<HashMap<String,String>>();
+		ArrayList<HashMap<String,String>> parametersList = new ArrayList<HashMap<String,String>>();
+		ArrayList<HashMap<String,String>> fullPropertiesList = new ArrayList<HashMap<String,String>>();
+
+		HashMap<String, String> apiHashMap = new HashMap<>();
+		apiHashMap.put("fileName", fileName);
+
+		HashMap<String, String> examplesHashMap = new HashMap<>();
 		
 		String jsonString = "", jsonStringFormatted = "", swaggerString = "", swaggerStringFormatted = "";
 		
@@ -1156,6 +1166,9 @@ public class AG {
             xmlJSONObj.remove("xmlns:xmi");
             xmlJSONObj.remove("xmlns:openapi");
             
+            //TODO: api description
+            //xmlJSONObj = xmlJSONObj.getJSONObject("info").put("description", apiDescription);
+            
             JSONArray pathsArray = xmlJSONObj.getJSONArray("paths");
             xmlJSONObj.remove("paths");
 
@@ -1166,6 +1179,53 @@ public class AG {
                 serversArray.put(servers);
                 xmlJSONObj.put("servers", serversArray);
         	}
+        	
+        	JSONArray propertiesArray = xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").getJSONArray("properties");
+            xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").remove("properties");
+            
+            for(int i = 0; i < propertiesArray.length(); i++) {
+            	JSONObject jsonobj = propertiesArray.getJSONObject(i);
+            	String path = jsonobj.getString("name");
+            	
+            	jsonobj.remove("name");
+            	if(i == 0) {
+                	xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").put("properties", new JSONObject());
+            	} 
+            	JSONObject jsonobj2 = propertiesArray.getJSONObject(i).getJSONObject("content");
+            	xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").getJSONObject("properties").put(path, jsonobj2);
+             	
+            	parametersList.clear();
+            	try {
+	        		HashMap<String, String> parameterHashMap = new HashMap<>();
+	        		parameterHashMap.put("name", path);
+	        		
+	        		String example = "";
+	        		try {
+	        			example = jsonobj2.get("example") + "";
+	        		} catch(Exception e) {
+	            		System.out.println(e.getMessage());
+	            	}
+	        		
+	        		parameterHashMap.put("example", example);
+
+	        		examplesHashMap.put(path, example);
+	        		
+	        		String type = "";
+	        		try {
+	        			type = jsonobj2.getString("type");
+	        		} catch(Exception e) {
+	            		System.out.println(e.getMessage());
+	            	}
+	        		parameterHashMap.put("type", type);
+	        		parameterHashMap.put("ptype", "property");
+	        		parametersList.add(parameterHashMap);
+	        		fullPropertiesList.add(parameterHashMap);
+	
+	               
+            	} catch(Exception e) {
+            		System.out.println(e.getMessage());
+            	}
+            }
         	
             for(int i = 0; i < pathsArray.length(); i++) {
             	JSONObject jsonobj = pathsArray.getJSONObject(i);
@@ -1180,11 +1240,95 @@ public class AG {
             	
             	try {
 	            	JSONObject parameters = xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONObject("parameters");
+	            	            	
 	            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").put("parameters", new JSONArray());
 	            	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONArray("parameters").put(parameters);
             	} catch (JSONException e) {
         			System.out.println(e.getMessage());
             	}
+            	
+            	JSONArray parametersArray = xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONArray("parameters");
+
+                fullParametersList.clear();
+            	for (int parameterIterator = 0; parameterIterator < parametersArray.length (); parameterIterator++) {
+            	   
+            	   parametersList.clear();
+            	   
+	               	try {
+	               		String paramName = parametersArray.getJSONObject(parameterIterator).getString("name");
+	   	        		HashMap<String, String> parameterHashMap = new HashMap<>();
+	   	        		parameterHashMap.put("name", paramName);
+	   	        		
+	   	        		String example = "";
+	   	        		
+	   	        		if(!paramName.contentEquals("limit") && !paramName.contentEquals("offset") && !paramName.contentEquals("visualisation")) {
+
+		   	        		try {
+			   	        		example = examplesHashMap.get(paramName);
+			   	        		if(example != null) {
+				   	        		parameterHashMap.put("example", example);
+			   	        		} else {
+			   	        			parameterHashMap.put("example", "");
+			   	        		}
+		   	        		} catch(Exception e) {
+		   	            		System.out.println(e.getMessage());
+		   	        		}
+		   	        		
+		   	        		String type = "";
+		   	        		try {
+		   	        			type = parametersArray.getJSONObject(parameterIterator).getJSONObject("schema").getString("type");
+		   	        		} catch(Exception e) {
+		   	            		System.out.println(e.getMessage());
+		   	            	}
+		   	        		parameterHashMap.put("type", type);
+		   	        		
+		   	        		String in = "";
+		   	        		try {
+		   	        			in = parametersArray.getJSONObject(parameterIterator).getString("in");
+		   	        		} catch(Exception e) {
+		   	            		System.out.println(e.getMessage());
+		   	            	}
+		   	        		parameterHashMap.put("in", in);
+		   	        		
+		   	        		boolean required = false;
+		   	        		try {
+		   	        			required = parametersArray.getJSONObject(parameterIterator).getBoolean("required");
+		   	        		} catch(Exception e) {
+		   	            		System.out.println(e.getMessage());
+		   	            		required = false;
+		   	            	}
+		   	        		parameterHashMap.put("required", String.valueOf(required));
+		   	        		
+		   	        		parameterHashMap.put("ptype", "parameter");
+		   	        		parametersList.add(parameterHashMap);
+		   	        		fullParametersList.add(parameterHashMap);
+
+		   	        		if(!path.contentEquals("/")) {
+		   	        			xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONArray("parameters")
+		   	             			.getJSONObject(parameterIterator).put("example", example);
+		   	        		}
+		   	                
+	   	        		}
+	   	        		else {
+	   	        			int exampleInt = parametersArray.getJSONObject(parameterIterator).getInt("example");
+		   	                xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").getJSONArray("parameters")
+		   	             		.getJSONObject(parameterIterator).put("example", exampleInt + "");
+	   	        		}
+	               	} catch(Exception e) {
+	               		System.out.println(e.getMessage());
+	               	}
+
+            	}
+
+            	String methodName = "";
+            	try{
+            		methodName = path.split("/")[1];
+            	} catch(Exception e) {
+            		methodName = "/";
+            	}
+        		apiHashMap.put("methodName", methodName);
+        		
+                fullParametersList.clear();
             	
             	JSONObject jsonobjAux = pathsArray.getJSONObject(i).getJSONObject("get").getJSONObject("responses").getJSONObject("responseCode");
             	xmlJSONObj.getJSONObject("paths").getJSONObject(path).getJSONObject("get").remove("responses");
@@ -1236,31 +1380,16 @@ public class AG {
             	
             }
             
-            JSONArray propertiesArray = xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").getJSONArray("properties");
-            xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").remove("properties");
-            
-            for(int i = 0; i < propertiesArray.length(); i++) {
-            	JSONObject jsonobj = propertiesArray.getJSONObject(i);
-            	String path = jsonobj.getString("name");
-            	jsonobj.remove("name");
-            	if(i == 0) {
-                	xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").put("properties", new JSONObject());
-            	} 
-            	JSONObject jsonobj2 = propertiesArray.getJSONObject(i).getJSONObject("content");
-            	xmlJSONObj.getJSONObject("components").getJSONObject("schemas").getJSONObject("mainComponent").getJSONObject("properties").put(path, jsonobj2);
-            	
-            }
-            
             jsonString = xmlJSONObj.toString();
             ObjectMapper jsonFormatter = new ObjectMapper();
             Object json = jsonFormatter.readValue(jsonString, Object.class);
             jsonStringFormatted = jsonFormatter.writerWithDefaultPrettyPrinter().writeValueAsString(json);
             
-
             JSONObject xmlSwaggerObj = xmlJSONObj;
             xmlSwaggerObj.remove("openapi");
             xmlSwaggerObj.put("swagger", "2.0");
             String urlServer = xmlSwaggerObj.getJSONArray("servers").getJSONObject(0).getString("url");
+            String definitionScheme = ((urlServer.contains("https") ? "https" : "http"));
             urlServer = urlServer.replaceAll("http://", "");
             urlServer = urlServer.replaceAll("https://", "");
             if(StringUtils.countMatches(urlServer,"/") > 0) {
@@ -1302,6 +1431,15 @@ public class AG {
             		for(int j = 0; j < parameters.length(); j++) {
             			parameters.getJSONObject(j).put("type", parameters.getJSONObject(j).getJSONObject("schema").getString("type"));
     	            	parameters.getJSONObject(j).remove("schema");
+
+    	            	try {
+	    	            	if(!parameters.getJSONObject(j).getString("example").isEmpty()) {
+		            			parameters.getJSONObject(j).put("default", parameters.getJSONObject(j).getString("example"));
+		    	            	parameters.getJSONObject(j).remove("example");
+	    	            	}
+    	            	} catch (JSONException e) {
+    	        			System.out.println(e.getMessage());
+    	            	}
             		}
 	            	
             	} catch (JSONException e) {
@@ -1340,7 +1478,7 @@ public class AG {
             xmlSwaggerObj.remove("components");
             xmlSwaggerObj.put("definitions", componentsSchemas);
             JSONArray definitionsSchemes = new JSONArray();
-            definitionsSchemes.put("https");
+            definitionsSchemes.put(definitionScheme);
             xmlSwaggerObj.put("schemes", definitionsSchemes);
             
             swaggerString = xmlSwaggerObj.toString();
@@ -1714,8 +1852,8 @@ public class AG {
 				}
 			}
 			for(String lineFunctionName: lineFunctionNames) {
-				if(lineFunctionName.contains("getvisualization")) {
-					servercode += lineFunctionName + "\t" + "var obj = new Object();obj.value = \"visualization\";args.visualization = obj;\n"
+				if(lineFunctionName.contains("getvisualisation")) {
+					servercode += lineFunctionName + "\t" + "var obj = new Object();obj.value = \"visualisation\";args.visualisation = obj;\n"
 							+ "\t" + "exports.getOperation(args, res, next); \n}\n";
 				} else {
 					servercode += lineFunctionName + "\t" + "exports.getOperation(args, res, next); \n}\n";
@@ -1816,7 +1954,7 @@ public class AG {
 		
 	}
 
-	private static void generateVisualization() {
+	private static void generateVisualisation() {
 	
 		
 		// ChartJS
@@ -1845,26 +1983,26 @@ public class AG {
 			e1.printStackTrace();
 		}
 		
-		String visualizationCode = "";
-		BufferedReader brVisualization = null;
-	    String lineVisualization = "";
+		String visualisationCode = "";
+		BufferedReader brVisualisation = null;
+	    String lineVisualisation = "";
 		try {
-			brVisualization = new BufferedReader(new InputStreamReader
+			brVisualisation = new BufferedReader(new InputStreamReader
 					(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
-		            		+ fileSeparatorForResources + "visualization" 
-		            		+ fileSeparatorForResources + visualizationChartJS)));
+		            		+ fileSeparatorForResources + "visualisation" 
+		            		+ fileSeparatorForResources + visualisationChartJS)));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	    try {
-			while ((lineVisualization = brVisualization.readLine()) != null) {
+			while ((lineVisualisation = brVisualisation.readLine()) != null) {
 				//TODO: arreglar pie chart (con botones como en Charts de iOS)
-				if(lineVisualization.contains("datasetsLineChart") || lineVisualization.contains("datasetsBarChart")) {
+				if(lineVisualisation.contains("datasetsLineChart") || lineVisualisation.contains("datasetsBarChart")) {
 					
 					String datasets = "";
 					
-					if(lineVisualization.contains("datasetsLineChart")) {
+					if(lineVisualisation.contains("datasetsLineChart")) {
 						for(int i = 0; i < columnNames.size(); i ++) {
 							if (i > 0) {
 								datasets += ",";
@@ -1882,9 +2020,9 @@ public class AG {
 							datasets += dataset;
 						}
 						
-						visualizationCode += lineVisualization.replace("datasetsLineChart", datasets) + "\n";
+						visualisationCode += lineVisualisation.replace("datasetsLineChart", datasets) + "\n";
 					}
-					else if(lineVisualization.contains("datasetsBarChart")) {
+					else if(lineVisualisation.contains("datasetsBarChart")) {
 						for(int i = 0; i < columnNames.size(); i ++) {
 							if (i > 0) {
 								datasets += ",";
@@ -1901,10 +2039,10 @@ public class AG {
 							datasets += dataset;
 						}
 						
-						visualizationCode += lineVisualization.replace("datasetsBarChart", datasets) + "\n";
+						visualisationCode += lineVisualisation.replace("datasetsBarChart", datasets) + "\n";
 					}
 				} 
-				else if(lineVisualization.contains("configPie0")) {
+				else if(lineVisualisation.contains("configPie0")) {
 					String pies = "";
 					for(int i = 0; i < allColumnNames.size(); i ++) {
 						String pie = "var configPie" + i + " = {\n" + 
@@ -1944,13 +2082,13 @@ public class AG {
 								"		});\n\n";
 						pies += pie;
 					}
-					visualizationCode += lineVisualization.replace("var configPie0;", pies) + "\n";
+					visualisationCode += lineVisualisation.replace("var configPie0;", pies) + "\n";
 				}
 				else {
-					visualizationCode += lineVisualization + "\n";
+					visualisationCode += lineVisualisation + "\n";
 				}
 			}
-			System.out.println("Visualization.html generated");
+			System.out.println("Visualisation.html generated");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1959,7 +2097,7 @@ public class AG {
 			e.printStackTrace();
 		}
 	    try {
-	    	brVisualization.close();
+	    	brVisualisation.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1971,7 +2109,7 @@ public class AG {
 	    PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(mainFolderName + File.separator + apiCodeFolderName + File.separator + 
-					"controllers" + File.separator + visualizationChartJS, "UTF-8");
+					"controllers" + File.separator + visualisationChartJS, "UTF-8");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1980,30 +2118,30 @@ public class AG {
 			e.printStackTrace();
 		}
 		try {
-			writer.println(visualizationCode);
+			writer.println(visualisationCode);
 			writer.close();
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Visualization.html saved");
+		System.out.println("Visualisation.html saved");
 		
 		/*try {
 	        Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
-	        		+ fileSeparatorForResources + "visualization" 
-	        		+ fileSeparatorForResources + visualizationMainFolderName + ".zip"), 
-	        		new File(mainFolderName + File.separator + visualizationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
+	        		+ fileSeparatorForResources + "visualisation" 
+	        		+ fileSeparatorForResources + visualisationMainFolderName + ".zip"), 
+	        		new File(mainFolderName + File.separator + visualisationZipFileName).toPath(), StandardCopyOption.REPLACE_EXISTING);
 	    } catch (IOException e) {
 			System.out.println(e.getMessage());
 	    }
 		
 		try {
-			FileUtils.deleteDirectory(new File(mainFolderName + File.separator + visualizationMainFolderName));
+			FileUtils.deleteDirectory(new File(mainFolderName + File.separator + visualisationMainFolderName));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		
 		try {
-			ZipFile zipFile = new ZipFile(mainFolderName + File.separator + visualizationZipFileName);
+			ZipFile zipFile = new ZipFile(mainFolderName + File.separator + visualisationZipFileName);
 			Enumeration<?> enu = zipFile.entries();
 			while (enu.hasMoreElements()) {
 				ZipEntry zipEntry = (ZipEntry) enu.nextElement();
@@ -2037,7 +2175,7 @@ public class AG {
 			e.printStackTrace();
 		}
 		
-		File file = new File(mainFolderName + File.separator + visualizationZipFileName);
+		File file = new File(mainFolderName + File.separator + visualisationZipFileName);
 		if (file.exists()) {
 		    file.delete();
 		} else {
@@ -2067,9 +2205,9 @@ public class AG {
 		}
 		
 		//Create graphs in swift
-		String swiftFilePath = mainFolderName + File.separator + visualizationMainFolderName + File.separator + visualizationProjectName 
-				+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
-				+ File.separator + visualizationSwiftFileName;
+		String swiftFilePath = mainFolderName + File.separator + visualisationMainFolderName + File.separator + visualisationProjectName 
+				+ File.separator + visualisationProjectName + File.separator + visualisationFolderName 
+				+ File.separator + visualisationSwiftFileName;
 		try(BufferedReader br = new BufferedReader(new FileReader(swiftFilePath))) {
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
@@ -2094,7 +2232,7 @@ public class AG {
 		    
 		    File swiftFile = new File(swiftFilePath);
 		    FileUtils.writeStringToFile(swiftFile, content);
-		    System.err.println("Visualization created");
+		    System.err.println("Visualisation created");
 		    //System.out.println(content);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -2103,9 +2241,9 @@ public class AG {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String swiftFilePath2 = mainFolderName + File.separator + visualizationMainFolderName + File.separator + visualizationProjectName 
-				+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
-				+ File.separator + visualizationSwiftFileName2;
+		String swiftFilePath2 = mainFolderName + File.separator + visualisationMainFolderName + File.separator + visualisationProjectName 
+				+ File.separator + visualisationProjectName + File.separator + visualisationFolderName 
+				+ File.separator + visualisationSwiftFileName2;
 		try(BufferedReader br = new BufferedReader(new FileReader(swiftFilePath2))) {
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
@@ -2130,7 +2268,7 @@ public class AG {
 		    
 		    File swiftFile = new File(swiftFilePath2);
 		    FileUtils.writeStringToFile(swiftFile, content);
-		    System.err.println("Visualization created");
+		    System.err.println("Visualisation created");
 		    //System.out.println(content);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -2207,9 +2345,9 @@ public class AG {
 		
 		// TODO: create pie chart for each classification column
 		if(classifiedColumnNames.size() > 0) {
-			String swiftFilePath3 = mainFolderName + File.separator + visualizationMainFolderName + File.separator + visualizationProjectName 
-					+ File.separator + visualizationProjectName + File.separator + visualizationFolderName 
-					+ File.separator + visualizationSwiftFileName3Tab;
+			String swiftFilePath3 = mainFolderName + File.separator + visualisationMainFolderName + File.separator + visualisationProjectName 
+					+ File.separator + visualisationProjectName + File.separator + visualisationFolderName 
+					+ File.separator + visualisationSwiftFileName3Tab;
 			try(BufferedReader br3= new BufferedReader(new FileReader(swiftFilePath3))) {
 			    StringBuilder sb = new StringBuilder();
 			    line = br3.readLine();
@@ -2235,7 +2373,7 @@ public class AG {
 			    
 			    File swiftFile = new File(swiftFilePath3);
 			    FileUtils.writeStringToFile(swiftFile, content);
-			    System.err.println("Visualization created");
+			    System.err.println("Visualisation created");
 			    //System.out.println(content);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -2246,36 +2384,36 @@ public class AG {
 			}
 		}
 	
-		// Build and open visualization generated
-		System.out.println("Waiting for building and opening visualization...");
+		// Build and open visualisation generated
+		System.out.println("Waiting for building and opening visualisation...");
 		try {
 	        Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
-	        		+ fileSeparatorForResources + "visualization" 
-	        		+ fileSeparatorForResources + "buildVisualization"), 
-	        		new File(mainFolderName + File.separator + "buildVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
+	        		+ fileSeparatorForResources + "visualisation" 
+	        		+ fileSeparatorForResources + "buildVisualisation"), 
+	        		new File(mainFolderName + File.separator + "buildVisualisation").toPath(), StandardCopyOption.REPLACE_EXISTING);
 	    } catch (IOException e) {
 			System.out.println(e.getMessage());
 	    }
 	
 		try {
 	        Files.copy(AG.class.getResourceAsStream(fileSeparatorForResources + resFolderName 
-	        		+ fileSeparatorForResources + "visualization" 
-	        		+ fileSeparatorForResources + "openVisualization"), 
-	        		new File(mainFolderName + File.separator + "openVisualization").toPath(), StandardCopyOption.REPLACE_EXISTING);
+	        		+ fileSeparatorForResources + "visualisation" 
+	        		+ fileSeparatorForResources + "openVisualisation"), 
+	        		new File(mainFolderName + File.separator + "openVisualisation").toPath(), StandardCopyOption.REPLACE_EXISTING);
 	    } catch (IOException e) {
 			System.out.println(e.getMessage());
 	    }
 		
-		File execFile1 = new File(mainFolderName + File.separator + "buildVisualization");
+		File execFile1 = new File(mainFolderName + File.separator + "buildVisualisation");
 		execFile1.setExecutable(true);
-		File execFile2 = new File(mainFolderName + File.separator + "openVisualization");
+		File execFile2 = new File(mainFolderName + File.separator + "openVisualisation");
 		execFile2.setExecutable(true);
 	    
 	    try {
 	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
-	    		System.out.println("The build visualization process is only for MacOS");
+	    		System.out.println("The build visualisation process is only for MacOS");
 	    	} else {
-	    		Process p = new ProcessBuilder("./" + mainFolderName + File.separator + "buildVisualization", "").start();
+	    		Process p = new ProcessBuilder("./" + mainFolderName + File.separator + "buildVisualisation", "").start();
 		        BufferedReader reader = 
 		                new BufferedReader(new InputStreamReader(p.getInputStream()));
 				StringBuilder builder = new StringBuilder();
@@ -2298,9 +2436,9 @@ public class AG {
 	
 	    try {
 	    	if(System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH).indexOf("win") >= 0) {
-	    		System.out.println("The visualization is built only for MacOS");
+	    		System.out.println("The visualisation is built only for MacOS");
 	    	} else {
-		        Process p = new ProcessBuilder("./" + mainFolderName + File.separator +  "openVisualization", "").start();
+		        Process p = new ProcessBuilder("./" + mainFolderName + File.separator +  "openVisualisation", "").start();
 	    	}
 	    } catch (IOException e) {
 	        // TODO Auto-generated catch block
@@ -2440,7 +2578,7 @@ public class AG {
             }
 
         }else{
-            System.out.println("Unrecognized charset.");
+            System.out.println("Unrecognised charset.");
         }
     }
 }*/

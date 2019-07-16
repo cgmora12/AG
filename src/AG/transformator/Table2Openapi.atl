@@ -18,7 +18,7 @@ rule Main {
 			openapi <- '3.0.0',
 			info <- openapi_info,
 			servers <- Sequence{openapi_servers},
-			paths <- Sequence{openapi_basic_path, openapi_visualization_path}
+			paths <- Sequence{openapi_basic_path, openapi_visualisation_path}
 				.union(firstTableRow -> collect(e | thisModule.OpenapiPaths(e, s))),
 			components <- Sequence{openapi_components}
 		),
@@ -28,22 +28,22 @@ rule Main {
 			description <- 'Obtaining the ' + s.filename
 		),
 		openapi_servers: Openapi!Server (
-			url <- 'http://www.urlprueba.com/v1'
+			url <- 'http://localhost:8080'
 		),
 		openapi_basic_path: Openapi!Path (
 			pattern <- '/' ,
 			get <- Sequence{path_operation_basic_get}
 		),
-		openapi_visualization_path: Openapi!Path (
-			pattern <- '/visualization' ,
-			get <- Sequence{path_operation_visualization_get}
+		openapi_visualisation_path: Openapi!Path (
+			pattern <- '/visualisation' ,
+			get <- Sequence{path_operation_visualisation_get}
 		),
 		
-		path_operation_visualization_get: Openapi!Operation (
-			summary <- 'GET visualization charts',
-			operationId <- 'getvisualization',
-			description <- 'Get visualization charts of the data',
-			responses <- thisModule.OperationResponsesVisualization(firstTableRow->first()),
+		path_operation_visualisation_get: Openapi!Operation (
+			summary <- 'GET visualisation charts',
+			operationId <- 'getvisualisation',
+			description <- 'Get visualisation charts of the data',
+			responses <- thisModule.OperationResponsesVisualisation(firstTableRow->first()),
 			parameters <- Sequence{thisModule.OperationParameterLimit(firstTableRow->first()), 
 				thisModule.OperationParameterOffset(firstTableRow->first())}
 		),
@@ -79,12 +79,13 @@ rule Main {
 			operationId <- 'get' + s.filename,
 			description <- 'Use value \'all\' in a parameter for non-empty values',
 			responses <- operation_responses_basic,
-			parameters <- Sequence{operation_parameter_limit, operation_parameter_offset, operation_parameter_visualization}
-				.union(firstTableRow -> collect(e | thisModule.OperationParemetersBasic(e)))
+			parameters <- Sequence{operation_parameter_limit, operation_parameter_offset, operation_parameter_visualisation}
+				.union(firstTableRow -> collect(e | thisModule.OperationParametersBasic(e, s)))
 		),
 		operation_parameter_limit: Openapi!Parameter (
 				in <- 'query',
 				name <- 'limit',
+				example <- '10000',
 				description <- 'Maximum number of results',
 				schema <- operation_parameter_limit_schema
 		),
@@ -94,19 +95,20 @@ rule Main {
 		operation_parameter_offset: Openapi!Parameter (
 				in <- 'query',
 				name <- 'offset',
+				example <- '0',
 				description <- 'Starting index for results',
 				schema <- operation_parameter_offset_schema
 		),
 		operation_parameter_offset_schema: Openapi!Schema (
 				type <- 'integer'
 		),
-		operation_parameter_visualization: Openapi!Parameter (
+		operation_parameter_visualisation: Openapi!Parameter (
 				in <- 'query',
-				name <- 'visualization',
-				description <- 'Visualization of the data via charts',
-				schema <- operation_parameter_visualization_schema
+				name <- 'visualisation',
+				description <- 'Visualisation of the data via charts',
+				schema <- operation_parameter_visualisation_schema
 		),
-		operation_parameter_visualization_schema: Openapi!Schema (
+		operation_parameter_visualisation_schema: Openapi!Schema (
 				type <- 'string'
 		),
 		--path_operation: distinct Openapi!Operation foreach (cell in firstTableRow) (
@@ -126,7 +128,7 @@ rule Main {
 		--),
 		response_code_basic: Openapi!ResponseCode (
 			description <- 'successful operation',
-			content <- Sequence{response_content_basic, thisModule.ResponseContentVisualization(firstTableRow->first())}
+			content <- Sequence{response_content_basic, thisModule.ResponseContentVisualisation(firstTableRow->first())}
 		),
 		--response_code: distinct Openapi!ResponseCode foreach (cell in firstTableRow) (
 		--	description <- 'successful operation',
@@ -210,51 +212,51 @@ lazy rule PathOperation {
 			description <- 'Use value \'all\' in a parameter for non-empty values',
 			responses <- thisModule.OperationResponses(cell),
 			parameters <- Sequence{thisModule.OperationParameterLimit(cell), 
-				thisModule.OperationParameterOffset(cell), thisModule.OperationParameterVisualization(cell), 
-				thisModule.OperationParameters(cell)}
+				thisModule.OperationParameterOffset(cell), thisModule.OperationParameterVisualisation(cell), 
+				thisModule.OperationParameters(cell, table)}
 		)
 }
 
-lazy rule OperationResponsesVisualization {
+lazy rule OperationResponsesVisualisation {
 	from
 		cell: Table!Cell
 	to
 		operation_responses: Openapi!Response (
 			code <- '200',
-			responseCode <- thisModule.ResponseCodeVisualization(cell)
+			responseCode <- thisModule.ResponseCodeVisualisation(cell)
 		)
 }
 
-lazy rule ResponseCodeVisualization {
+lazy rule ResponseCodeVisualisation {
 	from
 		cell: Table!Cell
 	to
 		response_code: Openapi!ResponseCode (
 			description <- 'successful operation',
-			content <- Sequence{thisModule.ResponseContentVisualization(cell)}
+			content <- Sequence{thisModule.ResponseContentVisualisation(cell)}
 		)
 }
 
-lazy rule ResponseContentVisualization {
+lazy rule ResponseContentVisualisation {
 	from
 		cell: Table!Cell
 	to
 		response_content: Openapi!ResponseContent (
 			contentTypeName <- 'text/html',
-			contentType <- thisModule.ResponseContentTypeVisualization(cell)
+			contentType <- thisModule.ResponseContentTypeVisualisation(cell)
 		)
 }
 
-lazy rule ResponseContentTypeVisualization {
+lazy rule ResponseContentTypeVisualisation {
 	from
 		cell: Table!Cell
 	to
 		response_content_type: Openapi!ResponseContentType (
-			schema <- thisModule.ResponseSchemaVisualization(cell)
+			schema <- thisModule.ResponseSchemaVisualisation(cell)
 		)
 }
 
-lazy rule ResponseSchemaVisualization {
+lazy rule ResponseSchemaVisualisation {
 	from
 		cell: Table!Cell
 	to
@@ -279,7 +281,7 @@ lazy rule ResponseCode {
 	to
 		response_code: Openapi!ResponseCode (
 			description <- 'successful operation',
-			content <- Sequence{thisModule.ResponseContent(cell), thisModule.ResponseContentVisualization(cell)}
+			content <- Sequence{thisModule.ResponseContent(cell), thisModule.ResponseContentVisualisation(cell)}
 		)
 }
 
@@ -321,36 +323,46 @@ lazy rule SchemaItems {
 		)
 }
 
-lazy rule OperationParemetersBasic {
+lazy rule OperationParametersBasic {
 	from 
-		cell: Table!Cell
+		cell: Table!Cell,
+		table: Table!Table
 	to
 		operation_parameters_basic_get: Openapi!Parameter (
 				in <- 'query',
 				name <- cell.value,
 				description <- cell.value,
-				schema <- thisModule.ParemeterSchemaBasic(cell)
+				schema <- thisModule.ParameterSchemaBasic(cell, table)
 		)
 }
 
-lazy rule ParemeterSchemaBasic {
+lazy rule ParameterSchemaBasic {
 	from 
-		cell: Table!Cell
+		cell: Table!Cell,
+		table: Table!Table
+	using {
+			firstTableRow : Sequence(Table!Cell) = table.rows->first().cells;
+			lastTableRow : Sequence(Table!Cell) = table.rows->last().cells;
+	}
 	to
 		parameter_schema_basic: Openapi!Schema (
-				type <- cell.type
+				type <- if lastTableRow->size() < firstTableRow->size() 
+				then cell.type
+				else lastTableRow->at(firstTableRow->indexOf(cell)).type
+				endif
 		)
 }
 
 lazy rule OperationParameters {
 	from 
-		cell: Table!Cell
+		cell: Table!Cell,
+		table: Table!Table
 	to
 		operation_parameters: Openapi!Parameter (
 				in <- 'path',
 				name <- cell.value,
 				description <- cell.value,
-				schema <- thisModule.ParameterSchema(cell),
+				schema <- thisModule.ParameterSchema(cell, table),
 				required <- true
 		)
 }
@@ -362,6 +374,7 @@ lazy rule OperationParameterLimit {
 		operation_parameters: Openapi!Parameter (
 				in <- 'query',
 				name <- 'limit',
+				example <- '10000',
 				description <- 'Maximum number of results',
 				schema <- thisModule.ParameterSchemaLimit(cell)
 		)
@@ -374,29 +387,38 @@ lazy rule OperationParameterOffset {
 		operation_parameters: Openapi!Parameter (
 				in <- 'query',
 				name <- 'offset',
+				example <- '0',
 				description <- 'Starting index for results',
 				schema <- thisModule.ParameterSchemaOffset(cell)
 		)
 }
 
-lazy rule OperationParameterVisualization {
+lazy rule OperationParameterVisualisation {
 	from 
 		cell: Table!Cell
 	to
 		operation_parameters: Openapi!Parameter (
 				in <- 'query',
-				name <- 'visualization',
-				description <- 'Visualization of the data via charts',
-				schema <- thisModule.ParameterSchemaVisualization(cell)
+				name <- 'visualisation',
+				description <- 'Visualisation of the data via charts',
+				schema <- thisModule.ParameterSchemaVisualisation(cell)
 		)
 }
 
 lazy rule ParameterSchema {
 	from
-		cell: Table!Cell
+		cell: Table!Cell,
+		table: Table!Table
+	using {
+			firstTableRow : Sequence(Table!Cell) = table.rows->first().cells;
+			lastTableRow : Sequence(Table!Cell) = table.rows->last().cells;
+	}
 	to
 		parameter_schema: Openapi!Schema (
-				type <- cell.type
+				type <- if lastTableRow->size() < firstTableRow->size() 
+				then cell.type
+				else lastTableRow->at(firstTableRow->indexOf(cell)).type
+				endif
 		)
 }
 
@@ -418,7 +440,7 @@ lazy rule ParameterSchemaOffset {
 		)
 }
 
-lazy rule ParameterSchemaVisualization {
+lazy rule ParameterSchemaVisualisation {
 	from
 		cell: Table!Cell
 	to

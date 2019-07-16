@@ -9,7 +9,7 @@ exports.getOperation = function(args, res, next) {
   var examples = {};
   var fileName = "./data.csv";
   var result;
-  var resultVisualization;
+  var resultVisualisation;
   var jsonResult = new Object();
   var limit = 10000; //by default
   var offset = 0;
@@ -26,25 +26,32 @@ exports.getOperation = function(args, res, next) {
     jsonResult.results = [];
 
     // Checking arguments
-    var argsUndefined = true;
+    /*var argsUndefined = false;
+
+    if(args.apiPath === "/"){
+      argsUndefined = true;
+    }
+
+    args = args.params;*/
+
     var filters = false;
-    var visualization = false;
+    var visualisation = false;
 
     for(var i = 0; i < Object.keys(args).length; i++){
-      if (Object.keys(args)[i] === "limit" || Object.keys(args)[i] === "offset"|| Object.keys(args)[i] === "visualization"){
+      if (Object.keys(args)[i] === "limit" || Object.keys(args)[i] === "offset"|| Object.keys(args)[i] === "visualisation"){
         if (Object.keys(args)[i] === "limit" && args[Object.keys(args)[i]].value != undefined){
           limit = parseInt(args[Object.keys(args)[i]].value);
         } 
         else if (Object.keys(args)[i] === "offset" && args[Object.keys(args)[i]].value != undefined){
           offset = parseInt(args[Object.keys(args)[i]].value);
         }
-        else if (Object.keys(args)[i] === "visualization" && args[Object.keys(args)[i]].value != undefined){
-          visualization = true;
+        else if (Object.keys(args)[i] === "visualisation" && args[Object.keys(args)[i]].value != undefined){
+          visualisation = true;
         }
       }
-      else if(args[Object.keys(args)[i]].value != undefined){
+      /*else if(args[Object.keys(args)[i]].value != undefined){
         argsUndefined = false;
-      }
+      }*/
     } 
 
     var instream = fs.createReadStream(fileName);
@@ -71,18 +78,18 @@ exports.getOperation = function(args, res, next) {
               result = row.data[0];
               //console.log("result row " + JSON.stringify(result));
                 
-              if(argsUndefined){
+              /*if(argsUndefined){
                 if(rowNumber >= offset){
                   jsonResult.results = jsonResult.results.concat(result);
                 }
                 rowNumber++;
-                if(visualization){
+                if(visualisation){
                   labels.push("'" + result[Object.keys(result)[0]] + "'");
-                  datasets = resultToDataset(visualization, result, datasets);
-                  allDatasets = resultToAllDataset(visualization, result, allDatasets);
+                  datasets = resultToDataset(visualisation, result, datasets);
+                  allDatasets = resultToAllDataset(visualisation, result, allDatasets);
                 }
               }
-              else {
+              else {*/
                 var resultValidator = true;
                 for(var j = 0; j < Object.keys(args).length; j++){
                   if(args[Object.keys(args)[j]].value != undefined){
@@ -105,13 +112,13 @@ exports.getOperation = function(args, res, next) {
                     jsonResult.results = jsonResult.results.concat(result);
                   }
                   rowNumber++;
-                  if(visualization){
+                  if(visualisation){
                     labels.push("'" + result[Object.keys(result)[0]] + "'");
-                    datasets = resultToDataset(visualization, result, datasets);
-                    allDatasets = resultToAllDataset(visualization, result, allDatasets);
+                    datasets = resultToDataset(visualisation, result, datasets);
+                    allDatasets = resultToAllDataset(visualisation, result, allDatasets);
                   }
                 }
-              }
+              /*}*/
 
             },
             complete: function(){
@@ -137,7 +144,7 @@ exports.getOperation = function(args, res, next) {
       rowNumber-=offset;
       jsonResult.limit = limit;
       jsonResult.offset = offset;
-      jsonResult.visualization = visualization;  
+      jsonResult.visualisation = visualisation;  
       jsonResult.fileSize = lineCount + " records";  
       jsonResult.resultsSize = rowNumber + " records";  
 
@@ -153,12 +160,12 @@ exports.getOperation = function(args, res, next) {
       }
 
       if(Object.keys(examples).length > 0) {
-        if(visualization){
+        if(visualisation){
           res.setHeader('Content-Type' , 'text/html');
-          var visualizationHtmlFile = readTextFile("./controllers/visualization.html");
+          var visualisationHtmlFile = readTextFile("./controllers/visualisation.html");
           if (typeof labels !== 'undefined' && labels !== null && labels.length > 0){
-            visualizationHtmlFile = visualizationHtmlFile.replace("labelsLineChart", labels.join());
-            visualizationHtmlFile = visualizationHtmlFile.replace("labelsBarChart", labels.join());
+            visualisationHtmlFile = visualisationHtmlFile.replace("labelsLineChart", labels.join());
+            visualisationHtmlFile = visualisationHtmlFile.replace("labelsBarChart", labels.join());
           }
 
           //console.log(datasets.toString());
@@ -166,19 +173,19 @@ exports.getOperation = function(args, res, next) {
           if (typeof datasets !== 'undefined' && datasets !== null && datasets.length > 0){
 
             var iteratorLineChart = 0;
-            while(visualizationHtmlFile.indexOf("dataLineChart") >= 0) {
-              visualizationHtmlFile = visualizationHtmlFile.replace("dataLineChart", datasets[iteratorLineChart].join());
+            while(visualisationHtmlFile.indexOf("dataLineChart") >= 0) {
+              visualisationHtmlFile = visualisationHtmlFile.replace("dataLineChart", datasets[iteratorLineChart].join());
               iteratorLineChart++;
             }
             var iteratorBarChart = 0;
-            while(visualizationHtmlFile.indexOf("dataBarChart") >= 0) {
-              visualizationHtmlFile = visualizationHtmlFile.replace("dataBarChart", datasets[iteratorBarChart].join());
+            while(visualisationHtmlFile.indexOf("dataBarChart") >= 0) {
+              visualisationHtmlFile = visualisationHtmlFile.replace("dataBarChart", datasets[iteratorBarChart].join());
               iteratorBarChart++;
             }
 
             if (typeof allDatasets !== 'undefined' && allDatasets !== null && allDatasets.length > 0){
               var iteratorPieChart = 0;
-              while(visualizationHtmlFile.indexOf("dataPieChart") >= 0) {
+              while(visualisationHtmlFile.indexOf("dataPieChart") >= 0) {
                 var differentValues = 0;
                 let unique = [...new Set(allDatasets[iteratorPieChart])]; 
                 differentValues = unique.length
@@ -187,11 +194,11 @@ exports.getOperation = function(args, res, next) {
                   var arr = allDatasets[iteratorPieChart];
                   var result = pieAux(arr);
 
-                  visualizationHtmlFile = visualizationHtmlFile.replace("dataPieChart", result[1].join());
-                  visualizationHtmlFile = visualizationHtmlFile.replace("labelsPieChart", result[0].join());
+                  visualisationHtmlFile = visualisationHtmlFile.replace("dataPieChart", result[1].join());
+                  visualisationHtmlFile = visualisationHtmlFile.replace("labelsPieChart", result[0].join());
                 }else {
-                  visualizationHtmlFile = visualizationHtmlFile.replace("dataPieChart", "'1'");
-                  visualizationHtmlFile = visualizationHtmlFile.replace("labelsPieChart", "'data not classifiable'");
+                  visualisationHtmlFile = visualisationHtmlFile.replace("dataPieChart", "'1'");
+                  visualisationHtmlFile = visualisationHtmlFile.replace("labelsPieChart", "'data not classifiable'");
                 }
                 iteratorPieChart++;
               }
@@ -199,8 +206,8 @@ exports.getOperation = function(args, res, next) {
 
           }
 
-          writeTextFile("./controllers/visualizationGenerated.html", visualizationHtmlFile);
-          res.write(visualizationHtmlFile);
+          writeTextFile("./controllers/visualisationGenerated.html", visualisationHtmlFile);
+          res.write(visualisationHtmlFile);
           res.end();
         } else {
           res.setHeader('Content-Type', 'application/json');
@@ -234,9 +241,9 @@ function pieAux(arr) {
     return [a, b];
 }
 
-function resultToDataset(visualization, result, datasets)
+function resultToDataset(visualisation, result, datasets)
 {
-  // Check columns types for visualization
+  // Check columns types for visualisation
   var datasetsInserted = 0;
   for(var columnIt = 0; columnIt < Object.keys(result).length; columnIt++){
     if(parseInt(result[Object.keys(result)[columnIt]]) == result[Object.keys(result)[columnIt]]) {
@@ -256,9 +263,9 @@ function resultToDataset(visualization, result, datasets)
   return datasets;
 }
 
-function resultToAllDataset(visualization, result, allDatasets)
+function resultToAllDataset(visualisation, result, allDatasets)
 {
-  // Check columns types for visualization
+  // Check columns types for visualisation
   var datasetsInserted = 0;
   for(var columnIt = 0; columnIt < Object.keys(result).length; columnIt++){
       datasetsInserted +=1;
