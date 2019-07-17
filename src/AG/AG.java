@@ -109,6 +109,7 @@ public class AG {
 	public static String fileUrl = "";
 	public static String defaultFileName = "data";
 	public static String newfileName = "data";
+	public static String desiredFileName = "data";
 	public static String fileType = "csv";
 	public static String alternativeFileType = "";
 	public static String modelFileName = "table.xmi";
@@ -186,7 +187,20 @@ public class AG {
 			if(fileName.contains(".csv")) {
 				fileName = fileName.replace(".csv", "");
 			}
+			desiredFileName = fileName;
 		} 
+		//args: csv2api http://url.to.data.csv filename
+		else if(args.length == 3) {
+			fileName = args[1];
+			if(fileName.contains("/")) {
+				fileUrl = fileName;
+				fileName = fileName.split("/")[fileName.split("/").length-1];
+			}
+			if(fileName.contains(".csv")) {
+				fileName = fileName.replace(".csv", "");
+			}
+			desiredFileName = cleanString(args[2]);
+		}
 		//args: csv2api data table.xmi openapi.xmi 
 		else if(args.length == 4) {
 			fileName = args[1];
@@ -197,6 +211,7 @@ public class AG {
 			if(fileName.contains(".csv")) {
 				fileName = fileName.replace(".csv", "");
 			}
+			desiredFileName = fileName;
 			modelFileName = args[2];
 			openAPIXMIFileName = args[3];
 		}
@@ -615,7 +630,8 @@ public class AG {
 		try {
 			url = new URL(fileUrl);
 			ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
-			FileOutputStream fileOutputStream = new FileOutputStream(fileName + ".csv");
+			FileOutputStream fileOutputStream = new FileOutputStream(desiredFileName + ".csv");
+			fileName = desiredFileName;
 			FileChannel fileChannel = fileOutputStream.getChannel();
 			fileOutputStream.getChannel().transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
 		} catch (MalformedURLException e) {
