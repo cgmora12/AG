@@ -216,7 +216,7 @@ public class AG {
 			openAPIXMIFileName = args[3];
 		}
 
-		mainFolderName = "AG_" + cleanString(fileName);
+		mainFolderName = "AG_" + cleanString(desiredFileName);
 
 		if(!fileUrl.isEmpty()) {
 			getCSVFromURL();
@@ -925,7 +925,9 @@ public class AG {
                 	firstLine = false;*/
                 	
                 	// Cleaning
-                	line = cleanString(line);
+                	if(i==0) {
+                		line = cleanString(line);
+                	}
                 	
                 	String[] row = line.split(csvSplitBy);
                 	if(i==0) {
