@@ -1,0 +1,20 @@
+Air pollution: https://datos.gob.es/es/catalogo/l01280066-contaminacion-atmosferica-por-horas-historico1
+Announcements: https://datos.gob.es/es/catalogo/l01330241-convocatorias-oij-historicos
+School improvement grants: https://catalog.data.gov/dataset/school-improvement-2010-grants
+Demographic statistics: https://catalog.data.gov/dataset/demographic-statistics-by-zip-code-acfc9
+Voter data: https://catalog.data.gov/dataset/voter-history-data
+Road safety: https://datos.alcobendas.org/dataset/seguridad-vial-tipos-de-accidentes-de-trafico-desde-el-ano-2012-historico
+Metro stops: https://datos.alcobendas.org/dataset/paradas-de-metro
+Bus stops: https://datos.alcobendas.org/dataset/paradas-de-autobus
+Population: https://datos.alcobendas.org/dataset/poblacion-empadronados-totales-y-grupos-de-edad-y-sexo-historico
+Salmonella testing programme: https://data.gov.uk/dataset/7b7f30d7-6226-4a49-a1ca-b2ab405db2ce/salmonella-testing-programme
+Public libraries: https://www.gov.uk/government/publications/public-libraries-in-england-basic-dataset
+Schools list: https://data.gov.uk/dataset/a688d54d-e0b0-441b-95b7-ac0d6cf003e0/schools-list
+Street lights: https://data.gov.uk/dataset/3b1b594f-e1a3-495b-a6c0-221fff9d1ffd/street-lights
+Travel data: https://data.gov.uk/dataset/b6b63ea3-c7be-4f60-81f5-3c8f5236f5f7/travel-data-transparency-agenda-and-foi-request
+British behaviour abroad: https://data.gov.uk/dataset/35f0785d-e85b-49ef-869c-2eca49755aa5/british-behaviour-abroad
+Innovation: https://open.canada.ca/data/en/dataset/662aba3e-988b-4871-8f80-eb62d5818391
+Wholesale trade sales: https://open.canada.ca/data/en/dataset/45d747d8-8abf-49d9-a76c-84c01156c04b
+International payments: https://open.canada.ca/data/en/dataset/823899ab-3cca-4484-a420-13bf0d0d0226
+Employee earnings: https://open.canada.ca/data/en/dataset/d4c86aaf-6d6b-4da8-a41e-6f96dbec982e
+Biodiversity: https://catalog.data.gov/dataset/biodiversity-by-county-distribution-of-animals-plants-and-natural-communities
