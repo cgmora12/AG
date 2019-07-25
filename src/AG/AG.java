@@ -759,9 +759,14 @@ public class AG {
 	}
 	
 	private static String cleanString(String s) {
-		return StringUtils.stripAccents(s.replaceAll(" ", "").replaceAll("/", "_").replaceAll("\"", "").replaceAll("\'", "")
+		return StringUtils.stripAccents(s.replaceAll("\u00f1", "ny").replaceAll(" ", "").replaceAll("/", "_").replaceAll("\"", "").replaceAll("\'", "")
         		.replaceAll("\\?", "").replaceAll("\\+", "plus").replaceAll("\\-", "minus").replaceAll("\\(", "_").replaceAll("\\)", "_")
         		.replaceAll("\\[", "_").replaceAll("\\]", "_").replaceAll("\\{", "_").replaceAll("\\}", "_"))
+        		.replaceAll("\\P{Print}", "").trim();
+	}
+	
+	private static String cleanStringInvalidChars(String s) {
+		return StringUtils.stripAccents(s.replaceAll("\u00f1", "ny").replaceAll("\"", "").replaceAll("\'", ""))
         		.replaceAll("\\P{Print}", "").trim();
 	}
 
@@ -927,6 +932,8 @@ public class AG {
                 	// Cleaning
                 	if(i==0) {
                 		line = cleanString(line);
+                	} else {
+                		line = cleanStringInvalidChars(line);
                 	}
                 	
                 	String[] row = line.split(csvSplitBy);

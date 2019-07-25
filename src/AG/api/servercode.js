@@ -97,6 +97,9 @@ exports.getOperation = function(args, res, next) {
                       if(result[Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]] === args[Object.keys(args)[j]].value + ""){
                         resultValidator = true && resultValidator;
                       }
+                      else if(cleanStringInvalidChars(result[Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]]) === args[Object.keys(args)[j]].value + ""){
+                        resultValidator = true && resultValidator;
+                      }
                       else if(args[Object.keys(args)[j]].value + "" === "all" && result[Object.keys(result)[Object.keys(result).indexOf(Object.keys(args)[j])]].replace(/\s+/g, '') != ""){
                         resultValidator = true && resultValidator;
                       }
@@ -305,7 +308,17 @@ function writeTextFile(file, content)
   }
 }
 
+function cleanStringInvalidChars(s) {
+  s = s.split("\u00f1").join("ny");
+  s = s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  s = s.split("\"").join("");
+  s = s.split("\'").join("");
+  s = s.split("\\P{Print}").join("");
+  return s;
+}
+
 function cleanString(s) {
+  s = s.split("\u00f1").join("ny");
   s = s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   s = s.trim();
   s = s.split(" ").join("");

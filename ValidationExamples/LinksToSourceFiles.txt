@@ -5,10 +5,10 @@ Demographic statistics: https://catalog.data.gov/dataset/demographic-statistics-
 Voter data: https://catalog.data.gov/dataset/voter-history-data
 Road safety: https://datos.alcobendas.org/dataset/seguridad-vial-tipos-de-accidentes-de-trafico-desde-el-ano-2012-historico
 Metro stops: https://datos.alcobendas.org/dataset/paradas-de-metro
-Bus stops: https://datos.alcobendas.org/dataset/paradas-de-autobus
+Train stops: https://datos.alcobendas.org/dataset/paradas-de-cercanias
 Population: https://datos.alcobendas.org/dataset/poblacion-empadronados-totales-y-grupos-de-edad-y-sexo-historico
 Salmonella testing programme: https://data.gov.uk/dataset/7b7f30d7-6226-4a49-a1ca-b2ab405db2ce/salmonella-testing-programme
-Public libraries: https://www.gov.uk/government/publications/public-libraries-in-england-basic-dataset
+Radioactivity: https://data.gov.uk/dataset/241e8f08-2b52-4835-bb6a-870f83e4c567/radiological-monitoring-data
 Schools list: https://data.gov.uk/dataset/a688d54d-e0b0-441b-95b7-ac0d6cf003e0/schools-list
 Street lights: https://data.gov.uk/dataset/3b1b594f-e1a3-495b-a6c0-221fff9d1ffd/street-lights
 Travel data: https://data.gov.uk/dataset/b6b63ea3-c7be-4f60-81f5-3c8f5236f5f7/travel-data-transparency-agenda-and-foi-request
