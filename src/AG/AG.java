@@ -759,7 +759,7 @@ public class AG {
 	}
 	
 	private static String cleanString(String s) {
-		return StringUtils.stripAccents(s.replaceAll("\u00f1", "ny").replaceAll(" ", "").replaceAll("/", "_").replaceAll("\"", "").replaceAll("\'", "")
+		return StringUtils.stripAccents(s.replaceAll("\u00f1", "ny").replaceAll(" ", "_").replaceAll("/", "_").replaceAll("\"", "").replaceAll("\'", "")
         		.replaceAll("\\?", "").replaceAll("\\+", "plus").replaceAll("\\-", "minus").replaceAll("\\(", "_").replaceAll("\\)", "_")
         		.replaceAll("\\[", "_").replaceAll("\\]", "_").replaceAll("\\{", "_").replaceAll("\\}", "_"))
         		.replaceAll("\\P{Print}", "").trim();
