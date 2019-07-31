@@ -759,10 +759,26 @@ public class AG {
 	}
 	
 	private static String cleanString(String s) {
-		return StringUtils.stripAccents(s.replaceAll("\u00f1", "ny").replaceAll(" ", "_").replaceAll("/", "_").replaceAll("\"", "").replaceAll("\'", "")
-        		.replaceAll("\\?", "").replaceAll("\\+", "plus").replaceAll("\\-", "minus").replaceAll("\\(", "_").replaceAll("\\)", "_")
-        		.replaceAll("\\[", "_").replaceAll("\\]", "_").replaceAll("\\{", "_").replaceAll("\\}", "_"))
-        		.replaceAll("\\P{Print}", "").trim();
+		String aux = "";
+		s = s.trim();
+		String [] cells = s.split(",");
+		
+		for(String cell: cells) {
+			String auxCell = cell.trim();
+			auxCell = StringUtils.stripAccents(cell.replaceAll("\u00f1", "ny").replaceAll(" ", "_").replaceAll("/", "_").replaceAll("\"", "").replaceAll("\'", "")
+	        		.replaceAll("\\?", "").replaceAll("\\+", "plus").replaceAll("\\-", "minus").replaceAll("\\(", "_").replaceAll("\\)", "_")
+	        		.replaceAll("\\[", "_").replaceAll("\\]", "_").replaceAll("\\{", "_").replaceAll("\\}", "_"))
+	        		.replaceAll("\\P{Print}", "");
+			if(auxCell.length() > 0 && auxCell.charAt(0) == '_') {
+				auxCell = auxCell.substring(1);
+			}
+			aux += auxCell + ",";
+		}
+
+		if(aux.length() > 0 && aux.charAt(aux.length()-1) == ',') {
+			aux = aux.substring(0, aux.length()-1);
+		}
+		return aux;
 	}
 	
 	private static String cleanStringInvalidChars(String s) {
