@@ -343,6 +343,7 @@ public class AG {
 		if(args.length == 5) {
 			fileName = args[1];
 			alternativeFileType = args[2];
+			fileType = args[2];
 		}
 
 		mainFolderName = "AG_" + cleanString(fileName);
@@ -585,8 +586,9 @@ public class AG {
 		    
 		    Writer writer = null;
 		    try {
-		    	File file = new File(fileName + "." + fileType);
-		    	file.delete();
+		    	//File file = new File(fileName + "." + fileType);
+		    	//file.delete();
+		        fileType = "csv";
 		        writer = new BufferedWriter(new OutputStreamWriter(
 		              new FileOutputStream(fileName + "." + fileType), "utf-8"));
 		        writer.write("stationName,about,hasEscalator,hasLift,hasTravelator,transfer,"+/*type,*/"lineAbout,lineID,lineName,routeService");
@@ -1768,25 +1770,24 @@ public class AG {
 	private static void generateServer() {
 
 		// TODO: Swagger 2.0 to OpenAPI
-		if(openapi2api || xmi2api || csv2api) {
-			String sourcePath = mainFolderName + File.separator + tempFolderName + File.separator + swaggerFileName;
-			new File(mainFolderName + File.separator + apiCodeFolderName).mkdirs();
-			File source = new File(sourcePath);
-			File dest = new File(mainFolderName + File.separator + apiCodeFolderName + File.separator + swaggerFileName);
-			try {
-			    FileUtils.copyFile(source, dest);
-			} catch (IOException e) {
-			    e.printStackTrace();
-			}
+		
+		String sourcePath = mainFolderName + File.separator + tempFolderName + File.separator + swaggerFileName;
+		new File(mainFolderName + File.separator + apiCodeFolderName).mkdirs();
+		File source = new File(sourcePath);
+		File dest = new File(mainFolderName + File.separator + apiCodeFolderName + File.separator + swaggerFileName);
+		try {
+		    FileUtils.copyFile(source, dest);
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
 
-			String sourcePath2 = mainFolderName + File.separator + tempFolderName + File.separator + openAPIFileName;
-			File source2 = new File(sourcePath2);
-			File dest2 = new File(mainFolderName + File.separator + apiCodeFolderName + File.separator + openAPIFileName);
-			try {
-			    FileUtils.copyFile(source2, dest2);
-			} catch (IOException e) {
-			    e.printStackTrace();
-			}
+		String sourcePath2 = mainFolderName + File.separator + tempFolderName + File.separator + openAPIFileName;
+		File source2 = new File(sourcePath2);
+		File dest2 = new File(mainFolderName + File.separator + apiCodeFolderName + File.separator + openAPIFileName);
+		try {
+		    FileUtils.copyFile(source2, dest2);
+		} catch (IOException e) {
+		    e.printStackTrace();
 		}
 		
 		String[] args = new String [7];
