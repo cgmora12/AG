@@ -81,7 +81,7 @@ exports.getOperation = function(args, res, next) {
           if(columnIndex < dataSplit.length - 1){
             dataToParse += cleanSpaces(dataSplit[columnIndex]) + ",";
           } else {
-            dataToParse += cleanSpaces(dataSplit[columnIndex]) + "\n";
+            dataToParse += cleanSpaces(dataSplit[columnIndex]);
           }
         }    
         //dataToParse = firstLine + data;
