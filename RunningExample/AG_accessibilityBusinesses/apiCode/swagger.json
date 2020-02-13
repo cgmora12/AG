@@ -1,0 +1,386 @@
+{
+  "basePath" : "/",
+  "paths" : {
+    "/visualisation" : {
+      "get" : {
+        "summary" : "GET visualisation charts",
+        "produces" : [ "text/html" ],
+        "operationId" : "getvisualisation",
+        "description" : "Get visualisation charts of the data",
+        "responses" : {
+          "200" : {
+            "schema" : {
+              "type" : "string"
+            },
+            "description" : "successful operation"
+          }
+        },
+        "parameters" : [ {
+          "default" : "10000",
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "default" : "0",
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        } ]
+      }
+    },
+    "/Closed_Moved/{Closed_Moved}" : {
+      "get" : {
+        "summary" : "GET Closed_Moved",
+        "produces" : [ "application/json", "text/html" ],
+        "operationId" : "getClosed_Moved",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "schema" : {
+              "type" : "string"
+            },
+            "description" : "successful operation"
+          }
+        },
+        "parameters" : [ {
+          "default" : "10000",
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "default" : "0",
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts",
+          "type" : "string"
+        }, {
+          "in" : "path",
+          "name" : "Closed_Moved",
+          "description" : "Closed_Moved",
+          "type" : "string",
+          "required" : true,
+          "example" : ""
+        } ]
+      }
+    },
+    "/Year/{Year}" : {
+      "get" : {
+        "summary" : "GET Year",
+        "produces" : [ "application/json", "text/html" ],
+        "operationId" : "getYear",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "schema" : {
+              "type" : "string"
+            },
+            "description" : "successful operation"
+          }
+        },
+        "parameters" : [ {
+          "default" : "10000",
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "default" : "0",
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts",
+          "type" : "string"
+        }, {
+          "default" : "1996",
+          "in" : "path",
+          "name" : "Year",
+          "description" : "Year",
+          "type" : "integer",
+          "required" : true
+        } ]
+      }
+    },
+    "/Decal_Recipient/{Decal_Recipient}" : {
+      "get" : {
+        "summary" : "GET Decal_Recipient",
+        "produces" : [ "application/json", "text/html" ],
+        "operationId" : "getDecal_Recipient",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "schema" : {
+              "type" : "string"
+            },
+            "description" : "successful operation"
+          }
+        },
+        "parameters" : [ {
+          "default" : "10000",
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "default" : "0",
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts",
+          "type" : "string"
+        }, {
+          "default" : "AMC Showplace 11",
+          "in" : "path",
+          "name" : "Decal_Recipient",
+          "description" : "Decal_Recipient",
+          "type" : "string",
+          "required" : true
+        } ]
+      }
+    },
+    "/SubminusCategory/{SubminusCategory}" : {
+      "get" : {
+        "summary" : "GET SubminusCategory",
+        "produces" : [ "application/json", "text/html" ],
+        "operationId" : "getSubminusCategory",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "schema" : {
+              "type" : "string"
+            },
+            "description" : "successful operation"
+          }
+        },
+        "parameters" : [ {
+          "default" : "10000",
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "default" : "0",
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts",
+          "type" : "string"
+        }, {
+          "default" : "Cinema",
+          "in" : "path",
+          "name" : "SubminusCategory",
+          "description" : "SubminusCategory",
+          "type" : "string",
+          "required" : true
+        } ]
+      }
+    },
+    "/" : {
+      "get" : {
+        "summary" : "GET accessibilityBusinesses",
+        "produces" : [ "application/json", "text/html" ],
+        "operationId" : "getaccessibilityBusinesses",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "schema" : {
+              "type" : "string"
+            },
+            "description" : "successful operation"
+          }
+        },
+        "parameters" : [ {
+          "default" : "10000",
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "default" : "0",
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts",
+          "type" : "string"
+        }, {
+          "in" : "query",
+          "name" : "Decal_Recipient",
+          "description" : "Decal_Recipient",
+          "type" : "string"
+        }, {
+          "in" : "query",
+          "name" : "Closed_Moved",
+          "description" : "Closed_Moved",
+          "type" : "string"
+        }, {
+          "in" : "query",
+          "name" : "Location",
+          "description" : "Location",
+          "type" : "string"
+        }, {
+          "in" : "query",
+          "name" : "Year",
+          "description" : "Year",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "Category",
+          "description" : "Category",
+          "type" : "string"
+        }, {
+          "in" : "query",
+          "name" : "SubminusCategory",
+          "description" : "SubminusCategory",
+          "type" : "string"
+        } ]
+      }
+    },
+    "/Location/{Location}" : {
+      "get" : {
+        "summary" : "GET Location",
+        "produces" : [ "application/json", "text/html" ],
+        "operationId" : "getLocation",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "schema" : {
+              "type" : "string"
+            },
+            "description" : "successful operation"
+          }
+        },
+        "parameters" : [ {
+          "default" : "10000",
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "default" : "0",
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts",
+          "type" : "string"
+        }, {
+          "default" : "1351 S College Mall Rd",
+          "in" : "path",
+          "name" : "Location",
+          "description" : "Location",
+          "type" : "string",
+          "required" : true
+        } ]
+      }
+    },
+    "/Category/{Category}" : {
+      "get" : {
+        "summary" : "GET Category",
+        "produces" : [ "application/json", "text/html" ],
+        "operationId" : "getCategory",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "schema" : {
+              "type" : "string"
+            },
+            "description" : "successful operation"
+          }
+        },
+        "parameters" : [ {
+          "default" : "10000",
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "type" : "integer"
+        }, {
+          "default" : "0",
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "type" : "integer"
+        }, {
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts",
+          "type" : "string"
+        }, {
+          "default" : "Entertainment Venue",
+          "in" : "path",
+          "name" : "Category",
+          "description" : "Category",
+          "type" : "string",
+          "required" : true
+        } ]
+      }
+    }
+  },
+  "host" : "localhost:8080",
+  "schemes" : [ "http" ],
+  "definitions" : {
+    "mainComponent" : {
+      "xml" : {
+        "name" : "mainComponent"
+      },
+      "type" : "object",
+      "properties" : {
+        "Closed_Moved" : {
+          "type" : "string",
+          "example" : ""
+        },
+        "Category" : {
+          "type" : "string",
+          "example" : "Entertainment Venue"
+        },
+        "Decal_Recipient" : {
+          "type" : "string",
+          "example" : "AMC Showplace 11"
+        },
+        "Year" : {
+          "type" : "integer",
+          "example" : 1996
+        },
+        "SubminusCategory" : {
+          "type" : "string",
+          "example" : "Cinema"
+        },
+        "Location" : {
+          "type" : "string",
+          "example" : "1351 S College Mall Rd"
+        }
+      }
+    }
+  },
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Obtaining the accessibilityBusinesses",
+    "title" : "accessibilityBusinesses",
+    "version" : "1.0.0"
+  }
+}

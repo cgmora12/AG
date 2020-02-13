@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="ASCII"?>
+<openapi:API xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:openapi="platform:/resource/TransformationRules/Openapi.ecore" openapi="3.0.0">
+  <info version="1.0.0" title="accessibilityBusinesses" description="Obtaining the accessibilityBusinesses"/>
+  <servers url="http://localhost:8080"/>
+  <paths pattern="/">
+    <get summary="GET accessibilityBusinesses" operationId="getaccessibilityBusinesses" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="limit" in="query" description="Maximum number of results" example="10000">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="offset" in="query" description="Starting index for results" example="0">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="visualisation" in="query" description="Visualisation of the data via charts">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="Decal_Recipient" in="query" description="Decal_Recipient">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="Closed_Moved" in="query" description="Closed_Moved">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="Location" in="query" description="Location">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="Year" in="query" description="Year">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="Category" in="query" description="Category">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="SubminusCategory" in="query" description="SubminusCategory">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+          <content contentTypeName="text/html">
+            <contentType>
+              <schema type="string"/>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/visualisation">
+    <get summary="GET visualisation charts" operationId="getvisualisation" description="Get visualisation charts of the data">
+      <parameters name="limit" in="query" description="Maximum number of results" example="10000">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="offset" in="query" description="Starting index for results" example="0">
+        <schema type="integer"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="text/html">
+            <contentType>
+              <schema type="string"/>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/Decal_Recipient/{Decal_Recipient}">
+    <get summary="GET Decal_Recipient" operationId="getDecal_Recipient" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="limit" in="query" description="Maximum number of results" example="10000">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="offset" in="query" description="Starting index for results" example="0">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="visualisation" in="query" description="Visualisation of the data via charts">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="Decal_Recipient" in="path" description="Decal_Recipient" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+          <content contentTypeName="text/html">
+            <contentType>
+              <schema type="string"/>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/Closed_Moved/{Closed_Moved}">
+    <get summary="GET Closed_Moved" operationId="getClosed_Moved" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="limit" in="query" description="Maximum number of results" example="10000">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="offset" in="query" description="Starting index for results" example="0">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="visualisation" in="query" description="Visualisation of the data via charts">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="Closed_Moved" in="path" description="Closed_Moved" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+          <content contentTypeName="text/html">
+            <contentType>
+              <schema type="string"/>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/Location/{Location}">
+    <get summary="GET Location" operationId="getLocation" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="limit" in="query" description="Maximum number of results" example="10000">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="offset" in="query" description="Starting index for results" example="0">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="visualisation" in="query" description="Visualisation of the data via charts">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="Location" in="path" description="Location" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+          <content contentTypeName="text/html">
+            <contentType>
+              <schema type="string"/>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/Year/{Year}">
+    <get summary="GET Year" operationId="getYear" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="limit" in="query" description="Maximum number of results" example="10000">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="offset" in="query" description="Starting index for results" example="0">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="visualisation" in="query" description="Visualisation of the data via charts">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="Year" in="path" description="Year" required="true">
+        <schema type="integer"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+          <content contentTypeName="text/html">
+            <contentType>
+              <schema type="string"/>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/Category/{Category}">
+    <get summary="GET Category" operationId="getCategory" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="limit" in="query" description="Maximum number of results" example="10000">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="offset" in="query" description="Starting index for results" example="0">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="visualisation" in="query" description="Visualisation of the data via charts">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="Category" in="path" description="Category" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+          <content contentTypeName="text/html">
+            <contentType>
+              <schema type="string"/>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <paths pattern="/SubminusCategory/{SubminusCategory}">
+    <get summary="GET SubminusCategory" operationId="getSubminusCategory" description="Use value 'all' in a parameter for non-empty values">
+      <parameters name="limit" in="query" description="Maximum number of results" example="10000">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="offset" in="query" description="Starting index for results" example="0">
+        <schema type="integer"/>
+      </parameters>
+      <parameters name="visualisation" in="query" description="Visualisation of the data via charts">
+        <schema type="string"/>
+      </parameters>
+      <parameters name="SubminusCategory" in="path" description="SubminusCategory" required="true">
+        <schema type="string"/>
+      </parameters>
+      <responses code="200">
+        <responseCode description="successful operation">
+          <content contentTypeName="application/json">
+            <contentType>
+              <schema type="array">
+                <items ref="#/components/schemas/mainComponent"/>
+              </schema>
+            </contentType>
+          </content>
+          <content contentTypeName="text/html">
+            <contentType>
+              <schema type="string"/>
+            </contentType>
+          </content>
+        </responseCode>
+      </responses>
+    </get>
+  </paths>
+  <components>
+    <schemas>
+      <mainComponent type="object">
+        <properties name="Decal_Recipient">
+          <content type="string" example="AMC Showplace 11"/>
+        </properties>
+        <properties name="Closed_Moved">
+          <content type="string" example=""/>
+        </properties>
+        <properties name="Location">
+          <content type="string" example="1351 S College Mall Rd"/>
+        </properties>
+        <properties name="Year">
+          <content type="integer" example="1996"/>
+        </properties>
+        <properties name="Category">
+          <content type="string" example="Entertainment Venue"/>
+        </properties>
+        <properties name="SubminusCategory">
+          <content type="string" example="Cinema"/>
+        </properties>
+        <xml name="mainComponent"/>
+      </mainComponent>
+    </schemas>
+  </components>
+</openapi:API>

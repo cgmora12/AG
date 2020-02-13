@@ -1,0 +1,350 @@
+---
+swagger: "2.0"
+info:
+  description: "Obtaining the accessibilityBusinesses"
+  version: "1.0.0"
+  title: "accessibilityBusinesses"
+host: "wake.dlsi.ua.es"
+basePath: "/AG/RunningExample"
+schemes:
+- "https"
+paths:
+  /:
+    get:
+      summary: "GET accessibilityBusinesses"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getaccessibilityBusinesses"
+      produces:
+      - "application/json"
+      - "text/html"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+        default: 10000
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
+        default: 0
+      - name: "visualisation"
+        in: "query"
+        description: "Visualisation of the data via charts"
+        required: false
+        type: "string"
+      - name: "Decal_Recipient"
+        in: "query"
+        description: "Decal_Recipient"
+        required: false
+        type: "string"
+      - name: "Closed_Moved"
+        in: "query"
+        description: "Closed_Moved"
+        required: false
+        type: "string"
+      - name: "Location"
+        in: "query"
+        description: "Location"
+        required: false
+        type: "string"
+      - name: "Year"
+        in: "query"
+        description: "Year"
+        required: false
+        type: "integer"
+      - name: "Category"
+        in: "query"
+        description: "Category"
+        required: false
+        type: "string"
+      - name: "SubminusCategory"
+        in: "query"
+        description: "SubminusCategory"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "Default"
+  /Category/{Category}:
+    get:
+      summary: "GET Category"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getCategory"
+      produces:
+      - "application/json"
+      - "text/html"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+        default: 10000
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
+        default: 0
+      - name: "visualisation"
+        in: "query"
+        description: "Visualisation of the data via charts"
+        required: false
+        type: "string"
+      - name: "Category"
+        in: "path"
+        description: "Category"
+        required: true
+        type: "string"
+        default: "Entertainment Venue"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "Default"
+  /Closed_Moved/{Closed_Moved}:
+    get:
+      summary: "GET Closed_Moved"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getClosed_Moved"
+      produces:
+      - "application/json"
+      - "text/html"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+        default: 10000
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
+        default: 0
+      - name: "visualisation"
+        in: "query"
+        description: "Visualisation of the data via charts"
+        required: false
+        type: "string"
+      - name: "Closed_Moved"
+        in: "path"
+        description: "Closed_Moved"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "Default"
+  /Decal_Recipient/{Decal_Recipient}:
+    get:
+      summary: "GET Decal_Recipient"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getDecal_Recipient"
+      produces:
+      - "application/json"
+      - "text/html"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+        default: 10000
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
+        default: 0
+      - name: "visualisation"
+        in: "query"
+        description: "Visualisation of the data via charts"
+        required: false
+        type: "string"
+      - name: "Decal_Recipient"
+        in: "path"
+        description: "Decal_Recipient"
+        required: true
+        type: "string"
+        default: "AMC Showplace 11"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "Default"
+  /Location/{Location}:
+    get:
+      summary: "GET Location"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getLocation"
+      produces:
+      - "application/json"
+      - "text/html"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+        default: 10000
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
+        default: 0
+      - name: "visualisation"
+        in: "query"
+        description: "Visualisation of the data via charts"
+        required: false
+        type: "string"
+      - name: "Location"
+        in: "path"
+        description: "Location"
+        required: true
+        type: "string"
+        default: "1351 S College Mall Rd"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "Default"
+  /SubminusCategory/{SubminusCategory}:
+    get:
+      summary: "GET SubminusCategory"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getSubminusCategory"
+      produces:
+      - "application/json"
+      - "text/html"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+        default: 10000
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
+        default: 0
+      - name: "visualisation"
+        in: "query"
+        description: "Visualisation of the data via charts"
+        required: false
+        type: "string"
+      - name: "SubminusCategory"
+        in: "path"
+        description: "SubminusCategory"
+        required: true
+        type: "string"
+        default: "Cinema"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "Default"
+  /Year/{Year}:
+    get:
+      summary: "GET Year"
+      description: "Use value 'all' in a parameter for non-empty values"
+      operationId: "getYear"
+      produces:
+      - "application/json"
+      - "text/html"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+        default: 10000
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
+        default: 0
+      - name: "visualisation"
+        in: "query"
+        description: "Visualisation of the data via charts"
+        required: false
+        type: "string"
+      - name: "Year"
+        in: "path"
+        description: "Year"
+        required: true
+        type: "integer"
+        default: 1996
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "Default"
+  /visualisation:
+    get:
+      summary: "GET visualisation charts"
+      description: "Get visualisation charts of the data"
+      operationId: "getvisualisation"
+      produces:
+      - "text/html"
+      parameters:
+      - name: "limit"
+        in: "query"
+        description: "Maximum number of results"
+        required: false
+        type: "integer"
+        default: 10000
+      - name: "offset"
+        in: "query"
+        description: "Starting index for results"
+        required: false
+        type: "integer"
+        default: 0
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      x-swagger-router-controller: "Default"
+definitions:
+  mainComponent:
+    type: "object"
+    properties:
+      Closed_Moved:
+        type: "string"
+        example: ""
+      Category:
+        type: "string"
+        example: "Entertainment Venue"
+      Decal_Recipient:
+        type: "string"
+        example: "AMC Showplace 11"
+      Year:
+        type: "integer"
+        example: 1996
+      SubminusCategory:
+        type: "string"
+        example: "Cinema"
+      Location:
+        type: "string"
+        example: "1351 S College Mall Rd"
+    xml:
+      name: "mainComponent"

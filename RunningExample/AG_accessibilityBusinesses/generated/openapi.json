@@ -1,0 +1,538 @@
+{
+  "components" : {
+    "schemas" : {
+      "mainComponent" : {
+        "xml" : {
+          "name" : "mainComponent"
+        },
+        "type" : "object",
+        "properties" : {
+          "Closed_Moved" : {
+            "type" : "string",
+            "example" : ""
+          },
+          "Category" : {
+            "type" : "string",
+            "example" : "Entertainment Venue"
+          },
+          "Decal_Recipient" : {
+            "type" : "string",
+            "example" : "AMC Showplace 11"
+          },
+          "Year" : {
+            "type" : "integer",
+            "example" : 1996
+          },
+          "SubminusCategory" : {
+            "type" : "string",
+            "example" : "Cinema"
+          },
+          "Location" : {
+            "type" : "string",
+            "example" : "1351 S College Mall Rd"
+          }
+        }
+      }
+    }
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8080"
+  } ],
+  "openapi" : "3.0.0",
+  "paths" : {
+    "/visualisation" : {
+      "get" : {
+        "summary" : "GET visualisation charts",
+        "operationId" : "getvisualisation",
+        "description" : "Get visualisation charts of the data",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "example" : "10000"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "example" : "0"
+        } ]
+      }
+    },
+    "/Closed_Moved/{Closed_Moved}" : {
+      "get" : {
+        "summary" : "GET Closed_Moved",
+        "operationId" : "getClosed_Moved",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "example" : "10000"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "example" : "0"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "Closed_Moved",
+          "description" : "Closed_Moved",
+          "required" : true,
+          "example" : ""
+        } ]
+      }
+    },
+    "/Year/{Year}" : {
+      "get" : {
+        "summary" : "GET Year",
+        "operationId" : "getYear",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "example" : "10000"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "example" : "0"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "path",
+          "name" : "Year",
+          "description" : "Year",
+          "required" : true,
+          "example" : "1996"
+        } ]
+      }
+    },
+    "/Decal_Recipient/{Decal_Recipient}" : {
+      "get" : {
+        "summary" : "GET Decal_Recipient",
+        "operationId" : "getDecal_Recipient",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "example" : "10000"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "example" : "0"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "Decal_Recipient",
+          "description" : "Decal_Recipient",
+          "required" : true,
+          "example" : "AMC Showplace 11"
+        } ]
+      }
+    },
+    "/SubminusCategory/{SubminusCategory}" : {
+      "get" : {
+        "summary" : "GET SubminusCategory",
+        "operationId" : "getSubminusCategory",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "example" : "10000"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "example" : "0"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "SubminusCategory",
+          "description" : "SubminusCategory",
+          "required" : true,
+          "example" : "Cinema"
+        } ]
+      }
+    },
+    "/" : {
+      "get" : {
+        "summary" : "GET accessibilityBusinesses",
+        "operationId" : "getaccessibilityBusinesses",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "example" : "10000"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "example" : "0"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "Decal_Recipient",
+          "description" : "Decal_Recipient"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "Closed_Moved",
+          "description" : "Closed_Moved"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "Location",
+          "description" : "Location"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "Year",
+          "description" : "Year"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "Category",
+          "description" : "Category"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "SubminusCategory",
+          "description" : "SubminusCategory"
+        } ]
+      }
+    },
+    "/Location/{Location}" : {
+      "get" : {
+        "summary" : "GET Location",
+        "operationId" : "getLocation",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "example" : "10000"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "example" : "0"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "Location",
+          "description" : "Location",
+          "required" : true,
+          "example" : "1351 S College Mall Rd"
+        } ]
+      }
+    },
+    "/Category/{Category}" : {
+      "get" : {
+        "summary" : "GET Category",
+        "operationId" : "getCategory",
+        "description" : "Use value 'all' in a parameter for non-empty values",
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "text/html" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "type" : "array",
+                  "items" : {
+                    "$ref" : "#/components/schemas/mainComponent"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters" : [ {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "limit",
+          "description" : "Maximum number of results",
+          "example" : "10000"
+        }, {
+          "schema" : {
+            "type" : "integer"
+          },
+          "in" : "query",
+          "name" : "offset",
+          "description" : "Starting index for results",
+          "example" : "0"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "query",
+          "name" : "visualisation",
+          "description" : "Visualisation of the data via charts"
+        }, {
+          "schema" : {
+            "type" : "string"
+          },
+          "in" : "path",
+          "name" : "Category",
+          "description" : "Category",
+          "required" : true,
+          "example" : "Entertainment Venue"
+        } ]
+      }
+    }
+  },
+  "info" : {
+    "description" : "Obtaining the accessibilityBusinesses",
+    "title" : "accessibilityBusinesses",
+    "version" : "1.0.0"
+  }
+}
