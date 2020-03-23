@@ -667,8 +667,25 @@ public class AG {
 		}*/
 		
 		String csvFile = fileName + "." + fileType;
+		new File(mainFolderName + File.separator + apiCodeFolderName).mkdirs();
+		/*
+	    try {
+	        Path FROM = Paths.get(csvFile);
+	        Path TO = Paths.get(mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType);
+	        //overwrite the destination file if it exists, and copy
+	        // the file attributes, including the rwx permissions
+	        CopyOption[] options = new CopyOption[]{
+	          StandardCopyOption.REPLACE_EXISTING,
+	          StandardCopyOption.COPY_ATTRIBUTES
+	        }; 
+	        Files.copy(FROM, TO, options);
+	    } catch(Exception e) {
+	    	e.printStackTrace();
+	    }*/
+	    
 		
-		BufferedReader br = null;
+        // Rewrite CSV without rare characters
+		BufferedReader reader = null;
         String line = "";
         String csvSplitBy = ",";
         ArrayList<String> rows = new ArrayList<String>();
@@ -697,6 +714,39 @@ public class AG {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		} // Skips BOM
+         
+        FileWriter writer = null;
+        try
+        {
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(csvFile), "UTF8"));
+            writer = new FileWriter(mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType);    
+            int counter = 0;            
+            while ((line = reader.readLine()) != null) {
+                if(counter == 0) {
+                    writer.write(cleanString(line));
+                } else {
+                	writer.write(System.lineSeparator());
+                    writer.write(cleanStringInvalidChars(line));
+                }
+                counter++;
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                reader.close();
+                writer.close();
+            } 
+            catch (IOException e) 
+            {
+                e.printStackTrace();
+            }
+        }
     	
         
         /*try {
@@ -725,21 +775,6 @@ public class AG {
             }
         }*/
         
-        // Rewrite CSV without rare characters
-	    try {
-			new File(mainFolderName + File.separator + apiCodeFolderName).mkdirs();
-	        Path FROM = Paths.get(csvFile);
-	        Path TO = Paths.get(mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType);
-	        //overwrite the destination file if it exists, and copy
-	        // the file attributes, including the rwx permissions
-	        CopyOption[] options = new CopyOption[]{
-	          StandardCopyOption.REPLACE_EXISTING,
-	          StandardCopyOption.COPY_ATTRIBUTES
-	        }; 
-	        Files.copy(FROM, TO, options);
-	    } catch(Exception e) {
-	    	e.printStackTrace();
-	    }
 	    /*Writer writer = null;
 	    try {
 			new File(mainFolderName + File.separator + apiCodeFolderName).mkdirs();
