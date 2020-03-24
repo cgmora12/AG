@@ -10,5 +10,6 @@
 	<classpathentry exported="true" kind="lib" path="res/libs/atl-emftvm-fatjar.jar"/>
 	<classpathentry exported="true" kind="lib" path="res/libs/java-json.jar"/>
 	<classpathentry exported="true" kind="lib" path="res/libs/MTCLauncherJava.jar"/>
+	<classpathentry kind="lib" path="res/libs/opencsv-5.1.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
