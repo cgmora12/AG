@@ -721,22 +721,22 @@ public class AG {
     	FileWriter writer = null;
         try
         {
-            reader = new CSVReader(new InputStreamReader(new FileInputStream(csvFile), "UTF8"));
+        	reader = new CSVReader(new InputStreamReader(new FileInputStream(csvFile), "UTF8"));
             writer = new FileWriter(mainFolderName + File.separator + apiCodeFolderName + File.separator + newfileName + "." + fileType);    
             int counter = 0;            
             while ((file = reader.readNext()) != null) {
             	line = "";
                 if(counter == 0) {
                 	for(int i = 0; i < file.length; i++) {
-                		line += file[i].replaceAll(",", ".") + ",";
+                		line += cleanString(file[i].replaceAll(",", ".")) + ",";
                 	}
-                    writer.write(cleanString(line.substring(0, line.length() - 1)));
+                    writer.write(line.substring(0, line.length() - 1));
                 } else {
                 	for(int i = 0; i < file.length; i++) {
-                		line += file[i].replaceAll(",", ".") + ",";
+                		line += cleanStringInvalidChars(file[i].replaceAll(",", ".")) + ",";
                 	}
                 	writer.write(System.lineSeparator());
-                    writer.write(cleanStringInvalidChars(line.substring(0, line.length() - 1)));
+                    writer.write(line.substring(0, line.length() - 1));
                 }
                 counter++;
             }
