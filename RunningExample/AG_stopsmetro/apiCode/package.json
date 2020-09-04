@@ -15,7 +15,7 @@
   "dependencies": {
     "connect": "^3.7.0",
     "js-yaml": "^3.13.1",
-    "papaparse": "^4.6.3",
+    "papaparse": "^5.2.0",
     "swagger-tools": "^0.10.4"
   }
 }
